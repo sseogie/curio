@@ -21,7 +21,7 @@ window.CURIO_VOLS = [
   { vol: "04", title: "SAPPORO", region: "HOKKAIDO, JAPAN", area: "japan",
     place: "ODORI PARK / SAPPORO TV TOWER", lat: 43.0611, lon: 141.3564, takenAt: "2025-07-01T14:46", transport: "subway" },
   { vol: "05", title: "SAPPORO", region: "HOKKAIDO, JAPAN", area: "japan",
-    place: "ODORI PARK / SAPPORO TV TOWER", lat: 43.0611, lon: 141.3564, takenAt: null, transport: "subway", warn: true },
+    place: "ODORI PARK / SAPPORO TV TOWER", lat: 43.0611, lon: 141.3564, takenAt: "2025-07-01T14:46", transport: "subway", warn: true },
   { vol: "06", title: "BIEI TOWN", region: "HOKKAIDO, JAPAN", area: "japan",
     place: "FARM TOMITA, NAKAFURANO", lat: 43.4392, lon: 142.4642, takenAt: "2025-06-30T11:40", transport: "bus", warn: true },
   { vol: "07", title: "OTARU", region: "HOKKAIDO, JAPAN", area: "japan",
