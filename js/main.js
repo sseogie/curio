@@ -167,6 +167,7 @@
     if (selG && pos.get(selG)) pulseC.attr("cx", pos.get(selG)[0]).attr("cy", pos.get(selG)[1]);
 
     if (!selected) setCoord(-rotate[1], wrapLon(-rotate[0]));
+    trackHeading([wrapLon(-rotate[0]), -rotate[1]]);
   }
 
   // 회전·줌 이동 (한 번만, 조용하게)
@@ -253,14 +254,44 @@
       <circle class="seal-outer" cx="${C}" cy="${C}" r="130.3"/>
       <circle class="seal-inner" cx="${C}" cy="${C}" r="95.5"/>
       <circle class="seal-sea" cx="${C}" cy="${C}" r="79.5"/>
+      <g id="cp-card" transform="rotate(${-cpHeading} ${C} ${C})">
       <path class="seal-cross" d="M${C} ${C - 79.5}V${C + 79.5}M${C - 79.5} ${C}H${C + 79.5}"/>
       ${ticks}
       <path class="cp-north" d="M${C} ${C - 58}L${C + 9} ${C}L${C - 9} ${C}Z"/>
       <path class="cp-south" d="M${C} ${C + 58}L${C + 9} ${C}L${C - 9} ${C}Z"/>
+      ${dir}
+      </g>
       <circle class="seal-globe" cx="${C}" cy="${C}" r="79.5"/>
       <circle class="seal-center" cx="${C}" cy="${C}" r="4"/>
-      ${dir}
     </svg>`;
+  }
+
+  // 나침반: 지구본을 돌리는 방향(진행 방위)으로 카드가 회전 — 바늘은 늘 북쪽
+  let cpHeading = 0, cpTarget = 0, cpRaf = 0, lastCenter = null;
+  function bearing([lon1, lat1], [lon2, lat2]) {
+    const r = Math.PI / 180, f1 = lat1 * r, f2 = lat2 * r, dl = (lon2 - lon1) * r;
+    const y = Math.sin(dl) * Math.cos(f2);
+    const x = Math.cos(f1) * Math.sin(f2) - Math.sin(f1) * Math.cos(f2) * Math.cos(dl);
+    return (Math.atan2(y, x) / r + 360) % 360;
+  }
+  function cpApply() {
+    const card = document.getElementById("cp-card");
+    if (card) card.setAttribute("transform", `rotate(${-cpHeading} 131.5 131.5)`);
+  }
+  function cpTick() {
+    const diff = ((cpTarget - cpHeading + 540) % 360) - 180;
+    if (Math.abs(diff) < 0.1) { cpHeading = cpTarget; cpApply(); cpRaf = 0; return; }
+    cpHeading = (cpHeading + diff * 0.12 + 360) % 360;
+    cpApply();
+    cpRaf = requestAnimationFrame(cpTick);
+  }
+  function trackHeading(center) {
+    if (lastCenter && d3.geoDistance(lastCenter, center) > 0.0004) {
+      cpTarget = bearing(lastCenter, center);
+      if (reduceMotion) { cpHeading = cpTarget; cpApply(); }
+      else if (!cpRaf) cpRaf = requestAnimationFrame(cpTick);
+    }
+    lastCenter = center;
   }
 
   function showIdle() {
