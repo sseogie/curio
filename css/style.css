@@ -277,22 +277,27 @@ body[data-view="project"] .fade { display: block; }
   margin-top: max(28px, calc(90 * var(--u)));
   font: 400 max(14px, calc(30 * var(--u)))/1.5 var(--sans); letter-spacing: -.01em; color: var(--text);
 }
+/* 두 캐릭터: 이미지는 아래끝 맞춤, 설명은 같은 줄에서 시작 */
 .evolution {
   margin-top: max(48px, calc(170 * var(--u)));
-  display: grid; grid-template-columns: auto auto auto; align-items: center;
+  display: grid;
+  grid-template-columns: max-content max-content max-content;
+  grid-template-areas: "game arrow brand" "cgame . cbrand";
+  align-items: end; justify-items: center;
   column-gap: max(24px, calc(160 * var(--u)));
+  row-gap: max(16px, calc(49 * var(--u)));
 }
-.ver { margin: 0; display: flex; flex-direction: column; align-items: center; }
-.ver img { display: block; height: auto; max-width: 100%; }
-.ver-game img { width: max(120px, calc(364 * var(--u))); image-rendering: pixelated; }
-.ver-brand img { width: max(150px, calc(509 * var(--u))); }
-.ver-arrow { width: max(64px, calc(263 * var(--u))); height: auto; }
-.ver figcaption {
-  margin-top: max(16px, calc(49 * var(--u)));
+.ver-img { display: block; height: auto; max-width: 100%; }
+.ver-game { grid-area: game; width: max(120px, calc(364 * var(--u))); image-rendering: pixelated; }
+.ver-brand { grid-area: brand; width: max(150px, calc(509 * var(--u))); margin-bottom: calc(31 * var(--u)); }
+.ver-arrow { grid-area: arrow; align-self: center; width: max(64px, calc(263 * var(--u))); height: auto; }
+.ver-cap {
+  align-self: start; margin: 0;
   font: 400 max(12px, calc(30 * var(--u)))/1.5 var(--sans); color: var(--text);
 }
-.ver figcaption span { display: block; }
-.ver-brand figcaption { margin-top: max(16px, calc(73 * var(--u))); }
+.ver-cap span { display: block; }
+.ver-cap-game { grid-area: cgame; }
+.ver-cap-brand { grid-area: cbrand; }
 .top { z-index: 7; }
 .about p { color: var(--text); }
 .about .meta { color: var(--foot); }
@@ -315,7 +320,7 @@ body[data-view="project"] .fade { display: block; }
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 12px; }
   .panels { grid-template-columns: 1fr; gap: 16px; }
   .about-lead br { display: none; }
-  .evolution { grid-template-columns: 1fr; row-gap: 24px; }
+  .evolution { grid-template-columns: 1fr; grid-template-areas: "game" "cgame" "arrow" "brand" "cbrand"; row-gap: 16px; }
   .ver-arrow { transform: rotate(90deg); margin: 8px auto; }
   .credit { position: static; text-align: right; padding: 24px 16px 32px; align-items: flex-end; }
   body[data-view="project"] .fade { display: none; }
