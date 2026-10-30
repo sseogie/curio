@@ -28,6 +28,12 @@
       <rect x="15" y="19" width="3" height="8" rx="1.5" fill="currentColor"/>
       <rect x="22" y="19" width="3" height="8" rx="1.5" fill="currentColor"/>
     </symbol>
+    <symbol id="curio-solid" viewBox="0 0 40 40">
+      <path d="M11.5 15.5 L7.5 8 M28.5 15.5 L32.5 8" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="7" cy="7" r="2.4" fill="currentColor"/>
+      <circle cx="33" cy="7" r="2.4" fill="currentColor"/>
+      <path fill="currentColor" fill-rule="evenodd" d="M20 11.5a12 12 0 1 1 0 24a12 12 0 1 1 0-24Z M16.5 19a1.5 1.5 0 0 0-1.5 1.5v5a1.5 1.5 0 0 0 3 0v-5a1.5 1.5 0 0 0-1.5-1.5Z M23.5 19a1.5 1.5 0 0 0-1.5 1.5v5a1.5 1.5 0 0 0 3 0v-5a1.5 1.5 0 0 0-1.5-1.5Z"/>
+    </symbol>
     <symbol id="curio-mini" viewBox="0 0 40 40">
       <path d="M11.5 15.5 L7.5 8 M28.5 15.5 L32.5 8" stroke="#BC534D" stroke-width="2.6" stroke-linecap="round"/>
       <circle cx="7" cy="7" r="2.4" fill="#BC534D"/>
@@ -38,18 +44,18 @@
 </svg>
 
 <main class="stage" id="top">
-  <header class="tl">
-    <svg class="logo" aria-label="Curio"><use href="#curio"/></svg>
-    <div class="coord-block">
-      <p class="meta" id="place-label">HALLSTATT MARKTPLATZ</p>
-      <p class="meta" id="live-coord" aria-live="off">47.5622° N · 13.6493° E</p>
-    </div>
+  <header class="top">
+    <a class="brand" href="#top" aria-label="PROJECT CURIO home"><svg aria-hidden="true"><use href="#curio-solid"/></svg></a>
+    <p class="wordmark" id="wordmark">CURIO</p>
+    <button type="button" class="menu-btn" id="menu-btn" aria-label="All volumes" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg>
+    </button>
   </header>
 
-  <div class="tr">
-    <p class="masthead">PROJECT. <b>CURIO.</b> CITY.</p>
-    <hr>
-    <p class="vol-num"><span class="vol-dot">VOL.</span> <span id="vol-big">12</span></p>
+  <div class="info" aria-live="polite">
+    <div class="seal" id="seal" hidden></div>
+    <h1 class="place" id="place">PREPARING TO EXPLORE</h1>
+    <p class="coord"><span id="coord-lat">37.2636 N</span><span id="coord-lon">127.0286 E</span></p>
   </div>
 
   <div class="globe-wrap">
@@ -66,24 +72,15 @@
         <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
       </div>
     </div>
-    <p class="hint">Drag to turn the globe</p>
   </div>
 
-  <aside class="panel" aria-live="polite">
-    <figure class="cover cover--panel" id="panel-cover"></figure>
-    <div class="vol-tabs" id="vol-tabs" role="group" aria-label="Volumes at this place"></div>
-    <dl class="facts">
-      <div><dt>DATE</dt><dd id="f-date"></dd></div>
-      <div><dt>BY</dt><dd id="f-transport"></dd></div>
-    </dl>
+  <aside class="photo" id="photo" hidden>
+    <figure class="cover" id="photo-cover"></figure>
+    <p class="exif"><span id="exif-time"></span><br>Focal length: 5.4mm (23mm in 35mm equivalent, wide-angle)</p>
+    <a class="detail" id="detail" href="#index">VIEW DETAIL</a>
   </aside>
 
-  <div class="bottom">
-    <p class="region" id="region">UPPER AUSTRIA, AUSTRIA</p>
-    <h1 class="title" id="title">HALLSTATT</h1>
-  </div>
-
-  <p class="exif meta" id="exif">13:44 · 23MM · F/1.8</p>
+  <p class="credit">PROJECT. CURIO. CITY.<br><span>© 2026 Kim Minseok</span></p>
 </main>
 
 <section class="index" id="index" aria-labelledby="index-h">
@@ -93,14 +90,6 @@
   </div>
   <ol class="grid" id="grid"></ol>
 </section>
-
-<footer class="foot">
-  <div class="speak">
-    <p class="bubble">I collect cities. One photo, a few quiet lines, and a stamp in my passport for every place I stop.</p>
-    <svg class="mini" aria-hidden="true"><use href="#curio-mini"/></svg>
-  </div>
-  <p class="meta">PROJECT. CURIO. CITY. — GALAXY S23+ · 23MM · F/1.8</p>
-</footer>
 
 <script src="vendor/d3.min.js"></script>
 <script src="vendor/topojson-client.min.js"></script>

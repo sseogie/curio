@@ -60,7 +60,7 @@
   const defs = svg.append("defs");
   // 구체 입체감: 좌상단 하이라이트 + 가장자리 어둡게
   const shade = defs.append("radialGradient").attr("id", "shade").attr("cx", "34%").attr("cy", "28%").attr("r", "78%");
-  [[0, "#FFFFFF", .7], [.32, "#FFF6EC", .12], [.7, "#2C4A47", 0], [.92, "#2C4A47", .1], [1, "#2C4A47", .22]]
+  [[0, "#FFFFFF", .55], [.4, "#FFFFFF", .08], [1, "#FFFFFF", 0]]
     .forEach(([o, c, a]) => shade.append("stop").attr("offset", o).attr("stop-color", c).attr("stop-opacity", a));
   const drop = defs.append("filter").attr("id", "drop").attr("x", "-20%").attr("y", "-20%").attr("width", "140%").attr("height", "150%");
   drop.append("feDropShadow").attr("dx", 0).attr("dy", 24).attr("stdDeviation", 28).attr("flood-color", "#2C4A47").attr("flood-opacity", .16);
@@ -69,7 +69,7 @@
 
   // 확대는 원형 렌즈 안에서만 — 지구본 외곽 크기는 고정
   const lensClip = defs.append("clipPath").attr("id", "lens").append("circle");
-  const sphereBg = svg.append("circle").attr("class", "sphere").attr("filter", "url(#drop)");
+  const sphereBg = svg.append("circle").attr("class", "sphere");
   const lens = svg.append("g").attr("clip-path", "url(#lens)");
   const gratP = lens.append("path").attr("class", "graticule");
   const landP = lens.append("path").attr("class", "land");
@@ -81,7 +81,7 @@
   const labelLayer = svg.append("g");
   const pulseC = svg.append("circle").attr("class", "pulse").attr("r", 0).attr("opacity", 0);
 
-  const pick = (g) => select(g.vols[g.vols.length - 1], true);
+  let pick = (g) => select(g.vols[g.vols.length - 1], true);
   const onKey = (e, g) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(g); } };
 
   const markers = markerLayer.selectAll("g.marker").data(groups).join("g")
@@ -168,7 +168,7 @@
 
     if (selG && pos.get(selG)) pulseC.attr("cx", pos.get(selG)[0]).attr("cy", pos.get(selG)[1]);
 
-    $("#live-coord").textContent = fmtCoord(-rotate[1], wrapLon(-rotate[0]));
+    if (!selected) setCoord(-rotate[1], wrapLon(-rotate[0]));
   }
 
   // 회전·줌 이동 (한 번만, 조용하게)
@@ -193,55 +193,109 @@
       .transition().duration(900).ease(d3.easeCubicOut).attr("r", 40).attr("opacity", 0);
   }
 
-  // ───────── selection ─────────
-  const title = $("#title");
+  // ───────── left info / seal / right photo ─────────
+  const TZ = { vietnam: "UTC+7", hokkaido: "UTC+9", europe: "UTC+2" };
+  const country = (v) => v.region.split(",").pop().trim();
+  const coordParts = (lat, lon) => [
+    `${Math.abs(lat).toFixed(4)} ${lat >= 0 ? "N" : "S"}`,
+    `${Math.abs(lon).toFixed(4)} ${lon >= 0 ? "E" : "W"}`,
+  ];
+  function setCoord(lat, lon) {
+    const [a, b] = coordParts(lat, lon);
+    $("#coord-lat").textContent = a;
+    $("#coord-lon").textContent = b;
+  }
+
+  // 좌표 씰: 바깥 링 텍스트 + 정사영 미니 글로브
+  const landAll = { type: "FeatureCollection", features: countries };
+  function drawSeal(v) {
+    const seal = d3.select("#seal");
+    seal.selectAll("*").remove();
+    const s = seal.append("svg").attr("viewBox", "0 0 100 100").attr("aria-hidden", "true");
+    const id = `s${v.vol}`;
+    const d = s.append("defs");
+    d.append("path").attr("id", `${id}-t`).attr("d", "M 13 50 A 37 37 0 0 1 87 50");
+    d.append("path").attr("id", `${id}-b`).attr("d", "M 13 50 A 37 37 0 0 0 87 50");
+    d.append("clipPath").attr("id", `${id}-c`).append("circle").attr("cx", 50).attr("cy", 50).attr("r", 28);
+    s.append("circle").attr("class", "seal-ring").attr("cx", 50).attr("cy", 50).attr("r", 48);
+    s.append("circle").attr("class", "seal-ring").attr("cx", 50).attr("cy", 50).attr("r", 28.5);
+    const [a, b] = coordParts(v.lat, v.lon);
+    s.append("text").attr("class", "seal-text").append("textPath").attr("href", `#${id}-t`).attr("startOffset", "50%").text(`${v.title}   ${country(v)}`);
+    s.append("text").attr("class", "seal-text").attr("dy", 5).append("textPath").attr("href", `#${id}-b`).attr("startOffset", "50%").text(`${a}   ${b}`);
+    s.append("circle").attr("class", "seal-dot").attr("cx", 11).attr("cy", 50).attr("r", 1.4);
+    s.append("circle").attr("class", "seal-dot").attr("cx", 89).attr("cy", 50).attr("r", 1.4);
+    const pj = d3.geoOrthographic().scale(28).translate([50, 50]).rotate([-v.lon, -v.lat]).clipAngle(90);
+    const pp = d3.geoPath(pj);
+    const gl = s.append("g").attr("clip-path", `url(#${id}-c)`);
+    gl.append("path").attr("class", "seal-grat").attr("d", pp(d3.geoGraticule().step([30, 30])()));
+    gl.append("path").attr("class", "seal-land").attr("d", pp(landAll));
+    gl.append("path").attr("class", "seal-grat").attr("d", "M50 21V79M21 50H79");
+    s.append("circle").attr("class", "seal-dot").attr("cx", 50).attr("cy", 50).attr("r", 1.6);
+  }
+
+  function showIdle() {
+    $("#place").textContent = "PREPARING TO EXPLORE";
+    $("#seal").hidden = true;
+    $("#photo").hidden = true;
+    $("#wordmark").hidden = false;
+    $("#menu-btn").hidden = true;
+  }
+
+  function showVol(v) {
+    $("#place").textContent = `${v.title}, ${country(v)}`;
+    setCoord(v.lat, v.lon);
+    drawSeal(v);
+    $("#seal").hidden = false;
+    fillCover($("#photo-cover"), v);
+    $("#exif-time").textContent = v.takenAt
+      ? `Time taken: ${fmtDate(v.takenAt)}, ${fmtTime(v.takenAt)} (${TZ[v.area]})`
+      : "Time taken: —";
+    $("#detail").href = `#vol-${v.vol}`;
+    $("#detail").setAttribute("aria-label", `View detail of VOL. ${v.vol} ${v.title}`);
+    $("#photo").hidden = false;
+    $("#wordmark").hidden = true;
+    $("#menu-btn").hidden = false;
+  }
+
   function select(v, fly) {
     const prevGroup = selected && groupOf(selected);
     selected = v;
     const g = groupOf(v);
-
-    markers.classed("is-selected", (d) => d === g);
-    $("#vol-big").textContent = v.vol;
-    $("#place-label").textContent = v.place;
-    $("#region").textContent = v.region;
-    $("#exif").textContent = `${fmtTime(v.takenAt)} · 23MM · F/1.8`;
-    $("#f-date").textContent = fmtDate(v.takenAt);
-    $("#f-transport").textContent = v.transport.toUpperCase();
-    fillCover($("#panel-cover"), v);
-
-    if (title.textContent !== v.title) {
-      title.textContent = v.title;
-      title.classList.remove("enter"); void title.offsetWidth; title.classList.add("enter");
-    }
-
-    const tabs = $("#vol-tabs");
-    tabs.innerHTML = "";
-    g.vols.forEach((gv) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.textContent = `VOL. ${gv.vol}`;
-      b.setAttribute("aria-pressed", gv === v ? "true" : "false");
-      b.addEventListener("click", () => select(gv, false));
-      tabs.appendChild(b);
-    });
-
+    showVol(v);
     document.querySelectorAll(".areas button").forEach((b) => b.setAttribute("aria-pressed", "false"));
     render();
-
     if (fly && prevGroup !== g) {
       const zoomTo = Math.max(k, AREAS[v.area].zoom * 0.75);
       flyTo(g.lon, g.lat, zoomTo).then(pulse);
     }
   }
 
+  function deselect() {
+    if (!selected) return;
+    selected = null;
+    showIdle();
+    render();
+  }
+
+  // 선택한 곳이 화면 중심에서 멀어지면 "탐험 준비 중" 상태로
+  function checkDrift() {
+    if (!selected) return;
+    const g = groupOf(selected);
+    const p = projection([g.lon, g.lat]);
+    const center = [-rotate[0], -rotate[1]];
+    const far = d3.geoDistance([g.lon, g.lat], center) > Math.PI / 2 - 0.05
+      || Math.hypot(p[0] - size / 2, p[1] - size / 2) > base * 0.45;
+    if (far) deselect();
+  }
+
   // ───────── interaction ─────────
-  const hint = $(".hint");
   svg.call(d3.drag()
-    .on("start", () => { svg.interrupt("fly"); svg.classed("dragging", true); hint.classList.add("gone"); })
+    .on("start", () => { svg.interrupt("fly"); svg.classed("dragging", true); })
     .on("drag", (e) => {
       const deg = 180 / (Math.PI * base * k);   // 화면 1px당 각도
       rotate = [rotate[0] + e.dx * deg, Math.max(-89, Math.min(89, rotate[1] - e.dy * deg)), 0];
       render();
+      checkDrift();
     })
     .on("end", () => svg.classed("dragging", false)));
 
@@ -260,6 +314,7 @@
 
   document.querySelectorAll(".areas button").forEach((b) => b.addEventListener("click", () => {
     const key = b.dataset.area;
+    deselect();
     document.querySelectorAll(".areas button").forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
     if (key === "world") flyTo(-rotate[0], 20, 1);
     else { const a = AREAS[key]; flyTo(a.center[0], a.center[1], a.zoom); }
@@ -269,6 +324,7 @@
   const grid = $("#grid");
   VOLS.forEach((v) => {
     const li = document.createElement("li");
+    li.id = `vol-${v.vol}`;
     li.innerHTML = `
       <button type="button" class="card" aria-label="VOL. ${v.vol} ${v.title} — show on globe">
         <figure class="cover"></figure>
@@ -293,8 +349,10 @@
   window.addEventListener("resize", resize);
   resize();
   const latest = VOLS[VOLS.length - 1];
-  selected = null;
-  select(latest, false);
-  // 진입 연출: 한국에서 출발해 최신 VOL로 한 번 회전
-  setTimeout(() => flyTo(latest.lon, latest.lat, 1.4, 1800).then(pulse), 300);
+  showIdle();
+  render();
+  // 진입 연출: 한국에서 출발해 최신 VOL로 한 번 회전한 뒤 선택
+  setTimeout(() => flyTo(latest.lon, latest.lat, 1.4, 1800).then(() => { select(latest, false); pulse(); }), 300);
+
+  $("#menu-btn").addEventListener("click", () => $("#index").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" }));
 })();
