@@ -316,16 +316,15 @@
     animate
   );
   paintBoard(false);
+  // 공항 전광판처럼: 맨 윗줄이 떠나고 나머지가 한 칸씩 올라감
+  const BOARD_INTERVAL = 2200;
+  const advance = () => { order.push(order.shift()); paintBoard(true); };
   function startBoard() {
     $("#board").hidden = false;
     board.resize();
     if (boardTimer) return;
-    // 공항 전광판처럼: 맨 윗줄이 떠나고 나머지가 한 칸씩 올라감
-    boardTimer = setInterval(() => {
-      if (document.hidden) return;
-      order.push(order.shift());
-      paintBoard(true);
-    }, 3200);
+    advance(); // 미탐색으로 바뀌는 즉시 한 번 넘김
+    boardTimer = setInterval(() => { if (!document.hidden) advance(); }, BOARD_INTERVAL);
   }
   function stopBoard() {
     $("#board").hidden = true;
