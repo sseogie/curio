@@ -321,7 +321,7 @@ body[data-view="project"] .fade { display: block; }
   .panels { grid-template-columns: 1fr; gap: 16px; }
   .about-lead br { display: none; }
   .evolution { grid-template-columns: 1fr; grid-template-areas: "game" "cgame" "arrow" "brand" "cbrand"; row-gap: 16px; }
-  .ver-arrow { transform: rotate(90deg); margin: 8px auto; }
+  .ver-arrow { width: 56px; transform: rotate(90deg); margin: 30px auto; }
   .credit { position: static; text-align: right; padding: 24px 16px 32px; align-items: flex-end; }
   body[data-view="project"] .fade { display: none; }
   .card-title { font-size: 20px; }
