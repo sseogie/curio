@@ -15,6 +15,10 @@
 <!-- 공용 SVG: 잉크 필터, Curio 로고, 미니 큐리오 -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
+    <filter id="logo-tex" x="0" y="0" width="100%" height="100%" filterUnits="objectBoundingBox">
+      <feTurbulence type="fractalNoise" baseFrequency="0.999" numOctaves="3" seed="0" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="0.8" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
     <filter id="ink" x="-2%" y="-2%" width="104%" height="104%">
       <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="4" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="1.4" xChannelSelector="R" yChannelSelector="G"/>
@@ -45,11 +49,14 @@
 
 <main class="stage" id="top">
   <header class="top">
-    <a class="brand" href="#top" aria-label="PROJECT CURIO home"><svg aria-hidden="true"><use href="#curio-solid"/></svg></a>
-    <p class="wordmark" id="wordmark">CURIO</p>
-    <button type="button" class="menu-btn" id="menu-btn" aria-label="All volumes" hidden>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg>
-    </button>
+    <a class="brand" href="#top" aria-label="PROJECT CURIO home">
+      <svg viewBox="0 0 81 67" aria-hidden="true"><path filter="url(#logo-tex)" fill="currentColor" d="M76.1782 31.8132L78.9893 21.2433C79.4751 19.4172 79.0946 16.3859 77.4116 15.8743C77.3919 15.8678 77.37 15.8657 77.3469 15.8657C77.1145 15.8657 76.7549 16.1637 76.6825 16.3956L72.8002 29.1082C72.6357 24.4035 71.4735 19.9081 69.0352 15.7909C65.007 8.98704 58.0635 3.86843 49.7298 1.62938C46.6742 0.810052 43.5407 0.400391 40.4072 0.400391C37.2737 0.400391 33.9384 0.836063 30.7951 1.70741C21.2487 4.35179 13.5915 10.8414 10.1225 19.1029C8.76955 22.3271 8.1775 25.6119 8.00866 29.132L4.14934 16.4498C4.07259 16.1951 3.71846 15.8635 3.45532 15.8635C3.4301 15.8635 3.40489 15.8657 3.38186 15.8733C1.84143 16.3089 1.29871 19.2416 1.77674 21.0482L4.62956 31.8284C0.770248 33.8063 -0.265851 38.0448 0.787786 41.7643C1.92365 45.1424 5.03632 47.4183 9.02611 47.4183C9.16535 47.4183 9.30569 47.4151 9.44603 47.4096C11.709 54.8269 18.1591 60.5351 26.0071 63.6671C30.5845 65.4955 35.503 66.4004 40.4115 66.4004C46.0591 66.4004 51.6913 65.2007 56.761 62.8251C63.7385 59.5575 69.3641 54.2167 71.3858 47.3923C71.5678 47.4031 71.7487 47.4086 71.9286 47.4086C75.8098 47.4086 79.0288 45.0059 80.0342 41.6841C81.0528 37.9852 80.0024 33.7889 76.1782 31.8132ZM35.1795 36.1472C35.1795 37.1768 34.3342 38.0113 33.2926 38.0113C32.2511 38.0113 31.4057 37.1768 31.4057 36.1472V27.3882C31.4057 26.3586 32.2511 25.5242 33.2926 25.5242C33.8134 25.5242 34.2849 25.7322 34.627 26.0704C34.969 26.4085 35.1795 26.8734 35.1795 27.3882V36.1472ZM50.1552 36.1472C50.1552 37.1768 49.3099 38.0113 48.2683 38.0113C47.2267 38.0113 46.3825 37.1768 46.3825 36.1472V27.3882C46.3825 26.3586 47.2267 25.5242 48.2683 25.5242C48.7891 25.5242 49.2606 25.7322 49.6026 26.0704C49.9447 26.4085 50.1552 26.8734 50.1552 27.3882V36.1472Z"/></svg>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#index">Project</a>
+      <a href="#top" aria-current="page">World</a>
+      <a href="#about">About</a>
+    </nav>
   </header>
 
   <div class="info" aria-live="polite">
@@ -80,7 +87,7 @@
     <a class="detail" id="detail" href="#index">VIEW DETAIL</a>
   </aside>
 
-  <p class="credit">PROJECT. CURIO. CITY.<br><span>© 2026 Kim Minseok</span></p>
+  <p class="credit"><span class="c1">PROJECT. CURIO. CITY.</span><span class="c2">© 2026 Kim Minseok</span></p>
 </main>
 
 <section class="index" id="index" aria-labelledby="index-h">
@@ -89,6 +96,12 @@
     <p class="meta"><span id="count">12</span> VOLUMES · 3 REGIONS</p>
   </div>
   <ol class="grid" id="grid"></ol>
+</section>
+
+<section class="about" id="about" aria-labelledby="about-h">
+  <h2 id="about-h">ABOUT</h2>
+  <p>Curio is a small explorer robot that collects cities. For every place it stops, it leaves one photo, a few quiet lines, and a stamp in its passport. PROJECT. CURIO. CITY. is the travel log of those stops, one volume per place.</p>
+  <p class="meta">Instagram @curio_hero</p>
 </section>
 
 <script src="vendor/d3.min.js"></script>

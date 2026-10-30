@@ -209,36 +209,38 @@
   // 좌표 씰: 바깥 링 텍스트 + 정사영 미니 글로브
   const landAll = { type: "FeatureCollection", features: countries };
   function drawSeal(v) {
+    // Figma "coordinate seal" (263px) → viewBox 0..263
     const seal = d3.select("#seal");
     seal.selectAll("*").remove();
-    const s = seal.append("svg").attr("viewBox", "0 0 100 100").attr("aria-hidden", "true");
-    const id = `s${v.vol}`;
+    const s = seal.append("svg").attr("viewBox", "0 0 263 263").attr("aria-hidden", "true");
+    const id = `s${v.vol}`, C = 131.5;
     const d = s.append("defs");
-    d.append("path").attr("id", `${id}-t`).attr("d", "M 13 50 A 37 37 0 0 1 87 50");
-    d.append("path").attr("id", `${id}-b`).attr("d", "M 13 50 A 37 37 0 0 0 87 50");
-    d.append("clipPath").attr("id", `${id}-c`).append("circle").attr("cx", 50).attr("cy", 50).attr("r", 28);
-    s.append("circle").attr("class", "seal-ring").attr("cx", 50).attr("cy", 50).attr("r", 48);
-    s.append("circle").attr("class", "seal-ring").attr("cx", 50).attr("cy", 50).attr("r", 28.5);
-    const [a, b] = coordParts(v.lat, v.lon);
-    s.append("text").attr("class", "seal-text").append("textPath").attr("href", `#${id}-t`).attr("startOffset", "50%").text(`${v.title}   ${country(v)}`);
-    s.append("text").attr("class", "seal-text").attr("dy", 5).append("textPath").attr("href", `#${id}-b`).attr("startOffset", "50%").text(`${a}   ${b}`);
-    s.append("circle").attr("class", "seal-dot").attr("cx", 11).attr("cy", 50).attr("r", 1.4);
-    s.append("circle").attr("class", "seal-dot").attr("cx", 89).attr("cy", 50).attr("r", 1.4);
-    const pj = d3.geoOrthographic().scale(28).translate([50, 50]).rotate([-v.lon, -v.lat]).clipAngle(90);
+    d.append("path").attr("id", `${id}-t`).attr("d", `M ${C - 100} ${C} A 100 100 0 0 1 ${C + 100} ${C}`);
+    d.append("path").attr("id", `${id}-b`).attr("d", `M ${C - 113} ${C} A 113 113 0 0 0 ${C + 113} ${C}`);
+    d.append("clipPath").attr("id", `${id}-c`).append("circle").attr("cx", C).attr("cy", C).attr("r", 79.5);
+    s.append("circle").attr("class", "seal-outer").attr("cx", C).attr("cy", C).attr("r", 130.3);
+    s.append("circle").attr("class", "seal-inner").attr("cx", C).attr("cy", C).attr("r", 95.5);
+    const lat = `${Math.abs(v.lat).toFixed(4)}° ${v.lat >= 0 ? "N" : "S"}`;
+    const lon = `${Math.abs(v.lon).toFixed(4)}° ${v.lon >= 0 ? "E" : "W"}`;
+    s.append("text").attr("class", "seal-text").append("textPath").attr("href", `#${id}-t`).attr("startOffset", "50%").text(`${v.title} · ${country(v)}`);
+    s.append("text").attr("class", "seal-text").append("textPath").attr("href", `#${id}-b`).attr("startOffset", "50%").text(`${lat} · ${lon}`);
+    s.append("circle").attr("class", "seal-dot").attr("cx", 18.5).attr("cy", C).attr("r", 3.5);
+    s.append("circle").attr("class", "seal-dot").attr("cx", 245.5).attr("cy", C).attr("r", 3.5);
+    const pj = d3.geoOrthographic().scale(79.5).translate([C, C]).rotate([-v.lon, -v.lat]).clipAngle(90);
     const pp = d3.geoPath(pj);
     const gl = s.append("g").attr("clip-path", `url(#${id}-c)`);
-    gl.append("path").attr("class", "seal-grat").attr("d", pp(d3.geoGraticule().step([30, 30])()));
+    gl.append("circle").attr("class", "seal-sea").attr("cx", C).attr("cy", C).attr("r", 79.5);
     gl.append("path").attr("class", "seal-land").attr("d", pp(landAll));
-    gl.append("path").attr("class", "seal-grat").attr("d", "M50 21V79M21 50H79");
-    s.append("circle").attr("class", "seal-dot").attr("cx", 50).attr("cy", 50).attr("r", 1.6);
+    gl.append("path").attr("class", "seal-grat").attr("d", pp(d3.geoGraticule().step([20, 20])()));
+    gl.append("path").attr("class", "seal-cross").attr("d", `M${C} ${C - 79.5}V${C + 79.5}M${C - 79.5} ${C}H${C + 79.5}`);
+    s.append("circle").attr("class", "seal-globe").attr("cx", C).attr("cy", C).attr("r", 79.5);
+    s.append("circle").attr("class", "seal-center").attr("cx", C).attr("cy", C).attr("r", 4);
   }
 
   function showIdle() {
     $("#place").textContent = "PREPARING TO EXPLORE";
     $("#seal").hidden = true;
     $("#photo").hidden = true;
-    $("#wordmark").hidden = false;
-    $("#menu-btn").hidden = true;
   }
 
   function showVol(v) {
@@ -253,8 +255,6 @@
     $("#detail").href = `#vol-${v.vol}`;
     $("#detail").setAttribute("aria-label", `View detail of VOL. ${v.vol} ${v.title}`);
     $("#photo").hidden = false;
-    $("#wordmark").hidden = true;
-    $("#menu-btn").hidden = false;
   }
 
   function select(v, fly) {
@@ -354,5 +354,4 @@
   // 진입 연출: 한국에서 출발해 최신 VOL로 한 번 회전한 뒤 선택
   setTimeout(() => flyTo(latest.lon, latest.lat, 1.4, 1800).then(() => { select(latest, false); pulse(); }), 300);
 
-  $("#menu-btn").addEventListener("click", () => $("#index").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" }));
 })();
