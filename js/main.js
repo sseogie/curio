@@ -104,9 +104,7 @@
   labels.each(function (g) {
     const el = d3.select(this);
     const w = el.select(".pill-name").node().getComputedTextLength();
-    el.append("text").attr("class", "pill-vol").attr("x", 12 + w + 8).attr("y", 15).text(volText(g));
-    const w2 = el.select(".pill-vol").node().getComputedTextLength();
-    g._pw = 12 + w + 8 + w2 + 12;
+    g._pw = 12 + w + 12;
     el.select(".pill").attr("width", g._pw).attr("height", 24).attr("rx", 12);
   });
 
