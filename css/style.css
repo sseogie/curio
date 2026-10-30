@@ -45,9 +45,9 @@ a { color: inherit; }
 }
 .brand { display: block; width: max(30px, calc(80 * var(--u))); color: var(--mark); }
 .brand svg { width: 100%; height: auto; display: block; overflow: visible; }
-.nav { display: flex; gap: max(18px, calc(56 * var(--u))); margin-top: calc(14 * var(--u)); }
+.nav { display: flex; gap: max(18px, calc(56 * var(--u))); margin-right: calc(16 * var(--u)); }
 .nav a {
-  font: 400 max(13px, calc(35 * var(--u)))/1.2 var(--sans); letter-spacing: -.03em;
+  font: 400 max(13px, calc(27 * var(--u)))/1.2 var(--sans); letter-spacing: -.03em;
   color: var(--text); text-decoration: none;
 }
 .nav a[aria-current="page"] { font-weight: 600; text-decoration: underline; text-underline-offset: .25em; text-decoration-thickness: 1px; }
@@ -96,7 +96,7 @@ a { color: inherit; }
 }
 .detail {
   display: inline-block; margin-top: max(10px, calc(34 * var(--u)));
-  font: 400 max(11px, calc(24 * var(--u))) var(--sans); letter-spacing: -.03em; color: var(--text); opacity: .9;
+  font: 500 max(11px, calc(24 * var(--u))) var(--sans); letter-spacing: -.03em; color: var(--text); opacity: .9;
   text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s;
 }
 .detail:hover { border-color: currentColor; }
@@ -114,7 +114,7 @@ a { color: inherit; }
 
 /* 우하단 크레딧 */
 .credit {
-  position: absolute; z-index: 3;
+  position: fixed; z-index: 6; margin: 0;
   right: max(var(--side), calc(83 * var(--u)), env(safe-area-inset-right, 0px));
   bottom: max(20px, calc(102 * var(--u)));
   display: flex; flex-direction: column; align-items: flex-end; gap: calc(11 * var(--u));
@@ -229,9 +229,39 @@ a { color: inherit; }
 .card:target .cover, li:target .cover { outline: 2px solid var(--accent); outline-offset: 4px; }
 .index { padding-left: max(var(--side), env(safe-area-inset-left, 0px)); padding-right: max(var(--side), env(safe-area-inset-right, 0px)); }
 
+/* ───────── Project: ARRIVAL COMPLETE ───────── */
+.project {
+  padding: max(96px, calc(235 * var(--u))) max(16px, calc(447 * var(--u))) max(160px, calc(400 * var(--u)));
+}
+.page-title {
+  text-align: center;
+  font: 600 max(20px, calc(55 * var(--u)))/1.2 var(--sans); letter-spacing: -.01em; color: var(--text);
+}
+.cards {
+  list-style: none; margin: max(48px, calc(144 * var(--u))) 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: calc(79 * var(--u)); row-gap: max(40px, calc(144 * var(--u)));
+}
+.vcard { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; text-align: left; }
+.vcard .cover { background: var(--land); border-radius: 0; transition: opacity .25s; }
+.vcard .cover::before, .vcard .cover::after, .vcard .cover .ph { display: none; }
+.vcard:hover .cover { opacity: .85; }
+.vcard-row { display: block; width: 100%; margin-top: max(10px, calc(40 * var(--u))); }
+
+/* 하단 페이드 (Project 화면) */
+.fade {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; pointer-events: none;
+  height: calc(239 * var(--u)); min-height: 90px;
+  background: linear-gradient(to bottom, rgba(245,255,254,0), var(--bg));
+  display: none;
+}
+body[data-view="project"] .fade { display: block; }
+
 /* ───────── About ───────── */
-.about { padding: 72px max(var(--side), env(safe-area-inset-right, 0px)) 120px max(var(--side), env(safe-area-inset-left, 0px)); display: grid; gap: 16px; max-width: 760px; }
-.about h2 { font-weight: 600; font-size: 24px; letter-spacing: -.03em; color: var(--text); }
+.about { padding: max(96px, calc(235 * var(--u))) max(16px, calc(268 * var(--u))) 160px; display: grid; gap: 24px; max-width: 980px; margin: 0 auto; }
+.about p { font-size: max(15px, calc(30 * var(--u))); line-height: 1.6; }
+.about-meta { color: var(--foot); }
+.top { z-index: 7; }
 .about p { color: var(--text); }
 .about .meta { color: var(--foot); }
 
@@ -250,7 +280,9 @@ a { color: inherit; }
   .photo { position: relative; right: auto; top: auto; transform: none; width: 112px; margin-top: 36px; grid-row: 2; grid-column: 2; align-self: start; }
   .exif { margin: 10px 0 0; font-size: 9px; white-space: normal; }
   .board { position: relative; right: auto; top: auto; transform: none; width: 100%; grid-column: 1 / -1; grid-row: 3; margin-top: 32px; }
-  .grid { grid-template-columns: repeat(2, 1fr); gap: 36px 12px; }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 12px; }
+  .credit { position: static; text-align: right; padding: 24px 16px 32px; align-items: flex-end; }
+  body[data-view="project"] .fade { display: none; }
   .card-title { font-size: 20px; }
   .index-head { flex-wrap: wrap; gap: 4px 12px; }
   .index-head h2 { font-size: 24px; }

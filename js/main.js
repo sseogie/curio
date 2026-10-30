@@ -416,38 +416,54 @@
     else { const a = AREAS[key]; flyTo(a.center[0], a.center[1], a.zoom); }
   }));
 
-  // ───────── index grid ─────────
-  const grid = $("#grid");
+  // ───────── Project: ARRIVAL COMPLETE 카드 ─────────
+  const cards = $("#cards");
   VOLS.forEach((v) => {
     const li = document.createElement("li");
     li.id = `vol-${v.vol}`;
     li.innerHTML = `
-      <button type="button" class="card" aria-label="VOL. ${v.vol} ${v.title} — show on globe">
+      <button type="button" class="vcard" aria-label="VOL. ${v.vol} ${v.title}, ${fmtDate(v.takenAt)} — show on the globe">
         <figure class="cover"></figure>
-        <div class="card-row">
-          <p class="card-vol"><span>VOL.</span> <span>${v.vol}</span></p>
-          <p class="meta">${v.transport.toUpperCase()}</p>
-        </div>
-        <p class="card-title">${v.title}</p>
-        <p class="card-region">${v.region}</p>
-        <p class="card-coord">${fmtCoord(v.lat, v.lon)}</p>
+        <canvas class="vcard-row" aria-hidden="true"></canvas>
       </button>`;
     fillCover(li.querySelector(".cover"), v);
-    li.querySelector(".card").addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
-      select(v, true);
+    const row = new DotBoard(li.querySelector(".vcard-row"), { rows: 1, lit: INK_TEXT, off: OFF });
+    row.set([DotBoard.fmt(stampDate(v.takenAt), v.title)], null, false);
+    li.querySelector(".vcard").addEventListener("click", () => {
+      pendingVol = v;
+      location.hash = "#world";
     });
-    grid.appendChild(li);
+    cards.appendChild(li);
   });
-  $("#count").textContent = VOLS.length;
+
+  // ───────── 화면 전환 (World / Project / About) ─────────
+  let pendingVol = null;
+  function showView() {
+    const key = (location.hash || "#world").slice(1);
+    const view = ["project", "about"].includes(key) ? key : "world";
+    document.querySelectorAll(".view").forEach((el) => { el.hidden = el.id !== view; });
+    document.querySelectorAll(".nav a").forEach((a) => {
+      if (a.dataset.view === view) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    document.body.dataset.view = view;
+    window.scrollTo(0, 0);
+    if (view === "world") {
+      resize();
+      if (selected) showVol(selected); else showIdle();
+      if (pendingVol) { const v = pendingVol; pendingVol = null; select(v, true); }
+    } else {
+      stopBoard();
+    }
+  }
+  window.addEventListener("hashchange", showView);
 
   // ───────── start ─────────
-  window.addEventListener("resize", resize);
-  resize();
+  window.addEventListener("resize", () => { if (document.body.dataset.view === "world") resize(); });
   const latest = VOLS[VOLS.length - 1];
-  showIdle();
-  render();
-  // 진입 연출: 한국에서 출발해 최신 VOL로 한 번 회전한 뒤 선택
-  setTimeout(() => flyTo(latest.lon, latest.lat, 1.4, 1800).then(() => { select(latest, false); pulse(); }), 300);
+  showView();
+  // 진입 연출: 한국에서 출발해 최신 VOL로 한 번 회전한 뒤 선택 (World 화면일 때만)
+  if (document.body.dataset.view === "world") {
+    setTimeout(() => flyTo(latest.lon, latest.lat, 1.4, 1800).then(() => { if (!selected) { select(latest, false); pulse(); } }), 300);
+  }
 
 })();
