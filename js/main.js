@@ -193,7 +193,7 @@
   }
 
   // ───────── left info / seal / right photo ─────────
-  const TZ = { vietnam: "UTC+7", hokkaido: "UTC+9", europe: "UTC+2" };
+  const TZ = { vietnam: "UTC+7", japan: "UTC+9", europe: "UTC+2" };
   const country = (v) => v.region.split(",").pop().trim();
   const coordParts = (lat, lon) => [
     `${Math.abs(lat).toFixed(4)} ${lat >= 0 ? "N" : "S"}`,
