@@ -36,6 +36,8 @@ window.CURIO_VOLS = [
     place: "EN ROUTE TO OSNABRÜCK HBF", lat: 52.2799, lon: 8.0472, takenAt: "2024-06-22T07:58", transport: "train" },
   { vol: "12", title: "HALLSTATT", region: "UPPER AUSTRIA, AUSTRIA", area: "europe",
     place: "HALLSTATT MARKTPLATZ", lat: 47.5622, lon: 13.6493, takenAt: "2024-07-05T13:44", transport: "train" },
+  { vol: "13", title: "HALLSTATT", region: "UPPER AUSTRIA, AUSTRIA", area: "europe",
+    place: "SEESTRASSE PENSION HALLBERG", lat: 47.5622, lon: 13.6493, takenAt: "2024-07-05T13:51", transport: "ferry" },
 ];
 
 // 다음 목적지 (안내판에 시간 "--:--"으로 표시, 첫 번째가 강조)
@@ -56,4 +58,5 @@ window.CURIO_IMAGES = {
   "10": ["frankfurt_1", "frankfurt_1_review", "frankfurt_stamp"],
   "11": ["osnabruck_1", "osnabruck_1_review", "osnabruck_1_stamp"],
   "12": ["HALLSTATT_1", "HALLSTATT_1_review", "HALLSTATT_1_stamp"],
+  "13": ["HALLSTATT_2", "HALLSTATT_2_review", "HALLSTATT_2_stamp"],
 };
