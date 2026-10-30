@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROJECT. CURIO. CITY.</title>
+<meta name="description" content="Curio collects cities — a travel magazine series, one place per volume.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=42dot+Sans:wght@300..800&family=ABeeZee&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 공용 SVG: 잉크 필터, Curio 로고, 미니 큐리오 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="ink" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <symbol id="curio" viewBox="0 0 40 40">
+      <path d="M11.5 15.5 L7.5 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M28.5 15.5 L32.5 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      <circle cx="7" cy="7" r="2.2" fill="currentColor"/>
+      <circle cx="33" cy="7" r="2.2" fill="currentColor"/>
+      <circle cx="20" cy="23.5" r="12" fill="none" stroke="currentColor" stroke-width="2.2"/>
+      <rect x="15" y="19" width="3" height="8" rx="1.5" fill="currentColor"/>
+      <rect x="22" y="19" width="3" height="8" rx="1.5" fill="currentColor"/>
+    </symbol>
+    <symbol id="curio-mini" viewBox="0 0 40 40">
+      <path d="M11.5 15.5 L7.5 8 M28.5 15.5 L32.5 8" stroke="#BC534D" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="7" cy="7" r="2.4" fill="#BC534D"/>
+      <circle cx="33" cy="7" r="2.4" fill="#BC534D"/>
+      <path fill="#BC534D" fill-rule="evenodd" d="M20 11.5a12 12 0 1 1 0 24a12 12 0 1 1 0-24Z M16.5 19a1.5 1.5 0 0 0-1.5 1.5v5a1.5 1.5 0 0 0 3 0v-5a1.5 1.5 0 0 0-1.5-1.5Z M23.5 19a1.5 1.5 0 0 0-1.5 1.5v5a1.5 1.5 0 0 0 3 0v-5a1.5 1.5 0 0 0-1.5-1.5Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main class="stage" id="top">
+  <header class="tl">
+    <svg class="logo" aria-label="Curio"><use href="#curio"/></svg>
+    <div class="coord-block">
+      <p class="meta" id="place-label">HALLSTATT MARKTPLATZ</p>
+      <p class="meta" id="live-coord" aria-live="off">47.5622° N · 13.6493° E</p>
+    </div>
+  </header>
+
+  <div class="tr">
+    <p class="masthead">PROJECT. <b>CURIO.</b> CITY.</p>
+    <hr>
+    <p class="vol-num"><span class="vol-dot">VOL.</span> <span id="vol-big">12</span></p>
+  </div>
+
+  <div class="globe-wrap">
+    <svg id="globe" role="img" aria-label="Globe with the places Curio visited. Drag to rotate."></svg>
+    <div class="globe-ui">
+      <div class="areas" role="group" aria-label="Jump to region">
+        <button type="button" data-area="vietnam">VIETNAM</button>
+        <button type="button" data-area="hokkaido">HOKKAIDO</button>
+        <button type="button" data-area="europe">EUROPE</button>
+        <button type="button" data-area="world">WORLD</button>
+      </div>
+      <div class="zoom" role="group" aria-label="Zoom">
+        <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+        <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+      </div>
+    </div>
+    <p class="hint">Drag to turn the globe</p>
+  </div>
+
+  <aside class="panel" aria-live="polite">
+    <figure class="cover cover--panel" id="panel-cover"></figure>
+    <div class="vol-tabs" id="vol-tabs" role="group" aria-label="Volumes at this place"></div>
+    <dl class="facts">
+      <div><dt>DATE</dt><dd id="f-date"></dd></div>
+      <div><dt>BY</dt><dd id="f-transport"></dd></div>
+    </dl>
+  </aside>
+
+  <div class="bottom">
+    <p class="region" id="region">UPPER AUSTRIA, AUSTRIA</p>
+    <h1 class="title" id="title">HALLSTATT</h1>
+  </div>
+
+  <p class="exif meta" id="exif">13:44 · 23MM · F/1.8</p>
+</main>
+
+<section class="index" id="index" aria-labelledby="index-h">
+  <div class="index-head">
+    <h2 id="index-h">ALL VOLUMES</h2>
+    <p class="meta"><span id="count">12</span> VOLUMES · 3 REGIONS</p>
+  </div>
+  <ol class="grid" id="grid"></ol>
+</section>
+
+<footer class="foot">
+  <div class="speak">
+    <p class="bubble">I collect cities. One photo, a few quiet lines, and a stamp in my passport for every place I stop.</p>
+    <svg class="mini" aria-hidden="true"><use href="#curio-mini"/></svg>
+  </div>
+  <p class="meta">PROJECT. CURIO. CITY. — GALAXY S23+ · 23MM · F/1.8</p>
+</footer>
+
+<script src="vendor/d3.min.js"></script>
+<script src="vendor/topojson-client.min.js"></script>
+<script src="vendor/world-50m.js"></script>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

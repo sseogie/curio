@@ -1,0 +1,39 @@
+// PROJECT CURIO — Volume data
+// 커버 이미지는 assets/covers/vol-NN.jpg 로 넣으면 자동으로 표시됩니다.
+// warn: true 는 브랜드 가이드에서 ⚠(확인 필요) 표시된 항목입니다.
+
+window.CURIO_AREAS = {
+  vietnam:  { label: "VIETNAM",  center: [103.7749, 22.3033], zoom: 5 },
+  hokkaido: { label: "HOKKAIDO", center: [141.8, 43.3],       zoom: 18 },
+  europe:   { label: "EUROPE",   center: [10.5, 49.8],        zoom: 4.2 },
+};
+
+// 방문한 국가 (world-atlas ISO numeric id)
+window.CURIO_VISITED = ["704", "392", "276", "040"];
+
+window.CURIO_VOLS = [
+  { vol: "01", title: "FANSIPAN", region: "FANSIPAN PEAK, VIETNAM", area: "vietnam",
+    place: "FANSIPAN SUMMIT", lat: 22.3033, lon: 103.7749, takenAt: "2024-12-24T11:33", transport: "cable car" },
+  { vol: "02", title: "FANSIPAN", region: "FANSIPAN PEAK, VIETNAM", area: "vietnam",
+    place: "FANSIPAN SUMMIT", lat: 22.3033, lon: 103.7749, takenAt: "2024-12-24T11:55", transport: "cable car" },
+  { vol: "03", title: "FANSIPAN", region: "FANSIPAN PEAK, VIETNAM", area: "vietnam",
+    place: "FANSIPAN SUMMIT", lat: 22.3033, lon: 103.7749, takenAt: "2024-12-24T12:41", transport: "cable car" },
+  { vol: "04", title: "SAPPORO", region: "HOKKAIDO, JAPAN", area: "hokkaido",
+    place: "ODORI PARK / SAPPORO TV TOWER", lat: 43.0611, lon: 141.3564, takenAt: "2025-07-01T14:46", transport: "subway" },
+  { vol: "05", title: "SAPPORO", region: "HOKKAIDO, JAPAN", area: "hokkaido",
+    place: "ODORI PARK / SAPPORO TV TOWER", lat: 43.0611, lon: 141.3564, takenAt: null, transport: "subway", warn: true },
+  { vol: "06", title: "BIEI TOWN", region: "HOKKAIDO, JAPAN", area: "hokkaido",
+    place: "FARM TOMITA, NAKAFURANO", lat: 43.4392, lon: 142.4642, takenAt: "2025-06-30T11:40", transport: "bus", warn: true },
+  { vol: "07", title: "OTARU", region: "HOKKAIDO, JAPAN", area: "hokkaido",
+    place: "OTARU CANAL / IRONAI 2-CHOME", lat: 43.1997, lon: 141.0038, takenAt: "2025-06-29T15:46", transport: "train" },
+  { vol: "08", title: "OTARU", region: "HOKKAIDO, JAPAN", area: "hokkaido",
+    place: "OTARU BACKSTREET", lat: 43.1907, lon: 141.0021, takenAt: "2025-06-29T17:11", transport: "train", warn: true },
+  { vol: "09", title: "BLUE POND", region: "HOKKAIDO, JAPAN", area: "hokkaido",
+    place: "SHIROGANE BLUE POND", lat: 43.4938, lon: 142.6307, takenAt: "2025-06-30T14:09", transport: "bus" },
+  { vol: "10", title: "FRANKFURT", region: "HESSE, GERMANY", area: "europe",
+    place: "FRANKFURT AIRPORT LONG-DISTANCE STATION", lat: 50.0533, lon: 8.5706, takenAt: "2024-06-20T19:03", transport: "plane" },
+  { vol: "11", title: "OSNABRÜCK", region: "LOWER SAXONY, GERMANY", area: "europe",
+    place: "EN ROUTE TO OSNABRÜCK HBF", lat: 52.2799, lon: 8.0472, takenAt: "2024-06-22T07:58", transport: "train" },
+  { vol: "12", title: "HALLSTATT", region: "UPPER AUSTRIA, AUSTRIA", area: "europe",
+    place: "HALLSTATT MARKTPLATZ", lat: 47.5622, lon: 13.6493, takenAt: "2024-07-05T13:44", transport: "train" },
+];
