@@ -488,9 +488,6 @@
   window.addEventListener("resize", () => { if (document.body.dataset.view === "world") resize(); });
   const latest = VOLS[VOLS.length - 1];
   showView();
-  // 진입 연출: 한국에서 출발해 최신 VOL로 한 번 회전한 뒤 선택 (World 화면일 때만)
-  if (document.body.dataset.view === "world") {
-    setTimeout(() => flyTo(latest.lon, latest.lat, 1.4, 1800).then(() => { if (!selected) { select(latest, false); pulse(); } }), 300);
-  }
+  // 처음 들어오면 미탐색(PREPARING TO EXPLORE) 상태의 World 화면에서 시작
 
 })();
