@@ -338,7 +338,7 @@
   }
 
   function showIdle() {
-    $("#place").textContent = "PREPARING TO EXPLORE";
+    $("#place").textContent = "PREPARING TO DEPART";
     drawCompass();
     $("#seal").hidden = false;
     startBoard();
@@ -488,6 +488,6 @@
   window.addEventListener("resize", () => { if (document.body.dataset.view === "world") resize(); });
   const latest = VOLS[VOLS.length - 1];
   showView();
-  // 처음 들어오면 미탐색(PREPARING TO EXPLORE) 상태의 World 화면에서 시작
+  // 처음 들어오면 미탐색(PREPARING TO DEPART) 상태의 World 화면에서 시작
 
 })();
