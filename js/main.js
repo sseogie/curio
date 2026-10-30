@@ -299,18 +299,19 @@
   const INK_TEXT = css.getPropertyValue("--text").trim() || "#42645F";
   const ACCENT = css.getPropertyValue("--accent").trim() || "#C8735A";
   const OFF = "rgba(66, 100, 95, 0.09)";
+  const stampDate = (iso) => { if (!iso) return "--.--.--"; const [y, m, d] = iso.split("T")[0].split("-"); return `${d}.${m}.${y.slice(2)}`; };
   const UPCOMING = window.CURIO_UPCOMING || [];
   const boardRows = [
     ...route.filter((g, i) => route.findIndex((h) => h.vols[0].title === g.vols[0].title) === i)
-      .map((g) => ({ time: firstTime(g) === "9" ? "--:--" : firstTime(g).split("T")[1], dest: g.vols[0].title })),
-    ...UPCOMING.map((d) => ({ time: "--:--", dest: d, next: d === UPCOMING[0] })),
+      .map((g) => ({ date: stampDate(firstTime(g) === "9" ? null : firstTime(g)), dest: g.vols[0].title })),
+    ...UPCOMING.map((d) => ({ date: "--.--.--", dest: d, next: d === UPCOMING[0] })),
   ];
   const board = new DotBoard($("#board-canvas"), { rows: boardRows.length, lit: INK_TEXT, off: OFF });
   const volRow = new DotBoard($("#vol-row"), { rows: 1, lit: INK_TEXT, off: OFF });
-  $("#board-list").innerHTML = boardRows.map((r) => `<li>${r.time} ${r.dest}</li>`).join("");
+  $("#board-list").innerHTML = boardRows.map((r) => `<li>${r.date} ${r.dest}</li>`).join("");
   let order = boardRows.slice(), boardTimer = 0;
   const paintBoard = (animate) => board.set(
-    order.map((r) => DotBoard.fmt(r.time, r.dest)),
+    order.map((r) => DotBoard.fmt(r.date, r.dest)),
     order.map((r) => (r.next ? ACCENT : INK_TEXT)),
     animate
   );
@@ -318,7 +319,7 @@
   function startBoard() {
     $("#board").hidden = false;
     board.resize();
-    if (boardTimer || reduceMotion) return;
+    if (boardTimer) return;
     // 공항 전광판처럼: 맨 윗줄이 떠나고 나머지가 한 칸씩 올라감
     boardTimer = setInterval(() => {
       if (document.hidden) return;
@@ -345,9 +346,8 @@
     drawSeal(v);
     $("#seal").hidden = false;
     fillCover($("#photo-cover"), v);
-    const rowText = DotBoard.fmt(v.takenAt ? fmtTime(v.takenAt) : "--:--", v.title);
-    volRow.set([rowText], [INK_TEXT], true);
-    $("#vol-row").setAttribute("aria-label", `${v.takenAt ? fmtTime(v.takenAt) : ""} ${v.title}`);
+    volRow.set([DotBoard.fmt(stampDate(v.takenAt), v.title)], [INK_TEXT], true);
+    $("#vol-row").setAttribute("aria-label", `${fmtDate(v.takenAt)} ${v.title}`);
     stopBoard();
     $("#detail").href = `#vol-${v.vol}`;
     $("#detail").setAttribute("aria-label", `View detail of VOL. ${v.vol} ${v.title}`);
