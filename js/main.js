@@ -294,10 +294,48 @@
     lastCenter = center;
   }
 
+  // ───────── 출발 안내판 ─────────
+  const css = getComputedStyle(document.documentElement);
+  const INK_TEXT = css.getPropertyValue("--text").trim() || "#42645F";
+  const ACCENT = css.getPropertyValue("--accent").trim() || "#C8735A";
+  const OFF = "rgba(66, 100, 95, 0.09)";
+  const UPCOMING = window.CURIO_UPCOMING || [];
+  const boardRows = [
+    ...route.filter((g, i) => route.findIndex((h) => h.vols[0].title === g.vols[0].title) === i)
+      .map((g) => ({ time: firstTime(g) === "9" ? "--:--" : firstTime(g).split("T")[1], dest: g.vols[0].title })),
+    ...UPCOMING.map((d) => ({ time: "--:--", dest: d, next: d === UPCOMING[0] })),
+  ];
+  const board = new DotBoard($("#board-canvas"), { rows: boardRows.length, lit: INK_TEXT, off: OFF });
+  const volRow = new DotBoard($("#vol-row"), { rows: 1, lit: INK_TEXT, off: OFF });
+  $("#board-list").innerHTML = boardRows.map((r) => `<li>${r.time} ${r.dest}</li>`).join("");
+  let order = boardRows.slice(), boardTimer = 0;
+  const paintBoard = (animate) => board.set(
+    order.map((r) => DotBoard.fmt(r.time, r.dest)),
+    order.map((r) => (r.next ? ACCENT : INK_TEXT)),
+    animate
+  );
+  paintBoard(false);
+  function startBoard() {
+    $("#board").hidden = false;
+    board.resize();
+    if (boardTimer || reduceMotion) return;
+    // 공항 전광판처럼: 맨 윗줄이 떠나고 나머지가 한 칸씩 올라감
+    boardTimer = setInterval(() => {
+      if (document.hidden) return;
+      order.push(order.shift());
+      paintBoard(true);
+    }, 3200);
+  }
+  function stopBoard() {
+    $("#board").hidden = true;
+    clearInterval(boardTimer); boardTimer = 0;
+  }
+
   function showIdle() {
     $("#place").textContent = "PREPARING TO EXPLORE";
     drawCompass();
     $("#seal").hidden = false;
+    startBoard();
     $("#photo").hidden = true;
   }
 
@@ -307,9 +345,10 @@
     drawSeal(v);
     $("#seal").hidden = false;
     fillCover($("#photo-cover"), v);
-    $("#exif-time").textContent = v.takenAt
-      ? `Time taken: ${fmtDate(v.takenAt)}, ${fmtTime(v.takenAt)} (${TZ[v.area]})`
-      : "Time taken: —";
+    const rowText = DotBoard.fmt(v.takenAt ? fmtTime(v.takenAt) : "--:--", v.title);
+    volRow.set([rowText], [INK_TEXT], true);
+    $("#vol-row").setAttribute("aria-label", `${v.takenAt ? fmtTime(v.takenAt) : ""} ${v.title}`);
+    stopBoard();
     $("#detail").href = `#vol-${v.vol}`;
     $("#detail").setAttribute("aria-label", `View detail of VOL. ${v.vol} ${v.title}`);
     $("#photo").hidden = false;

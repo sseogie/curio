@@ -101,6 +101,17 @@ a { color: inherit; }
 }
 .detail:hover { border-color: currentColor; }
 
+/* 출발 안내판 — 미탐색: 오른쪽, 탐색: 커버 아래 한 줄 */
+.board {
+  position: absolute; z-index: 3;
+  right: calc(344 * var(--u)); top: 50%; transform: translateY(-50%);
+  width: max(180px, calc(520 * var(--u)));
+}
+.board canvas, .board-row { display: block; width: 100%; }
+.board-row { margin-top: max(10px, calc(36 * var(--u))); }
+.photo .detail { margin-top: max(10px, calc(42 * var(--u))); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
 /* 우하단 크레딧 */
 .credit {
   position: absolute; z-index: 3;
@@ -238,6 +249,7 @@ a { color: inherit; }
   .coord { gap: 14px; }
   .photo { position: relative; right: auto; top: auto; transform: none; width: 112px; margin-top: 36px; grid-row: 2; grid-column: 2; align-self: start; }
   .exif { margin: 10px 0 0; font-size: 9px; white-space: normal; }
+  .board { position: relative; right: auto; top: auto; transform: none; width: 100%; grid-column: 1 / -1; grid-row: 3; margin-top: 32px; }
   .grid { grid-template-columns: repeat(2, 1fr); gap: 36px 12px; }
   .card-title { font-size: 20px; }
   .index-head { flex-wrap: wrap; gap: 4px 12px; }

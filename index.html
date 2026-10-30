@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=42dot+Sans:wght@300..800&family=ABeeZee&family=Bpmf+Zihi+Kai+Std&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=202610302342">
+<link rel="stylesheet" href="css/style.css?v=202610310004">
 </head>
 <body>
 
@@ -83,8 +83,13 @@
 
   <aside class="photo" id="photo" hidden>
     <figure class="cover" id="photo-cover"></figure>
-    <p class="exif"><span id="exif-time"></span><br>Focal length: 5.4mm (23mm in 35mm equivalent, wide-angle)</p>
+    <canvas class="board-row" id="vol-row" role="img" aria-label=""></canvas>
     <a class="detail" id="detail" href="#index">VIEW DETAIL</a>
+  </aside>
+
+  <aside class="board" id="board" aria-label="Departures: places Curio has visited and where it goes next">
+    <canvas id="board-canvas"></canvas>
+    <ol class="sr-only" id="board-list"></ol>
   </aside>
 
   <p class="credit"><span class="c1">PROJECT. CURIO. CITY.</span><span class="c2">© 2026 Kim Minseok</span></p>
@@ -107,7 +112,8 @@
 <script src="vendor/d3.min.js"></script>
 <script src="vendor/topojson-client.min.js"></script>
 <script src="vendor/world-50m.js"></script>
-<script src="js/data.js?v=202610302342"></script>
-<script src="js/main.js?v=202610302342"></script>
+<script src="js/data.js?v=202610310004"></script>
+<script src="js/board.js?v=202610310004"></script>
+<script src="js/main.js?v=202610310004"></script>
 </body>
 </html>

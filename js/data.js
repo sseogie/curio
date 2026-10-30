@@ -37,3 +37,6 @@ window.CURIO_VOLS = [
   { vol: "12", title: "HALLSTATT", region: "UPPER AUSTRIA, AUSTRIA", area: "europe",
     place: "HALLSTATT MARKTPLATZ", lat: 47.5622, lon: 13.6493, takenAt: "2024-07-05T13:44", transport: "train" },
 ];
+
+// 다음 목적지 (안내판에 시간 "--:--"으로 표시, 첫 번째가 강조)
+window.CURIO_UPCOMING = ["TOKYO", "OSAKA", "KYOTO"];
