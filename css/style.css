@@ -11,6 +11,7 @@
   --sans: "42dot Sans", "Pretendard", system-ui, sans-serif;
   --meta: "ABeeZee", "42dot Sans", system-ui, sans-serif;
   --mono: "Roboto Mono", ui-monospace, monospace;
+  --coord: "Bpmf Zihi Kai Std", "Noto Serif", Georgia, serif;
 
   --u: calc(100vw / 3805);
   --side: max(20px, calc(70 * var(--u)));
@@ -76,8 +77,8 @@ a { color: inherit; }
 .cp-south { fill: var(--bg); stroke: var(--ink); stroke-width: 1.3; stroke-linejoin: round; }
 .cp-dir { font: 500 18px var(--sans); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
 
-.place { font: 600 max(18px, calc(55 * var(--u)))/1.2 var(--sans); letter-spacing: 0; color: var(--text); }
-.coord { display: flex; margin-top: max(6px, calc(25 * var(--u))); font: 400 max(13px, calc(40 * var(--u)))/1.2 var(--sans); letter-spacing: -.03em; color: var(--text); font-variant-numeric: tabular-nums; }
+.place { font: 600 max(18px, calc(55 * var(--u)))/1.2 var(--sans); letter-spacing: -.03em; color: var(--text); }
+.coord { display: flex; margin-top: max(6px, calc(25 * var(--u))); font: 400 max(13px, calc(40 * var(--u)))/1.2 var(--coord); letter-spacing: -.03em; color: var(--text); font-variant-numeric: tabular-nums; }
 .coord { gap: max(16px, calc(49 * var(--u))); }
 
 /* 오른쪽 커버 — 세로 중앙 */
