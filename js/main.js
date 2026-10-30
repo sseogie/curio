@@ -235,9 +235,38 @@
     s.append("circle").attr("class", "seal-center").attr("cx", C).attr("cy", C).attr("r", 4);
   }
 
+  // 미탐색 상태의 나침반 (Figma "compass", 263px)
+  function drawCompass() {
+    const C = 131.5;
+    let ticks = "";
+    for (let d = 0; d < 360; d += 5) {
+      const major = d % 90 === 0, mid = d % 30 === 0;
+      const r2 = major ? 64 : mid ? 70 : 74.5;
+      const a = (d - 90) * Math.PI / 180;
+      ticks += `<line x1="${(C + 79.5 * Math.cos(a)).toFixed(2)}" y1="${(C + 79.5 * Math.sin(a)).toFixed(2)}" x2="${(C + r2 * Math.cos(a)).toFixed(2)}" y2="${(C + r2 * Math.sin(a)).toFixed(2)}" class="cp-tick${major || mid ? "" : " minor"}" stroke-width="${major ? 1.8 : mid ? 1.4 : 1}"/>`;
+    }
+    const dir = [["N", 0], ["E", 90], ["S", 180], ["W", 270]].map(([l, d]) => {
+      const a = (d - 90) * Math.PI / 180;
+      return `<text class="cp-dir" x="${(C + 113 * Math.cos(a)).toFixed(2)}" y="${(C + 113 * Math.sin(a)).toFixed(2)}">${l}</text>`;
+    }).join("");
+    $("#seal").innerHTML = `<svg viewBox="0 0 263 263" aria-hidden="true">
+      <circle class="seal-outer" cx="${C}" cy="${C}" r="130.3"/>
+      <circle class="seal-inner" cx="${C}" cy="${C}" r="95.5"/>
+      <circle class="seal-sea" cx="${C}" cy="${C}" r="79.5"/>
+      <path class="seal-cross" d="M${C} ${C - 79.5}V${C + 79.5}M${C - 79.5} ${C}H${C + 79.5}"/>
+      ${ticks}
+      <path class="cp-north" d="M${C} ${C - 58}L${C + 9} ${C}L${C - 9} ${C}Z"/>
+      <path class="cp-south" d="M${C} ${C + 58}L${C + 9} ${C}L${C - 9} ${C}Z"/>
+      <circle class="seal-globe" cx="${C}" cy="${C}" r="79.5"/>
+      <circle class="seal-center" cx="${C}" cy="${C}" r="4"/>
+      ${dir}
+    </svg>`;
+  }
+
   function showIdle() {
     $("#place").textContent = "PREPARING TO EXPLORE";
-    $("#seal").hidden = true;
+    drawCompass();
+    $("#seal").hidden = false;
     $("#photo").hidden = true;
   }
 

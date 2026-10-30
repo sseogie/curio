@@ -70,6 +70,11 @@ a { color: inherit; }
 .seal-cross { fill: none; stroke: var(--teal-line); stroke-width: 1.69; }
 .seal-globe { fill: none; stroke: var(--ink); stroke-width: 1.87; }
 .seal-center { fill: var(--accent); stroke: #fff; stroke-width: 1.87; }
+.cp-tick { stroke: var(--ink); stroke-linecap: round; }
+.cp-tick.minor { stroke-opacity: .45; }
+.cp-north { fill: var(--accent); }
+.cp-south { fill: var(--bg); stroke: var(--ink); stroke-width: 1.3; stroke-linejoin: round; }
+.cp-dir { font: 500 18px var(--sans); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
 
 .place { font: 600 max(18px, calc(55 * var(--u)))/1.2 var(--sans); letter-spacing: 0; color: var(--text); }
 .coord { display: flex; margin-top: max(6px, calc(25 * var(--u))); font: 400 max(13px, calc(40 * var(--u)))/1.2 var(--sans); letter-spacing: -.03em; color: var(--text); font-variant-numeric: tabular-nums; }
