@@ -60,7 +60,7 @@
   const defs = svg.append("defs");
   // 구체 입체감: 좌상단 하이라이트 + 가장자리 어둡게
   const shade = defs.append("radialGradient").attr("id", "shade").attr("cx", "34%").attr("cy", "28%").attr("r", "78%");
-  [[0, "#FFFFFF", .55], [.4, "#FFFFFF", .08], [1, "#FFFFFF", 0]]
+  [[0, "#F5FFFE", .6], [.4, "#F5FFFE", .1], [1, "#F5FFFE", 0]]
     .forEach(([o, c, a]) => shade.append("stop").attr("offset", o).attr("stop-color", c).attr("stop-opacity", a));
   const drop = defs.append("filter").attr("id", "drop").attr("x", "-20%").attr("y", "-20%").attr("width", "140%").attr("height", "150%");
   drop.append("feDropShadow").attr("dx", 0).attr("dy", 24).attr("stdDeviation", 28).attr("flood-color", "#2C4A47").attr("flood-opacity", .16);
