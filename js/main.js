@@ -424,6 +424,14 @@
 
   // ───────── Project: ARRIVAL COMPLETE 카드 ─────────
   const cards = $("#cards");
+  const cardRows = [];
+  let cardTimers = [];
+  function flipCards() {
+    cardTimers.forEach(clearTimeout);
+    cardRows.forEach(({ row }) => { row.resize(); row.set([" "], null, false); });
+    // 공항 전광판처럼 카드 순서대로 차르륵
+    cardTimers = cardRows.map(({ row, text }, i) => setTimeout(() => row.set([text], null, true), 120 + i * 90));
+  }
   VOLS.forEach((v) => {
     const li = document.createElement("li");
     li.innerHTML = `
@@ -433,7 +441,11 @@
       </button>`;
     fillCover(li.querySelector(".cover"), v);
     const row = new DotBoard(li.querySelector(".vcard-row"), { rows: 1, lit: INK_TEXT, off: OFF });
-    row.set([DotBoard.fmt(stampDate(v.takenAt), v.title)], null, false);
+    const text = DotBoard.fmt(stampDate(v.takenAt), v.title);
+    row.set([text], null, false);
+    cardRows.push({ row, text });
+    // 마우스를 올리면 한 번 더 넘어감
+    li.querySelector(".vcard").addEventListener("mouseenter", () => { row.set([" "], null, false); row.set([text], null, true); });
     li.querySelector(".vcard").addEventListener("click", () => { location.hash = `#vol-${v.vol}`; });
     cards.appendChild(li);
   });
@@ -467,6 +479,7 @@
     } else {
       stopBoard();
       if (view === "detail") showDetail(vol);
+      if (view === "project") flipCards();
     }
   }
   window.addEventListener("hashchange", showView);
