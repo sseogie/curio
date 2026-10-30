@@ -40,3 +40,20 @@ window.CURIO_VOLS = [
 
 // 다음 목적지 (안내판에 시간 "--:--"으로 표시, 첫 번째가 강조)
 window.CURIO_UPCOMING = ["TOKYO", "OSAKA", "KYOTO"];
+
+// VOL별 이미지 (피그마 프레임 이름 그대로 내보낸 JPG → assets/vol/ 폴더)
+// 순서: [커버, 리뷰, 스탬프 지도]
+window.CURIO_IMAGES = {
+  "01": ["FANSIPAN_1", "FANSIPAN_1_REVIEW", "FANSIPAN_1_stamp"],
+  "02": ["FANSIPAN_2", "FANSIPAN_2_REVIEW", "FANSIPAN_2_stamp"],
+  "03": ["fansipan_3", "fansipan_3_review", "fansipan_3_stamp"],
+  "04": ["SAPPORO_1", "SAPPORO_1_REVIEW", "SAPPORO_1_stamp"],
+  "05": ["SAPPORO_2", "SAPPORO_2_REVIEW", "SAPPORO_2_stamp"],
+  "06": ["BIEI TOWN_1", "BIEI TOWN_1_REVIEW", "BIEI TOWN_1_stamp"],
+  "07": ["OTARU_1", "OTARU_1_REVIEW", "OTARU_1_stamp"],
+  "08": ["sapporo_4", "sapporo_4_review", "sapporo_4_stamp"],
+  "09": ["blue1", "blue2", "blue1_stamp"],
+  "10": ["frankfurt_1", "frankfurt_1_review", "frankfurt_stamp"],
+  "11": ["osnabruck_1", "osnabruck_1_review", "osnabruck_1_stamp"],
+  "12": ["HALLSTATT_1", "HALLSTATT_1_review", "HALLSTATT_1_stamp"],
+};

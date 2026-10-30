@@ -248,6 +248,17 @@ a { color: inherit; }
 .vcard:hover .cover { opacity: .85; }
 .vcard-row { display: block; width: 100%; margin-top: max(10px, calc(40 * var(--u))); }
 
+/* ───────── VOL 상세 (Project_inside) ───────── */
+.view[hidden] { display: none !important; }
+.vol-detail { padding: max(96px, calc(248 * var(--u))) max(16px, calc(383 * var(--u))) max(120px, calc(255 * var(--u))); }
+.detail-title { display: block; width: min(100%, max(320px, calc(1329 * var(--u)))); margin: 0 auto; }
+.panels {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: calc(77 * var(--u));
+  margin-top: max(40px, calc(132 * var(--u)));
+}
+.panels .cover { background: var(--land); border-radius: 0; }
+.panels .cover::before, .panels .cover::after { display: none; }
+
 /* 하단 페이드 (Project 화면) */
 .fade {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; pointer-events: none;
@@ -281,6 +292,7 @@ body[data-view="project"] .fade { display: block; }
   .exif { margin: 10px 0 0; font-size: 9px; white-space: normal; }
   .board { position: relative; right: auto; top: auto; transform: none; width: 100%; grid-column: 1 / -1; grid-row: 3; margin-top: 32px; }
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 12px; }
+  .panels { grid-template-columns: 1fr; gap: 16px; }
   .credit { position: static; text-align: right; padding: 24px 16px 32px; align-items: flex-end; }
   body[data-view="project"] .fade { display: none; }
   .card-title { font-size: 20px; }

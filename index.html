@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=42dot+Sans:wght@300..800&family=ABeeZee&family=Bpmf+Zihi+Kai+Std&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=202610310031">
+<link rel="stylesheet" href="css/style.css?v=202610310045">
 </head>
 <body>
 
@@ -58,7 +58,7 @@
   </nav>
 </header>
 
-<main class="view stage" id="world">
+<main class="view stage" id="world" data-name="world">
 
   <div class="info" aria-live="polite">
     <div class="seal" id="seal" hidden></div>
@@ -95,12 +95,21 @@
 
 </main>
 
-<main class="view project" id="project" hidden aria-labelledby="project-h">
+<main class="view project" id="project" data-name="project" hidden aria-labelledby="project-h">
   <h1 class="page-title" id="project-h">ARRIVAL COMPLETE</h1>
   <ol class="cards" id="cards"></ol>
 </main>
 
-<main class="view about" id="about" hidden aria-labelledby="about-h">
+<main class="view vol-detail" id="detail-view" data-name="detail" hidden aria-labelledby="detail-title">
+  <canvas class="detail-title" id="detail-title" role="img"></canvas>
+  <div class="panels" id="detail-panels">
+    <figure class="cover" data-kind="cover"></figure>
+    <figure class="cover" data-kind="review"></figure>
+    <figure class="cover" data-kind="stamp"></figure>
+  </div>
+</main>
+
+<main class="view about" id="about" data-name="about" hidden aria-labelledby="about-h">
   <h1 class="page-title" id="about-h">ABOUT</h1>
   <p>Curio is a small explorer robot that collects cities. For every place it stops, it leaves one photo, a few quiet lines, and a stamp in its passport. PROJECT. CURIO. CITY. is the travel log of those stops, one volume per place.</p>
   <p class="about-meta">Instagram @curio_hero</p>
@@ -112,8 +121,8 @@
 <script src="vendor/d3.min.js"></script>
 <script src="vendor/topojson-client.min.js"></script>
 <script src="vendor/world-50m.js"></script>
-<script src="js/data.js?v=202610310031"></script>
-<script src="js/board.js?v=202610310031"></script>
-<script src="js/main.js?v=202610310031"></script>
+<script src="js/data.js?v=202610310045"></script>
+<script src="js/board.js?v=202610310045"></script>
+<script src="js/main.js?v=202610310045"></script>
 </body>
 </html>

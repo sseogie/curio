@@ -20,16 +20,22 @@
   const fmtTime = (iso) => (iso ? iso.split("T")[1] : "--:--");
   const wrapLon = (l) => ((l + 540) % 360) - 180;
 
-  function fillCover(el, v) {
+  const KINDS = ["cover", "review", "stamp"];
+  const imgSrc = (v, kind = "cover") => {
+    const n = (window.CURIO_IMAGES || {})[v.vol];
+    return n ? `assets/vol/${encodeURIComponent(n[KINDS.indexOf(kind)])}.jpg` : `assets/covers/vol-${v.vol}.jpg`;
+  };
+  function fillCover(el, v, kind = "cover") {
     el.classList.remove("has-img");
-    el.innerHTML = `<span class="ph">vol-${v.vol}.jpg</span><span class="matte"></span>`;
+    el.innerHTML = `<span class="matte"></span>`;
     const img = new Image();
-    img.alt = `${v.title} — VOL. ${v.vol} cover`;
+    img.alt = `${v.title} — VOL. ${v.vol} ${kind}`;
     img.decoding = "async";
-    img.onload = () => { if (el.dataset.vol === v.vol) { el.prepend(img); el.classList.add("has-img"); } };
+    const key = `${v.vol}-${kind}`;
+    img.onload = () => { if (el.dataset.key === key) { el.prepend(img); el.classList.add("has-img"); } };
     img.onerror = () => {};
-    el.dataset.vol = v.vol;
-    img.src = `assets/covers/vol-${v.vol}.jpg`;
+    el.dataset.key = key;
+    img.src = imgSrc(v, kind);
   }
 
   // 같은 좌표의 VOL은 하나의 마커로 묶음
@@ -420,32 +426,39 @@
   const cards = $("#cards");
   VOLS.forEach((v) => {
     const li = document.createElement("li");
-    li.id = `vol-${v.vol}`;
     li.innerHTML = `
-      <button type="button" class="vcard" aria-label="VOL. ${v.vol} ${v.title}, ${fmtDate(v.takenAt)} — show on the globe">
+      <button type="button" class="vcard" aria-label="VOL. ${v.vol} ${v.title}, ${fmtDate(v.takenAt)}">
         <figure class="cover"></figure>
         <canvas class="vcard-row" aria-hidden="true"></canvas>
       </button>`;
     fillCover(li.querySelector(".cover"), v);
     const row = new DotBoard(li.querySelector(".vcard-row"), { rows: 1, lit: INK_TEXT, off: OFF });
     row.set([DotBoard.fmt(stampDate(v.takenAt), v.title)], null, false);
-    li.querySelector(".vcard").addEventListener("click", () => {
-      pendingVol = v;
-      location.hash = "#world";
-    });
+    li.querySelector(".vcard").addEventListener("click", () => { location.hash = `#vol-${v.vol}`; });
     cards.appendChild(li);
   });
 
   // ───────── 화면 전환 (World / Project / About) ─────────
   let pendingVol = null;
+  const detailTitle = new DotBoard($("#detail-title"), { rows: 1, lit: INK_TEXT, off: OFF });
+  function showDetail(v) {
+    detailTitle.set([DotBoard.fmt(stampDate(v.takenAt), v.title)], null, true);
+    $("#detail-title").setAttribute("aria-label", `${fmtDate(v.takenAt)} ${v.title}, VOL. ${v.vol}`);
+    document.querySelectorAll("#detail-panels .cover").forEach((el) => fillCover(el, v, el.dataset.kind));
+    document.title = `${v.title} · VOL. ${v.vol} — PROJECT CURIO`;
+  }
   function showView() {
     const key = (location.hash || "#world").slice(1);
-    const view = ["project", "about"].includes(key) ? key : "world";
-    document.querySelectorAll(".view").forEach((el) => { el.hidden = el.id !== view; });
+    const volMatch = key.match(/^vol-(\d{2})$/);
+    const vol = volMatch && VOLS.find((v) => v.vol === volMatch[1]);
+    const view = vol ? "detail" : ["project", "about"].includes(key) ? key : "world";
+    document.querySelectorAll(".view").forEach((el) => { el.hidden = el.dataset.name !== view; });
+    const navKey = view === "detail" ? "project" : view;
     document.querySelectorAll(".nav a").forEach((a) => {
-      if (a.dataset.view === view) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+      if (a.dataset.view === navKey) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
     document.body.dataset.view = view;
+    if (view !== "detail") document.title = "PROJECT. CURIO. CITY.";
     window.scrollTo(0, 0);
     if (view === "world") {
       resize();
@@ -453,6 +466,7 @@
       if (pendingVol) { const v = pendingVol; pendingVol = null; select(v, true); }
     } else {
       stopBoard();
+      if (view === "detail") showDetail(vol);
     }
   }
   window.addEventListener("hashchange", showView);
