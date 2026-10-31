@@ -16,6 +16,7 @@
       this.cells = Array.from({ length: this.o.rows }, () => Array.from({ length: this.COLS }, () => ({ cur: " ", target: " ", left: 0, next: 0 })));
       this.colors = Array(this.o.rows).fill(this.o.lit);
       this.raf = 0;
+      this.hl = -1;
       this.resize();
       new ResizeObserver(() => this.resize()).observe(canvas);
     }
@@ -49,6 +50,9 @@
       });
       this.loop();
     }
+    // 줄 번호 (캔버스 안의 y 좌표 → 몇 번째 줄인지)
+    rowAt(y) { const i = Math.floor((y + this.gap / 2) / (this.rowH + this.gap)); return i >= 0 && i < this.o.rows ? i : -1; }
+    setHl(i) { if (this.hl !== i) { this.hl = i; this.draw(); } }
     loop() {
       if (this.raf) return;
       const step = (t) => {
@@ -71,6 +75,11 @@
       const { ctx, pitch, rowH, gap, w, h } = this; if (!pitch) return;
       ctx.clearRect(0, 0, w, h);
       const r = pitch * this.o.radius;
+      // 마우스를 올린 줄 배경
+      if (this.hl >= 0 && this.o.hlBg) {
+        ctx.fillStyle = this.o.hlBg;
+        ctx.fillRect(0, this.hl * (rowH + gap) - gap * 0.4, w, rowH + gap * 0.8);
+      }
       this.cells.forEach((row, ri) => {
         const y0 = ri * (rowH + gap);
         // 꺼진 도트

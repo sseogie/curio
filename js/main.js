@@ -46,6 +46,8 @@
     g.vols.push(v);
   });
   const groupOf = (v) => groups.find((g) => g.vols.includes(v));
+  const stampDateEarly = (iso) => { if (!iso) return ""; const [y, m, d] = iso.split("T")[0].split("-"); return `${d}.${m}.${y.slice(2)}`; };
+  const firstTimeLast = (g) => g.vols.map((v) => v.takenAt).filter(Boolean).sort().pop();
 
   // ───────── globe setup ─────────
   const svg = d3.select("#globe");
@@ -87,7 +89,7 @@
   const labelLayer = svg.append("g");
   const pulseC = svg.append("circle").attr("class", "pulse").attr("r", 0).attr("opacity", 0);
 
-  let pick = (g) => select(g.vols[g.vols.length - 1], true);
+  let pick = (g) => { hideHint(); select(g.vols[0], true); };
   const onKey = (e, g) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(g); } };
 
   const markers = markerLayer.selectAll("g.marker").data(groups).join("g")
@@ -97,8 +99,24 @@
     .attr("aria-label", (g) => `${g.vols[0].title}, VOL. ${g.vols.map((v) => v.vol).join(", ")}`)
     .on("click", (e, g) => pick(g))
     .on("keydown", onKey);
+  markers.append("circle").attr("class", "breath").attr("r", 4.5);
   markers.append("circle").attr("class", "hit").attr("r", 18);
   markers.append("circle").attr("class", "dot");
+  // 같은 장소에 VOL이 여러 개면 숫자 배지
+  const badge = markers.filter((g) => g.vols.length > 1).append("g").attr("class", "count").attr("transform", "translate(8,-9)");
+  badge.append("circle").attr("r", 7.5);
+  badge.append("text").attr("text-anchor", "middle").attr("dy", "0.35em").text((g) => g.vols.length);
+
+  // 다음 목적지: 점선 빈 핀
+  const UP_AT = window.CURIO_UPCOMING_AT || {};
+  const nexts = (window.CURIO_UPCOMING || []).filter((n) => UP_AT[n]).map((n, i) => ({ name: n, lon: UP_AT[n][0], lat: UP_AT[n][1], first: i === 0 }));
+  const nextMarkers = markerLayer.selectAll("g.next-marker").data(nexts).join("g").attr("class", "next-marker").attr("aria-hidden", "true");
+  nextMarkers.append("circle").attr("r", (d) => (d.first ? 7 : 5.5));
+
+  // 미니 큐리오: 가장 최근 도착지에 서 있음
+  const curioG = markerLayer.append("g").attr("class", "curio").attr("aria-hidden", "true");
+  curioG.append("ellipse").attr("class", "curio-shadow").attr("cx", 0).attr("cy", 1).attr("rx", 9).attr("ry", 2.4);
+  curioG.append("use").attr("href", "#curio-solid").attr("x", -13).attr("y", -31).attr("width", 26).attr("height", 26);
 
   const volText = (g) => g.vols.length > 1 ? `${g.vols[0].vol}–${g.vols[g.vols.length - 1].vol}` : g.vols[0].vol;
   const labels = labelLayer.selectAll("g.label").data(groups).join("g")
@@ -106,7 +124,17 @@
     .attr("aria-hidden", "true")
     .on("click", (e, g) => pick(g));
   labels.append("rect").attr("class", "pill").attr("filter", "url(#pill)");
-  labels.append("text").attr("class", "pill-name").attr("x", 12).attr("y", 15).text((g) => g.vols[0].title);
+  const latestG = route[route.length - 1];
+  const pillText = labels.append("text").attr("class", "pill-name").attr("x", 12).attr("y", 15).text((g) => g.vols[0].title);
+  pillText.filter((g) => g === latestG).append("tspan").attr("class", "pill-date").text(` ${stampDateEarly(firstTimeLast(latestG))}`);
+  const nextLabels = labelLayer.selectAll("g.next-label").data(nexts).join("g").attr("class", "next-label").attr("aria-hidden", "true");
+  nextLabels.append("rect").attr("class", "pill");
+  nextLabels.append("text").attr("class", "pill-name").attr("x", 12).attr("y", 15).text((d) => (d.first ? `NEXT  ${d.name}` : d.name));
+  nextLabels.each(function (d) {
+    const el = d3.select(this);
+    d._pw = 24 + el.select(".pill-name").node().getComputedTextLength();
+    el.select(".pill").attr("width", d._pw).attr("height", 24).attr("rx", 12);
+  });
   labels.each(function (g) {
     const el = d3.select(this);
     const w = el.select(".pill-name").node().getComputedTextLength();
@@ -162,13 +190,32 @@
       const el = labels.filter((d) => d === g);
       const p = pos.get(g);
       if (!p) { el.attr("display", "none"); return; }
-      const off = g === selG ? 16 : 10;
+      const off = g === selG ? 16 : g === latestG ? 18 : 10;
       const box = { x: p[0] + off, y: p[1] - off - 24, w: g._pw, h: 24 };
       const hit = placed.some((b) => box.x < b.x + b.w + 4 && b.x < box.x + box.w + 4 && box.y < b.y + b.h + 4 && b.y < box.y + box.h + 4);
       if (hit) { el.attr("display", "none"); return; }
       placed.push(box);
       el.attr("display", null).attr("transform", `translate(${box.x},${box.y})`).classed("is-selected", g === selG);
     });
+
+    // 다음 목적지 핀과 라벨 (방문한 곳 라벨과 겹치면 숨김)
+    nextMarkers.each(function (d) {
+      const el = d3.select(this), lbl = nextLabels.filter((x) => x === d);
+      const [x, y] = projection([d.lon, d.lat]);
+      const vis = d3.geoDistance([d.lon, d.lat], center) < Math.PI / 2 - 0.02 && Math.hypot(x - size / 2, y - size / 2) < base - 6;
+      el.attr("display", vis ? null : "none").attr("transform", `translate(${x},${y})`);
+      if (!vis) { lbl.attr("display", "none"); return; }
+      const box = { x: x + 12, y: y - 12 - 24, w: d._pw, h: 24 };
+      const hit = placed.some((b) => box.x < b.x + b.w + 4 && b.x < box.x + box.w + 4 && box.y < b.y + b.h + 4 && b.y < box.y + box.h + 4);
+      if (hit) { lbl.attr("display", "none"); return; }
+      placed.push(box);
+      lbl.attr("display", null).attr("transform", `translate(${box.x},${box.y})`);
+    });
+
+    // 미니 큐리오
+    const cp = pos.get(latestG);
+    curioG.attr("display", cp ? null : "none");
+    if (cp) curioG.attr("transform", `translate(${cp[0]},${cp[1] - (latestG === selG ? 8 : 2)})`);
 
     if (selG && pos.get(selG)) pulseC.attr("cx", pos.get(selG)[0]).attr("cy", pos.get(selG)[1]);
 
@@ -312,19 +359,41 @@
       .map((g) => ({ date: stampDate(firstTime(g) === "9" ? null : firstTime(g)), dest: g.vols[0].title })),
     ...UPCOMING.map((d) => ({ date: "--.--.--", dest: d, next: d === UPCOMING[0] })),
   ];
-  const board = new DotBoard($("#board-canvas"), { rows: boardRows.length, lit: INK_TEXT, off: OFF });
+  const board = new DotBoard($("#board-canvas"), { rows: boardRows.length, lit: INK_TEXT, off: OFF, hlBg: "#E2F3F0" });
   const volRow = new DotBoard($("#vol-row"), { rows: 1, lit: INK_TEXT, off: OFF });
   $("#board-list").innerHTML = boardRows.map((r) => `<li>${r.date} ${r.dest}</li>`).join("");
-  let order = boardRows.slice(), boardTimer = 0;
+  let order = boardRows.slice(), boardTimer = 0, boardHover = -1;
   const paintBoard = (animate) => board.set(
     order.map((r) => DotBoard.fmt(r.date, r.dest)),
-    order.map((r) => (r.next ? ACCENT : INK_TEXT)),
+    order.map((r, i) => (r.next || i === boardHover ? ACCENT : INK_TEXT)),
     animate
   );
+  // 전광판 줄 → 지구본: 올리면 강조, 누르면 그 도시로 날아감
+  const boardCanvas = $("#board-canvas");
+  const volsAt = (dest) => VOLS.filter((v) => v.title === dest);
+  function boardHoverAt(e) {
+    const i = board.rowAt(e.offsetY);
+    const ok = i >= 0 && !order[i].next && volsAt(order[i].dest).length;
+    const next = ok ? i : -1;
+    boardCanvas.style.cursor = ok ? "pointer" : "";
+    if (next === boardHover) return;
+    boardHover = next; board.setHl(next); paintBoard(false);
+  }
+  boardCanvas.addEventListener("mousemove", boardHoverAt);
+  boardCanvas.addEventListener("mouseleave", () => { boardHover = -1; board.setHl(-1); paintBoard(false); boardCanvas.style.cursor = ""; });
+  boardCanvas.addEventListener("click", (e) => {
+    const i = board.rowAt(e.offsetY);
+    if (i < 0 || order[i].next) return;
+    const v = volsAt(order[i].dest)[0];
+    if (!v) return;
+    boardHover = -1; board.setHl(-1);
+    hideHint();
+    select(v, true);
+  });
   paintBoard(false);
   // 공항 전광판처럼: 맨 윗줄이 떠나고 나머지가 한 칸씩 올라감
   const BOARD_INTERVAL = 2200;
-  const advance = () => { order.push(order.shift()); paintBoard(true); };
+  const advance = () => { if (boardHover >= 0) return; order.push(order.shift()); paintBoard(true); };
   function startBoard() {
     $("#board").hidden = false;
     board.resize();
@@ -345,32 +414,75 @@
     $("#photo").hidden = true;
   }
 
-  function showVol(v) {
+  // 커버 + 같은 장소 포스터 겹침 + 도장 + 상태
+  function showVol(v, arrived = true) {
+    const g = groupOf(v), n = g.vols.length, idx = g.vols.indexOf(v);
     $("#place").textContent = `${v.title}, ${country(v)}`;
     setCoord(v.lat, v.lon);
     drawSeal(v);
     $("#seal").hidden = false;
     fillCover($("#photo-cover"), v);
+    const backs = [...document.querySelectorAll("#photo-stack .back")];
+    backs.forEach((el, i) => { const o = g.vols[(idx + 1 + (backs.length - 1 - i)) % n]; if (n > 1 + (backs.length - 1 - i)) fillCover(el, o); });
+    $("#photo-stack").dataset.n = Math.min(n, 3);
+    $("#photo-count").hidden = n < 2;
+    $("#photo-count").textContent = `${n} VOLS`;
+    $("#photo-stamp").innerHTML = stampSVG(v);
+    // 페이저
+    $("#pager").hidden = n < 2;
+    $("#pg-num").textContent = `${String(idx + 1).padStart(2, "0")} / ${String(n).padStart(2, "0")}`;
+    $("#pg-dots").innerHTML = g.vols.map((_, i) => `<i${i === idx ? ' class="on"' : ""}></i>`).join("");
     volRow.set([DotBoard.fmt(stampDate(v.takenAt), v.title)], [INK_TEXT], true);
     $("#vol-row").setAttribute("aria-label", `${fmtDate(v.takenAt)} ${v.title}`);
     stopBoard();
     $("#detail").href = `#vol-${v.vol}`;
     $("#detail").setAttribute("aria-label", `View detail of VOL. ${v.vol} ${v.title}`);
     $("#photo").hidden = false;
+    setStatus(arrived);
+  }
+  function setStatus(arrived) {
+    const s = $("#vol-status");
+    s.textContent = arrived ? "ARRIVED" : "EN ROUTE";
+    s.classList.toggle("is-arrived", arrived);
+    if (!arrived) $("#photo-stamp").style.opacity = 0;
+  }
+  // 도착: 상태가 ARRIVED로, 커버에 도장 "쿵"
+  function arrive(v) {
+    if (selected !== v) return;
+    setStatus(true);
+    const st = $("#photo-stamp");
+    st.style.opacity = "";
+    st.getAnimations().forEach((a) => a.cancel());
+    st.animate([
+      { opacity: 0, transform: "rotate(-6deg) scale(1.45)" },
+      { opacity: 1, transform: "rotate(-6deg) scale(0.95)", offset: 0.62 },
+      { opacity: 1, transform: "rotate(-6deg) scale(1.02)", offset: 0.82 },
+      { opacity: 1, transform: "rotate(-6deg) scale(1)" },
+    ], { duration: 340, easing: "cubic-bezier(.3,.7,.4,1)", fill: "both" });
+    $("#photo-cover").animate([{ transform: "translateY(0)" }, { transform: "translateY(3px)", offset: 0.4 }, { transform: "translateY(0)" }], { duration: 260, delay: 200, easing: "ease-out" });
   }
 
   function select(v, fly) {
     const prevGroup = selected && groupOf(selected);
     selected = v;
     const g = groupOf(v);
-    showVol(v);
+    const flying = fly && prevGroup !== g;
+    showVol(v, false);
     document.querySelectorAll(".areas button").forEach((b) => b.setAttribute("aria-pressed", "false"));
     render();
-    if (fly && prevGroup !== g) {
+    if (flying) {
       const zoomTo = Math.max(k, AREAS[v.area].zoom * 0.75);
-      flyTo(g.lon, g.lat, zoomTo).then(pulse);
-    }
+      flyTo(g.lon, g.lat, zoomTo).then(() => { pulse(); arrive(v); });
+    } else setTimeout(() => arrive(v), 120);
   }
+  // 같은 장소의 다른 VOL로 넘기기
+  function stepVol(d) {
+    if (!selected) return;
+    const g = groupOf(selected), n = g.vols.length;
+    select(g.vols[(g.vols.indexOf(selected) + d + n) % n], false);
+  }
+  $("#pg-prev").addEventListener("click", () => stepVol(-1));
+  $("#pg-next").addEventListener("click", () => stepVol(1));
 
   function deselect() {
     if (!selected) return;
@@ -390,10 +502,47 @@
     if (far) deselect();
   }
 
+  // ───────── 첫 방문 안내 ─────────
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  let hintTimer = 0;
+  function showHint() {
+    let seen = false;
+    try { seen = sessionStorage.getItem("curio-hint") === "1"; } catch (e) {}
+    if (seen) return;
+    $("#drag-hint-text").textContent = coarse ? "PINCH TO ZOOM" : "DRAG TO EXPLORE";
+    $("#drag-hint").hidden = false;
+    document.body.classList.add("first-visit");
+    hintTimer = setTimeout(hideHint, 5000);
+  }
+  function hideHint() {
+    if ($("#drag-hint").hidden && !document.body.classList.contains("first-visit")) return;
+    clearTimeout(hintTimer);
+    try { sessionStorage.setItem("curio-hint", "1"); } catch (e) {}
+    $("#drag-hint").classList.add("is-out");
+    document.body.classList.remove("first-visit");
+    setTimeout(() => { $("#drag-hint").hidden = true; }, 400);
+  }
+
   // ───────── interaction ─────────
+  // 두 손가락 핀치 = 확대/축소 (한 손가락은 회전)
+  let pinch = null;
+  const tdist = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+  svg.node().addEventListener("touchstart", (e) => {
+    hideHint();
+    if (e.touches.length === 2) { pinch = { d: tdist(e.touches), k }; svg.interrupt("fly"); }
+  }, { passive: true });
+  svg.node().addEventListener("touchmove", (e) => {
+    if (!pinch || e.touches.length !== 2) return;
+    e.preventDefault();
+    k = Math.max(1, Math.min(28, pinch.k * tdist(e.touches) / pinch.d));
+    render();
+  }, { passive: false });
+  svg.node().addEventListener("touchend", (e) => { if (e.touches.length < 2) pinch = null; }, { passive: true });
+
   svg.call(d3.drag()
-    .on("start", () => { svg.interrupt("fly"); svg.classed("dragging", true); })
+    .on("start", () => { svg.interrupt("fly"); svg.classed("dragging", true); hideHint(); })
     .on("drag", (e) => {
+      if (pinch) return;
       const deg = 180 / (Math.PI * base * k);   // 화면 1px당 각도
       rotate = [rotate[0] + e.dx * deg, Math.max(-89, Math.min(89, rotate[1] - e.dy * deg)), 0];
       render();
@@ -416,6 +565,7 @@
 
   document.querySelectorAll(".areas button").forEach((b) => b.addEventListener("click", () => {
     const key = b.dataset.area;
+    hideHint();
     deselect();
     document.querySelectorAll(".areas button").forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
     if (key === "world") flyTo(-rotate[0], 20, 1);
@@ -590,6 +740,7 @@
   window.addEventListener("resize", () => { if (document.body.dataset.view === "world") resize(); });
   const latest = VOLS[VOLS.length - 1];
   showView();
+  if (document.body.dataset.view === "world") showHint();
   // 처음 들어오면 미탐색(PREPARING TO DEPART) 상태의 World 화면에서 시작
 
 })();
