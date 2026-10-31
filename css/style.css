@@ -275,6 +275,16 @@ a { color: inherit; }
 .view[hidden] { display: none !important; }
 .vol-detail { padding: max(96px, calc(248 * var(--u))) max(16px, calc(383 * var(--u))) max(120px, calc(255 * var(--u))); }
 .detail-title { display: block; width: min(100%, max(320px, calc(1329 * var(--u)))); margin: 0 auto; }
+.detail-head { position: relative; }
+.vol-nav { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; gap: max(8px, calc(14 * var(--u))); }
+.arrow-btn {
+  display: grid; place-items: center; box-sizing: border-box;
+  width: max(40px, calc(68 * var(--u))); height: max(40px, calc(68 * var(--u))); border-radius: 50%;
+  border: 1.5px solid var(--mark); color: var(--text); text-decoration: none;
+  font: 500 max(16px, calc(28 * var(--u)))/1 var(--sans);
+  transition: border-color .2s, color .2s, background .2s;
+}
+.arrow-btn:hover, .arrow-btn:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
 .panels {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: calc(77 * var(--u));
   margin-top: max(40px, calc(132 * var(--u)));
@@ -346,6 +356,7 @@ body[data-view="project"] .fade { display: block; }
   .arr-head { margin-top: 18px; }
   .posters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; padding-bottom: 12px; }
   .panels { grid-template-columns: 1fr; gap: 16px; }
+  .vol-nav { position: static; transform: none; justify-content: flex-end; margin-top: 16px; }
   .about-lead br { display: none; }
   .evolution { grid-template-columns: 1fr; grid-template-areas: "game" "cgame" "arrow" "brand" "cbrand"; row-gap: 16px; }
   .ver-arrow { width: 56px; transform: rotate(90deg); margin: 30px auto; }

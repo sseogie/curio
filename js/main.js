@@ -547,7 +547,20 @@
     $("#detail-title").setAttribute("aria-label", `${fmtDate(v.takenAt)} ${v.title}, VOL. ${v.vol}`);
     document.querySelectorAll("#detail-panels .cover").forEach((el) => fillCover(el, v, el.dataset.kind));
     document.title = `${v.title} · VOL. ${v.vol} — PROJECT CURIO`;
+    // 이전·다음 VOL (Project 페이지 순서, 끝에서 처음으로 이어짐)
+    const order = TRIPS.flatMap((t) => t.vols);
+    const i = order.indexOf(v.vol), n = order.length;
+    [["#vol-prev", order[(i - 1 + n) % n], "Previous"], ["#vol-next", order[(i + 1) % n], "Next"]].forEach(([sel, id, word]) => {
+      const a = $(sel), t = BYVOL[id];
+      a.href = `#vol-${id}`;
+      a.setAttribute("aria-label", `${word}: VOL. ${id} ${t.title}`);
+    });
   }
+  document.addEventListener("keydown", (e) => {
+    if (document.body.dataset.view !== "detail" || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === "ArrowLeft") $("#vol-prev").click();
+    if (e.key === "ArrowRight") $("#vol-next").click();
+  });
   function showView() {
     const key = (location.hash || "#world").slice(1);
     const volMatch = key.match(/^vol-(\d{2})$/);
