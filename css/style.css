@@ -280,7 +280,7 @@ a { color: inherit; }
 .arrow-btn {
   display: grid; place-items: center; box-sizing: border-box;
   width: max(40px, calc(68 * var(--u))); height: max(40px, calc(68 * var(--u))); border-radius: 50%;
-  border: 1.5px solid var(--mark); color: var(--text); text-decoration: none;
+  border: 1.5px solid var(--text); color: var(--text); text-decoration: none;
   font: 500 max(16px, calc(28 * var(--u)))/1 var(--sans);
   transition: border-color .2s, color .2s, background .2s;
 }
