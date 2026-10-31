@@ -42,8 +42,6 @@ window.CURIO_VOLS = [
 
 // 다음 목적지 (안내판에 시간 "--:--"으로 표시, 첫 번째가 강조)
 window.CURIO_UPCOMING = ["TOKYO", "OSAKA", "KYOTO"];
-// 다음 목적지 좌표 [경도, 위도] — 지구본에 점선 빈 핀으로 표시
-window.CURIO_UPCOMING_AT = { TOKYO: [139.6917, 35.6895], OSAKA: [135.5023, 34.6937], KYOTO: [135.7681, 35.0116] };
 
 // VOL별 이미지 (피그마 프레임 이름 그대로 내보낸 JPG → assets/vol/ 폴더)
 // 순서: [커버, 리뷰, 스탬프 지도]

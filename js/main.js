@@ -46,8 +46,6 @@
     g.vols.push(v);
   });
   const groupOf = (v) => groups.find((g) => g.vols.includes(v));
-  const stampDateEarly = (iso) => { if (!iso) return ""; const [y, m, d] = iso.split("T")[0].split("-"); return `${d}.${m}.${y.slice(2)}`; };
-  const firstTimeLast = (g) => g.vols.map((v) => v.takenAt).filter(Boolean).sort().pop();
 
   // ───────── globe setup ─────────
   const svg = d3.select("#globe");
@@ -102,21 +100,12 @@
   markers.append("circle").attr("class", "breath").attr("r", 4.5);
   markers.append("circle").attr("class", "hit").attr("r", 18);
   markers.append("circle").attr("class", "dot");
-  // 같은 장소에 VOL이 여러 개면 숫자 배지
-  const badge = markers.filter((g) => g.vols.length > 1).append("g").attr("class", "count").attr("transform", "translate(8,-9)");
-  badge.append("circle").attr("r", 7.5);
-  badge.append("text").attr("text-anchor", "middle").attr("dy", "0.35em").text((g) => g.vols.length);
-
-  // 다음 목적지: 점선 빈 핀
-  const UP_AT = window.CURIO_UPCOMING_AT || {};
-  const nexts = (window.CURIO_UPCOMING || []).filter((n) => UP_AT[n]).map((n, i) => ({ name: n, lon: UP_AT[n][0], lat: UP_AT[n][1], first: i === 0 }));
-  const nextMarkers = markerLayer.selectAll("g.next-marker").data(nexts).join("g").attr("class", "next-marker").attr("aria-hidden", "true");
-  nextMarkers.append("circle").attr("r", (d) => (d.first ? 7 : 5.5));
 
   // 미니 큐리오: 가장 최근 도착지에 서 있음
   const curioG = markerLayer.append("g").attr("class", "curio").attr("aria-hidden", "true");
   curioG.append("ellipse").attr("class", "curio-shadow").attr("cx", 0).attr("cy", 1).attr("rx", 9).attr("ry", 2.4);
-  curioG.append("use").attr("href", "#curio-solid").attr("x", -13).attr("y", -31).attr("width", 26).attr("height", 26);
+  curioG.append("svg").attr("class", "curio-mark").attr("viewBox", "0 0 81 67").attr("x", -15).attr("y", -27).attr("width", 30).attr("height", 25)
+    .append("path").attr("d", document.querySelector(".brand path").getAttribute("d"));
 
   const volText = (g) => g.vols.length > 1 ? `${g.vols[0].vol}–${g.vols[g.vols.length - 1].vol}` : g.vols[0].vol;
   const labels = labelLayer.selectAll("g.label").data(groups).join("g")
@@ -125,16 +114,7 @@
     .on("click", (e, g) => pick(g));
   labels.append("rect").attr("class", "pill").attr("filter", "url(#pill)");
   const latestG = route[route.length - 1];
-  const pillText = labels.append("text").attr("class", "pill-name").attr("x", 12).attr("y", 15).text((g) => g.vols[0].title);
-  pillText.filter((g) => g === latestG).append("tspan").attr("class", "pill-date").text(` ${stampDateEarly(firstTimeLast(latestG))}`);
-  const nextLabels = labelLayer.selectAll("g.next-label").data(nexts).join("g").attr("class", "next-label").attr("aria-hidden", "true");
-  nextLabels.append("rect").attr("class", "pill");
-  nextLabels.append("text").attr("class", "pill-name").attr("x", 12).attr("y", 15).text((d) => (d.first ? `NEXT  ${d.name}` : d.name));
-  nextLabels.each(function (d) {
-    const el = d3.select(this);
-    d._pw = 24 + el.select(".pill-name").node().getComputedTextLength();
-    el.select(".pill").attr("width", d._pw).attr("height", 24).attr("rx", 12);
-  });
+  labels.append("text").attr("class", "pill-name").attr("x", 12).attr("y", 15).text((g) => g.vols[0].title);
   labels.each(function (g) {
     const el = d3.select(this);
     const w = el.select(".pill-name").node().getComputedTextLength();
@@ -190,26 +170,12 @@
       const el = labels.filter((d) => d === g);
       const p = pos.get(g);
       if (!p) { el.attr("display", "none"); return; }
-      const off = g === selG ? 16 : g === latestG ? 18 : 10;
+      const off = g === selG ? 16 : g === latestG ? 16 : 10;
       const box = { x: p[0] + off, y: p[1] - off - 24, w: g._pw, h: 24 };
       const hit = placed.some((b) => box.x < b.x + b.w + 4 && b.x < box.x + box.w + 4 && box.y < b.y + b.h + 4 && b.y < box.y + box.h + 4);
       if (hit) { el.attr("display", "none"); return; }
       placed.push(box);
       el.attr("display", null).attr("transform", `translate(${box.x},${box.y})`).classed("is-selected", g === selG);
-    });
-
-    // 다음 목적지 핀과 라벨 (방문한 곳 라벨과 겹치면 숨김)
-    nextMarkers.each(function (d) {
-      const el = d3.select(this), lbl = nextLabels.filter((x) => x === d);
-      const [x, y] = projection([d.lon, d.lat]);
-      const vis = d3.geoDistance([d.lon, d.lat], center) < Math.PI / 2 - 0.02 && Math.hypot(x - size / 2, y - size / 2) < base - 6;
-      el.attr("display", vis ? null : "none").attr("transform", `translate(${x},${y})`);
-      if (!vis) { lbl.attr("display", "none"); return; }
-      const box = { x: x + 12, y: y - 12 - 24, w: d._pw, h: 24 };
-      const hit = placed.some((b) => box.x < b.x + b.w + 4 && b.x < box.x + box.w + 4 && box.y < b.y + b.h + 4 && b.y < box.y + box.h + 4);
-      if (hit) { lbl.attr("display", "none"); return; }
-      placed.push(box);
-      lbl.attr("display", null).attr("transform", `translate(${box.x},${box.y})`);
     });
 
     // 미니 큐리오
@@ -415,7 +381,7 @@
   }
 
   // 커버 + 같은 장소 포스터 겹침 + 도장 + 상태
-  function showVol(v, arrived = true) {
+  function showVol(v) {
     const g = groupOf(v), n = g.vols.length, idx = g.vols.indexOf(v);
     $("#place").textContent = `${v.title}, ${country(v)}`;
     setCoord(v.lat, v.lon);
@@ -425,9 +391,6 @@
     const backs = [...document.querySelectorAll("#photo-stack .back")];
     backs.forEach((el, i) => { const o = g.vols[(idx + 1 + (backs.length - 1 - i)) % n]; if (n > 1 + (backs.length - 1 - i)) fillCover(el, o); });
     $("#photo-stack").dataset.n = Math.min(n, 3);
-    $("#photo-count").hidden = n < 2;
-    $("#photo-count").textContent = `${n} VOLS`;
-    $("#photo-stamp").innerHTML = stampSVG(v);
     // 페이저
     $("#pager").hidden = n < 2;
     $("#pg-num").textContent = `${String(idx + 1).padStart(2, "0")} / ${String(n).padStart(2, "0")}`;
@@ -438,42 +401,22 @@
     $("#detail").href = `#vol-${v.vol}`;
     $("#detail").setAttribute("aria-label", `View detail of VOL. ${v.vol} ${v.title}`);
     $("#photo").hidden = false;
-    setStatus(arrived);
   }
-  function setStatus(arrived) {
-    const s = $("#vol-status");
-    s.textContent = arrived ? "ARRIVED" : "EN ROUTE";
-    s.classList.toggle("is-arrived", arrived);
-    if (!arrived) $("#photo-stamp").style.opacity = 0;
-  }
-  // 도착: 상태가 ARRIVED로, 커버에 도장 "쿵"
-  function arrive(v) {
-    if (selected !== v) return;
-    setStatus(true);
-    const st = $("#photo-stamp");
-    st.style.opacity = "";
-    st.getAnimations().forEach((a) => a.cancel());
-    st.animate([
-      { opacity: 0, transform: "rotate(-6deg) scale(1.45)" },
-      { opacity: 1, transform: "rotate(-6deg) scale(0.95)", offset: 0.62 },
-      { opacity: 1, transform: "rotate(-6deg) scale(1.02)", offset: 0.82 },
-      { opacity: 1, transform: "rotate(-6deg) scale(1)" },
-    ], { duration: 340, easing: "cubic-bezier(.3,.7,.4,1)", fill: "both" });
-    $("#photo-cover").animate([{ transform: "translateY(0)" }, { transform: "translateY(3px)", offset: 0.4 }, { transform: "translateY(0)" }], { duration: 260, delay: 200, easing: "ease-out" });
-  }
+  // 도착하면 핀 펄스
+  function arrive(v) { if (selected === v) pulse(); }
 
   function select(v, fly) {
     const prevGroup = selected && groupOf(selected);
     selected = v;
     const g = groupOf(v);
     const flying = fly && prevGroup !== g;
-    showVol(v, false);
+    showVol(v);
     document.querySelectorAll(".areas button").forEach((b) => b.setAttribute("aria-pressed", "false"));
     render();
     if (flying) {
       const zoomTo = Math.max(k, AREAS[v.area].zoom * 0.75);
-      flyTo(g.lon, g.lat, zoomTo).then(() => { pulse(); arrive(v); });
-    } else setTimeout(() => arrive(v), 120);
+      flyTo(g.lon, g.lat, zoomTo).then(() => arrive(v));
+    }
   }
   // 같은 장소의 다른 VOL로 넘기기
   function stepVol(d) {
