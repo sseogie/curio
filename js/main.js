@@ -23,7 +23,7 @@
   const KINDS = ["cover", "review", "stamp"];
   const imgSrc = (v, kind = "cover") => {
     const n = (window.CURIO_IMAGES || {})[v.vol];
-    return n ? `assets/vol/${encodeURIComponent(n[KINDS.indexOf(kind)])}.jpg` : `assets/covers/vol-${v.vol}.jpg`;
+    return n ? `assets/vol/${encodeURIComponent(n[KINDS.indexOf(kind)])}.jpg?v=${window.CURIO_IMG_V || ""}` : `assets/covers/vol-${v.vol}.jpg`;
   };
   function fillCover(el, v, kind = "cover") {
     el.classList.remove("has-img");
