@@ -526,7 +526,7 @@
   const regions = new Set(VOLS.map((v) => v.area));
   const years = VOLS.map((v) => v.takenAt.slice(0, 4)).sort();
   $("#arr-sum").textContent = `${VOLS.length} ARRIVALS · ${regions.size} REGIONS · ${years[0]} — ${years[years.length - 1]}`;
-  const rowText = (v) => `${v.vol}  ${stampDate(v.takenAt)}  ${v.title.padEnd(10).slice(0, 10)}  ARRIVED`;
+  const rowText = (v) => `${v.vol}  ${stampDate(v.takenAt)}  ${v.title.padEnd(13).slice(0, 13)}  ARRIVED`;
 
   function stampSVG(v) {
     const t = TRANSPORT[v.transport] || "train";
@@ -564,7 +564,7 @@
       const li = document.createElement("li");
       li.innerHTML = `<button type="button" class="arr-row" aria-label="${label}"><canvas aria-hidden="true"></canvas></button>`;
       sec.querySelector(".arr-rows").appendChild(li);
-      const row = new DotBoard(li.querySelector("canvas"), { rows: 1, cols: 33, lit: ROW_INK, off: ROW_OFF, radius: 0.4 });
+      const row = new DotBoard(li.querySelector("canvas"), { rows: 1, cols: 36, lit: ROW_INK, off: ROW_OFF, radius: 0.4 });
       const pi = document.createElement("li");
       pi.innerHTML = `<button type="button" class="poster" aria-label="${label}"><figure class="cover"></figure>${stampSVG(v)}</button>`;
       sec.querySelector(".posters").appendChild(pi);

@@ -9,7 +9,7 @@ window.CURIO_AREAS = {
 };
 
 // 방문한 국가 (world-atlas ISO numeric id)
-window.CURIO_VISITED = ["704", "392", "276", "040"];
+window.CURIO_VISITED = ["704", "392", "276", "040", "528"];
 
 window.CURIO_VOLS = [
   { vol: "01", title: "FANSIPAN", region: "FANSIPAN PEAK, VIETNAM", area: "vietnam",
@@ -38,6 +38,8 @@ window.CURIO_VOLS = [
     place: "HALLSTATT MARKTPLATZ", lat: 47.5622, lon: 13.6493, takenAt: "2024-07-05T13:44", transport: "train" },
   { vol: "13", title: "HALLSTATT", region: "UPPER AUSTRIA, AUSTRIA", area: "europe",
     place: "SEESTRASSE PENSION HALLBERG", lat: 47.5622, lon: 13.6493, takenAt: "2024-07-05T13:51", transport: "ferry" },
+  { vol: "14", title: "ZAANSE SCHANS", region: "NORTH HOLLAND, NETHERLANDS", area: "europe",
+    place: "DE HAAL, ZAANSE SCHANS", lat: 52.4741, lon: 4.8167, takenAt: "2024-06-23T13:39", transport: "train" },
 ];
 
 // 다음 목적지 (안내판에 시간 "--:--"으로 표시, 첫 번째가 강조)
@@ -59,11 +61,12 @@ window.CURIO_IMAGES = {
   "11": ["osnabruck_1", "osnabruck_1_review", "osnabruck_1_stamp"],
   "12": ["HALLSTATT_1", "HALLSTATT_1_review", "HALLSTATT_1_stamp"],
   "13": ["HALLSTATT_2", "HALLSTATT_2_review", "HALLSTATT_2_stamp"],
+  "14": ["ZAANSE SCHANS_1", "ZAANSE SCHANS_1_REVIEW", "ZAANSE SCHANS_1_stamp"],
 };
 
 // 여정 묶음 (Project 화면) — 순서대로 표시
 window.CURIO_TRIPS = [
-  { key: "EUROPE",  sub: "GERMANY · AUSTRIA", when: "20.06 — 05.07.2024", vols: ["10", "11", "12", "13"] },
+  { key: "EUROPE",  sub: "GERMANY, NETHERLANDS, AUSTRIA", when: "20.06 — 05.07.2024", vols: ["10", "11", "14", "12", "13"] },
   { key: "VIETNAM", sub: "FANSIPAN PEAK",     when: "24.12.2024",         vols: ["01", "02", "03"] },
   { key: "JAPAN",   sub: "HOKKAIDO",          when: "29.06 — 01.07.2025", vols: ["07", "08", "06", "09", "04", "05"] },
 ];
@@ -73,5 +76,5 @@ window.CURIO_STAMP_CITY = {
   "01": "FANSIPAN/SA PA", "02": "FANSIPAN/SA PA", "03": "FANSIPAN/SA PA",
   "04": "SAPPORO/HOKKAIDO", "05": "SAPPORO/HOKKAIDO", "06": "NAKAFURANO/HKD",
   "07": "OTARU/HOKKAIDO", "08": "OTARU/HOKKAIDO", "09": "BIEI/SHIROGANE",
-  "10": "FRANKFURT/MAIN", "11": "OSNABRÜCK HBF", "12": "HALLSTATT/AUSTRIA", "13": "HALLSTATT/AUSTRIA",
+  "10": "FRANKFURT/MAIN", "11": "OSNABRÜCK HBF", "12": "HALLSTATT/AUSTRIA", "13": "HALLSTATT/AUSTRIA", "14": "ZAANSE SCHANS/NL",
 };

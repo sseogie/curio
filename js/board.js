@@ -11,7 +11,7 @@
     // opts: { rows, lit, off, accent, rowGap (줄 간격 / 줄 높이) }
     constructor(canvas, opts) {
       this.c = canvas; this.ctx = canvas.getContext("2d");
-      this.o = Object.assign({ rows: 1, cols: 20, rowGap: 23.4 / 36, radius: 0.36 }, opts);
+      this.o = Object.assign({ rows: 1, cols: 23, rowGap: 23.4 / 36, radius: 0.36 }, opts);
       this.COLS = this.o.cols;
       this.cells = Array.from({ length: this.o.rows }, () => Array.from({ length: this.COLS }, () => ({ cur: " ", target: " ", left: 0, next: 0 })));
       this.colors = Array(this.o.rows).fill(this.o.lit);
@@ -20,7 +20,7 @@
       this.resize();
       new ResizeObserver(() => this.resize()).observe(canvas);
     }
-    static fmt(date, dest) { return (date.padEnd(8).slice(0, 8) + "  " + dest.padEnd(10).slice(0, 10)); }
+    static fmt(date, dest) { return (date.padEnd(8).slice(0, 8) + "  " + dest.padEnd(13).slice(0, 13)); }
     resize() {
       const w = this.c.clientWidth; if (!w) return;
       const pitch = w / (this.COLS * 6 - 1), rowH = pitch * 7, gap = rowH * this.o.rowGap;
