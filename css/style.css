@@ -25,7 +25,7 @@ p, h1, h2, figure, ol { margin: 0; padding: 0; }
 button { font: inherit; color: inherit; }
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.meta { font: 400 12px/1.5 var(--meta); letter-spacing: .08em; text-transform: uppercase; }
+.meta { font: 400 12px/1.5 var(--meta); letter-spacing: .03em; text-transform: uppercase; }
 
 /* ───────── Stage ───────── */
 .stage {
@@ -63,7 +63,7 @@ a { color: inherit; }
 .seal svg { width: 100%; height: 100%; display: block; overflow: visible; }
 .seal-outer { fill: var(--bg); stroke: var(--ink); stroke-width: 2.47; }
 .seal-inner { fill: var(--bg); stroke: var(--ink); stroke-width: 1.32; }
-.seal-text { font: 500 14.8px var(--sans); letter-spacing: .14em; fill: var(--ink); text-anchor: middle; }
+.seal-text { font: 500 14.8px var(--sans); letter-spacing: .03em; fill: var(--ink); text-anchor: middle; }
 .seal-dot { fill: var(--accent); }
 .seal-sea { fill: var(--bg); }
 .seal-land { fill: var(--focus); }
@@ -156,7 +156,7 @@ a { color: inherit; }
 .label { cursor: pointer; }
 .label .pill { fill: #fff; }
 .label .pill-name { font: 600 11px var(--sans); letter-spacing: .02em; fill: var(--ink); }
-.label .pill-vol { font: 500 10px var(--mono); letter-spacing: .04em; fill: var(--ink-soft); }
+.label .pill-vol { font: 500 10px var(--mono); letter-spacing: .03em; fill: var(--ink-soft); }
 .label.is-selected .pill-vol { fill: var(--accent); }
 .label:hover .pill { fill: var(--paper); }
 
@@ -173,7 +173,7 @@ a { color: inherit; }
   box-shadow: 0 2px 10px rgba(44,74,71,.12), inset 0 0 0 1px rgba(255,255,255,.7);
 }
 .areas button, .zoom button {
-  font: 500 12px/1 var(--mono); letter-spacing: .04em;
+  font: 500 12px/1 var(--mono); letter-spacing: .03em;
   background: transparent; border: 0; border-radius: 999px;
   padding: 9px 13px; cursor: pointer; color: var(--ink-soft);
   transition: background .2s, color .2s;
@@ -184,7 +184,7 @@ a { color: inherit; }
 
 .hint {
   position: absolute; top: -32px; left: 50%; transform: translateX(-50%);
-  font: 400 12px var(--meta); letter-spacing: .06em; color: var(--ink-soft);
+  font: 400 12px var(--meta); letter-spacing: .03em; color: var(--ink-soft);
   transition: opacity .6s;
 }
 .hint.gone { opacity: 0; }
@@ -204,7 +204,7 @@ a { color: inherit; }
 .cover::after { top: 50%; left: 0; right: 0; height: 1px;
   background: repeating-linear-gradient(to right, var(--teal-line) 0 7px, transparent 7px 14px);
   -webkit-mask: linear-gradient(90deg, transparent, #000 50%, transparent); mask: linear-gradient(90deg, transparent, #000 50%, transparent); }
-.cover .ph { position: absolute; left: 12px; bottom: 10px; font: 400 11px var(--mono); color: var(--ink-soft); letter-spacing: .04em; }
+.cover .ph { position: absolute; left: 12px; bottom: 10px; font: 400 11px var(--mono); color: var(--ink-soft); letter-spacing: .03em; }
 .cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
 .cover.has-img::before, .cover.has-img::after, .cover.has-img .ph { display: none; }
 .cover.has-img { background: none; }
@@ -224,7 +224,7 @@ a { color: inherit; }
 .card-vol span:last-child { font-weight: 500; font-size: 20px; }
 .card-title { font-weight: 600; font-size: 24px; letter-spacing: -.04em; line-height: 1.1; margin-top: 8px; }
 .card-region { font-weight: 500; font-size: 13px; color: var(--ink-soft); }
-.card-coord { font: 400 12px var(--meta); letter-spacing: .04em; color: var(--ink-soft); margin-top: 4px; }
+.card-coord { font: 400 12px var(--meta); letter-spacing: .03em; color: var(--ink-soft); margin-top: 4px; }
 
 
 .card { scroll-margin-top: 48px; }
@@ -234,7 +234,7 @@ a { color: inherit; }
 /* ───────── Project: ARRIVALS (D · 전광판 줄 + 포스터 + 도장) ───────── */
 .project { padding: max(96px, calc(230 * var(--u))) max(16px, calc(268 * var(--u))) max(160px, calc(320 * var(--u))); }
 .arr-title { display: block; width: max(200px, calc(564 * var(--u))); }
-.arr-sum { display: none; margin: max(14px, calc(40 * var(--u))) 0 0; font: 400 max(12px, calc(26 * var(--u)))/1.4 var(--sans); letter-spacing: .06em; color: var(--foot); }
+.arr-sum { display: none; margin: max(14px, calc(40 * var(--u))) 0 0; font: 400 max(12px, calc(26 * var(--u)))/1.4 var(--sans); letter-spacing: .03em; color: var(--foot); }
 .trips { margin-top: max(40px, calc(90 * var(--u))); display: grid; row-gap: max(48px, calc(120 * var(--u))); }
 .trip {
   display: grid; grid-template-columns: calc(827 * var(--u)) 1fr; column-gap: calc(110 * var(--u));
@@ -242,10 +242,10 @@ a { color: inherit; }
   border-top: 1px solid rgba(127,175,168,.35); padding-top: max(20px, calc(44 * var(--u)));
 }
 .trip-name { grid-area: name; display: block; width: calc((var(--n) * 6 - 1) * max(3px, calc(8 * var(--u)))); }
-.trip-sub { margin: max(10px, calc(26 * var(--u))) 0 0; font: 500 max(12px, calc(24 * var(--u)))/1.4 var(--sans); letter-spacing: .06em; color: var(--text); }
+.trip-sub { margin: max(10px, calc(26 * var(--u))) 0 0; font: 500 max(12px, calc(24 * var(--u)))/1.4 var(--sans); letter-spacing: .03em; color: var(--text); }
 .trip-sub span { margin-left: 1.2em; font-weight: 400; color: var(--foot); }
 .trip-side { grid-area: side; }
-.arr-head { position: relative; height: 1.4em; margin-top: max(14px, calc(40 * var(--u))); font: 500 max(9px, calc(16 * var(--u))) var(--sans); letter-spacing: .12em; color: var(--mark); }
+.arr-head { position: relative; height: 1.4em; margin-top: max(14px, calc(40 * var(--u))); font: 500 max(9px, calc(16 * var(--u))) var(--sans); letter-spacing: .03em; color: var(--mark); }
 .arr-head span { position: absolute; top: 0; }
 .arr-head span:nth-child(1) { left: 0; }
 .arr-head span:nth-child(2) { left: calc(4 * 6 / 197 * 100%); }
@@ -338,13 +338,13 @@ body[data-view="project"] .fade { display: block; }
 .ver-cap-game { grid-area: cgame; }
 .ver-cap-brand { grid-area: cbrand; }
 /* 제작 과정 */
-.system-title { margin: max(56px, calc(170 * var(--u))) 0 0; font: 600 max(14px, calc(30 * var(--u)))/1.2 var(--sans); letter-spacing: .08em; color: var(--text); }
+.system-title { margin: max(56px, calc(170 * var(--u))) 0 0; font: 600 max(14px, calc(30 * var(--u)))/1.2 var(--sans); letter-spacing: .03em; color: var(--text); }
 .system { list-style: none; margin: max(20px, calc(60 * var(--u))) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: max(12px, calc(40 * var(--u))); width: min(100%, calc(2300 * var(--u))); }
 .system li { padding: max(16px, calc(44 * var(--u))) max(14px, calc(40 * var(--u))); border-radius: max(8px, calc(16 * var(--u))); background: var(--sphere); text-align: left; }
-.system b { display: block; font: 500 max(13px, calc(30 * var(--u)))/1.2 var(--mono); letter-spacing: .06em; color: var(--accent); }
+.system b { display: block; font: 500 max(13px, calc(30 * var(--u)))/1.2 var(--mono); letter-spacing: .03em; color: var(--accent); }
 .system span { display: block; margin-top: max(8px, calc(20 * var(--u))); font: 400 max(12px, calc(23 * var(--u)))/1.55 var(--sans); color: var(--text); }
 .process { margin-top: max(72px, calc(260 * var(--u))); width: 100%; display: flex; flex-direction: column; align-items: center; }
-.process-title { margin: 0; font: 600 max(16px, calc(40 * var(--u)))/1.2 var(--sans); letter-spacing: .04em; color: var(--text); }
+.process-title { margin: 0; font: 600 max(16px, calc(40 * var(--u)))/1.2 var(--sans); letter-spacing: .03em; color: var(--text); }
 .process-lead { margin: max(14px, calc(40 * var(--u))) 0 0; font: 400 max(13px, calc(27 * var(--u)))/1.6 var(--sans); color: var(--text); }
 .steps { list-style: none; margin: max(32px, calc(110 * var(--u))) 0 0; padding: 0; display: flex; align-items: flex-start; justify-content: center; gap: calc(60 * var(--u)); }
 .step { display: flex; flex-direction: column; align-items: center; }
@@ -355,7 +355,7 @@ body[data-view="project"] .fade { display: block; }
 .step-arrow img { display: block; width: max(44px, calc(120 * var(--u))); height: auto; }
 .step-cap { margin: max(14px, calc(46 * var(--u))) 0 0; max-width: max(160px, calc(470 * var(--u))); font: 400 max(11px, calc(22 * var(--u)))/1.55 var(--sans); color: var(--text); text-align: center; }
 .step-pair .step-cap { max-width: max(200px, calc(560 * var(--u))); }
-.step-cap span { display: block; margin-bottom: .5em; font: 500 max(12px, calc(25 * var(--u)))/1.3 var(--sans); letter-spacing: .06em; color: var(--ink); }
+.step-cap span { display: block; margin-bottom: .5em; font: 500 max(12px, calc(25 * var(--u)))/1.3 var(--sans); letter-spacing: .03em; color: var(--ink); }
 .top { z-index: 7; }
 .about p { color: var(--text); }
 .about .meta { color: var(--foot); }
@@ -370,7 +370,7 @@ body.first-visit .marker .breath { animation: breath 2.2s ease-out infinite; tra
 .marker.is-selected .count { display: none; }
 .next-marker circle { fill: var(--bg); fill-opacity: .6; stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: 2.5 2.5; }
 .next-label .pill { fill: var(--bg); stroke: var(--accent); stroke-width: 1; stroke-dasharray: 4 3; }
-.next-label .pill-name { font: 600 11px var(--sans); letter-spacing: .04em; fill: var(--accent); }
+.next-label .pill-name { font: 600 11px var(--sans); letter-spacing: .03em; fill: var(--accent); }
 .next-label { pointer-events: none; }
 .label .pill-date { font-weight: 500; fill: var(--accent); }
 .curio { pointer-events: none; color: var(--accent); }
@@ -383,7 +383,7 @@ body.first-visit .marker .breath { animation: breath 2.2s ease-out infinite; tra
   position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); z-index: 3; margin: 0;
   display: flex; align-items: center; gap: 10px; padding: 11px 20px 11px 16px; border-radius: 999px;
   background: rgba(44,74,71,.88); color: var(--bg); pointer-events: none; white-space: nowrap;
-  font: 500 max(11px, calc(26 * var(--u))) var(--sans); letter-spacing: .14em;
+  font: 500 max(11px, calc(26 * var(--u))) var(--sans); letter-spacing: .03em;
   animation: hint-in .5s ease-out both;
 }
 .drag-hint.is-out { opacity: 0; transition: opacity .4s; }
@@ -399,7 +399,7 @@ body.first-visit .marker .breath { animation: breath 2.2s ease-out infinite; tra
 .stack .count {
   position: absolute; z-index: 3; top: -10px; right: -8px;
   padding: 5px 10px; border-radius: 999px; background: var(--accent); color: #fff;
-  font: 500 max(10px, calc(22 * var(--u))) var(--sans); letter-spacing: .1em;
+  font: 500 max(10px, calc(22 * var(--u))) var(--sans); letter-spacing: .03em;
 }
 .stack .count[hidden] { display: none; }
 .stamp-slot {
@@ -410,7 +410,7 @@ body.first-visit .marker .breath { animation: breath 2.2s ease-out infinite; tra
 .stamp-slot .stamp { position: static; display: block; width: 100%; opacity: 1; transform: none; filter: none; }
 .status {
   display: table; margin: max(10px, calc(30 * var(--u))) auto 0; padding: 5px 12px; border-radius: 4px;
-  font: 500 max(10px, calc(22 * var(--u))) var(--sans); letter-spacing: .14em;
+  font: 500 max(10px, calc(22 * var(--u))) var(--sans); letter-spacing: .03em;
   color: var(--mark); border: 1.5px dashed var(--mark); transition: color .25s, border-color .25s, background .25s;
 }
 .status.is-arrived { color: var(--accent); border: 1.5px solid var(--accent); background: var(--sphere); }
@@ -425,7 +425,7 @@ body.first-visit .marker .breath { animation: breath 2.2s ease-out infinite; tra
 .pg-dots { display: flex; gap: 6px; align-items: center; }
 .pg-dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--mark); }
 .pg-dots i.on { width: 8px; height: 8px; background: var(--accent); }
-.pg-num { font: 500 max(11px, calc(24 * var(--u))) var(--sans); letter-spacing: .08em; color: var(--text); font-variant-numeric: tabular-nums; }
+.pg-num { font: 500 max(11px, calc(24 * var(--u))) var(--sans); letter-spacing: .03em; color: var(--text); font-variant-numeric: tabular-nums; }
 #board-canvas { cursor: default; }
 
 /* ───────── Mobile ───────── */
@@ -443,7 +443,7 @@ body.first-visit .marker .breath { animation: breath 2.2s ease-out infinite; tra
   .marker .hit { r: 22px; }
   .drag-hint { bottom: 10%; }
   .stack .count { top: -8px; right: -6px; padding: 3px 7px; font-size: 9px; }
-  .status { padding: 3px 6px; font-size: 9px; letter-spacing: .08em; }
+  .status { padding: 3px 6px; font-size: 9px; letter-spacing: .03em; }
   .pager { gap: 6px; }
   .pg-btn { width: 30px; height: 30px; font-size: 12px; }
   .pg-dots { display: none; }
