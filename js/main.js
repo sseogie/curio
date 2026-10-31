@@ -103,9 +103,9 @@
 
   // 미니 큐리오: 가장 최근 도착지에 서 있음
   const curioG = markerLayer.append("g").attr("class", "curio").attr("aria-hidden", "true");
-  curioG.append("ellipse").attr("class", "curio-shadow").attr("cx", 0).attr("cy", 1).attr("rx", 9).attr("ry", 2.4);
-  curioG.append("svg").attr("class", "curio-mark").attr("viewBox", "0 0 81 67").attr("x", -15).attr("y", -27).attr("width", 30).attr("height", 25)
-    .append("path").attr("d", document.querySelector(".brand path").getAttribute("d"));
+  curioG.append("ellipse").attr("class", "curio-shadow").attr("cx", 0).attr("cy", 1).attr("rx", 12).attr("ry", 2.8);
+  curioG.append("svg").attr("class", "curio-mark").attr("viewBox", "0 0 81 67").attr("x", -14).attr("y", -25).attr("width", 28).attr("height", 23)
+    .append("path").attr("filter", "url(#logo-tex)").attr("d", document.querySelector(".brand path").getAttribute("d"));
 
   const volText = (g) => g.vols.length > 1 ? `${g.vols[0].vol}–${g.vols[g.vols.length - 1].vol}` : g.vols[0].vol;
   const labels = labelLayer.selectAll("g.label").data(groups).join("g")
@@ -113,7 +113,8 @@
     .attr("aria-hidden", "true")
     .on("click", (e, g) => pick(g));
   labels.append("rect").attr("class", "pill").attr("filter", "url(#pill)");
-  const latestG = route[route.length - 1];
+  // 가장 마지막에 올린 VOL(번호가 가장 큰 것)이 있는 곳
+  const latestG = groupOf(VOLS.reduce((a, b) => (+b.vol > +a.vol ? b : a)));
   labels.append("text").attr("class", "pill-name").attr("x", 12).attr("y", 15).text((g) => g.vols[0].title);
   labels.each(function (g) {
     const el = d3.select(this);

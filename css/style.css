@@ -349,7 +349,7 @@ body.first-visit .marker .breath { animation: breath 2.2s ease-out infinite; tra
 .next-label { pointer-events: none; }
 .label .pill-date { font-weight: 500; fill: var(--accent); }
 .curio { pointer-events: none; color: var(--accent); }
-.curio-mark { fill: #46766F; overflow: visible; }
+.curio-mark { fill: #68948E; overflow: visible; }
 .curio-mark path { animation: bob 2.6s ease-in-out infinite; }
 .curio-shadow { fill: var(--ink); opacity: .18; }
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
