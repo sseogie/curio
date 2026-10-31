@@ -338,6 +338,11 @@ body[data-view="project"] .fade { display: block; }
 .ver-cap-game { grid-area: cgame; }
 .ver-cap-brand { grid-area: cbrand; }
 /* 제작 과정 */
+.system-title { margin: max(56px, calc(170 * var(--u))) 0 0; font: 600 max(14px, calc(30 * var(--u)))/1.2 var(--sans); letter-spacing: .08em; color: var(--text); }
+.system { list-style: none; margin: max(20px, calc(60 * var(--u))) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: max(12px, calc(40 * var(--u))); width: min(100%, calc(2300 * var(--u))); }
+.system li { padding: max(16px, calc(44 * var(--u))) max(14px, calc(40 * var(--u))); border-radius: max(8px, calc(16 * var(--u))); background: var(--sphere); text-align: left; }
+.system b { display: block; font: 500 max(13px, calc(30 * var(--u)))/1.2 var(--mono); letter-spacing: .06em; color: var(--accent); }
+.system span { display: block; margin-top: max(8px, calc(20 * var(--u))); font: 400 max(12px, calc(23 * var(--u)))/1.55 var(--sans); color: var(--text); }
 .process { margin-top: max(72px, calc(260 * var(--u))); width: 100%; display: flex; flex-direction: column; align-items: center; }
 .process-title { margin: 0; font: 600 max(16px, calc(40 * var(--u)))/1.2 var(--sans); letter-spacing: .04em; color: var(--text); }
 .process-lead { margin: max(14px, calc(40 * var(--u))) 0 0; font: 400 max(13px, calc(27 * var(--u)))/1.6 var(--sans); color: var(--text); }
@@ -469,6 +474,8 @@ body.first-visit .marker .breath { animation: breath 2.2s ease-out infinite; tra
   .step-arrow { align-self: center; display: flex; align-items: center; justify-content: center; height: 44px; margin: 28px 0; }
   .step-arrow img { width: 44px; transform: rotate(90deg); }
   .step-cap { max-width: 300px; }
+  .system { grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; gap: 10px; }
+  .system li { padding: 16px 14px; }
   .credit { position: static; text-align: right; padding: 24px 16px 32px; align-items: flex-end; }
   body[data-view="project"] .fade { display: none; }
   .card-title { font-size: 20px; }
