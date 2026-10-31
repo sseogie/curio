@@ -422,33 +422,122 @@
     else { const a = AREAS[key]; flyTo(a.center[0], a.center[1], a.zoom); }
   }));
 
-  // ───────── Project: ARRIVAL COMPLETE 카드 ─────────
-  const cards = $("#cards");
-  const cardRows = [];
-  let cardTimers = [];
-  function flipCards() {
-    cardTimers.forEach(clearTimeout);
-    cardRows.forEach(({ row }) => { row.resize(); row.set([" "], null, false); });
-    // 공항 전광판처럼 카드 순서대로 차르륵
-    cardTimers = cardRows.map(({ row, text }, i) => setTimeout(() => row.set([text], null, true), 120 + i * 90));
+  // ───────── Project: ARRIVALS (전광판 줄 + 포스터 + 여권 도장) ─────────
+  const BYVOL = Object.fromEntries(VOLS.map((v) => [v.vol, v]));
+  const TRIPS = window.CURIO_TRIPS || [];
+  const STAMP_CITY = window.CURIO_STAMP_CITY || {};
+  const ROW_INK = "#2C4A47", ROW_OFF = "rgba(44,74,71,0.1)";
+  const TRANSPORT = { "cable car": "cable", subway: "subway", bus: "bus", train: "train", plane: "plane", ferry: "ferry" };
+  const arrTitle = new DotBoard($("#arr-title"), { rows: 1, cols: 8, lit: INK_TEXT, off: OFF });
+  const regions = new Set(VOLS.map((v) => v.area));
+  const years = VOLS.map((v) => v.takenAt.slice(0, 4)).sort();
+  $("#arr-sum").textContent = `${VOLS.length} ARRIVALS · ${regions.size} REGIONS · ${years[0]} — ${years[years.length - 1]}`;
+  const rowText = (v) => `${v.vol}  ${stampDate(v.takenAt)}  ${v.title.padEnd(10).slice(0, 10)}  ARRIVED`;
+
+  function stampSVG(v) {
+    const t = TRANSPORT[v.transport] || "train";
+    return `<svg class="stamp" viewBox="0 0 340 220" aria-hidden="true">
+      <rect x="7" y="7" width="326" height="206" rx="16" fill="#F5FFFE" opacity=".9"/>
+      <image href="assets/stamp/base.svg" width="340" height="220"/>
+      <image href="assets/stamp/${t}.svg" width="340" height="220"/>
+      <g font-family="Roboto Mono, monospace" font-weight="500" dominant-baseline="hanging">
+        <text x="56" y="92" font-size="34" letter-spacing="2.04" fill="#C8735A">${stampDate(v.takenAt)}</text>
+        <text x="262" y="92" font-size="34" letter-spacing="2.04" fill="#C8735A" opacity=".82">${v.vol}</text>
+        <text x="127" y="158" font-size="17" letter-spacing="1.7" fill="#2C4A47" opacity=".9">${STAMP_CITY[v.vol] || v.title}</text>
+        <text x="148" y="184" font-size="13" letter-spacing="1.82" fill="#2C4A47" opacity=".7">PROJECT CURIO</text>
+      </g>
+    </svg>`;
   }
-  VOLS.forEach((v) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <button type="button" class="vcard" aria-label="VOL. ${v.vol} ${v.title}, ${fmtDate(v.takenAt)}">
-        <figure class="cover"></figure>
-        <canvas class="vcard-row" aria-hidden="true"></canvas>
-      </button>`;
-    fillCover(li.querySelector(".cover"), v);
-    const row = new DotBoard(li.querySelector(".vcard-row"), { rows: 1, lit: INK_TEXT, off: OFF });
-    const text = DotBoard.fmt(stampDate(v.takenAt), v.title);
-    row.set([text], null, false);
-    cardRows.push({ row, text });
-    // 마우스를 올리면 한 번 더 넘어감
-    li.querySelector(".vcard").addEventListener("mouseenter", () => { row.set([" "], null, false); row.set([text], null, true); });
-    li.querySelector(".vcard").addEventListener("click", () => { location.hash = `#vol-${v.vol}`; });
-    cards.appendChild(li);
+
+  const items = {};      // vol → { row, rowEl, poster, stamp, landed }
+  const tripBoards = [];
+  TRIPS.forEach((tr) => {
+    const sec = document.createElement("section");
+    sec.className = "trip";
+    sec.setAttribute("aria-label", `${tr.key}, ${tr.sub}, ${tr.when}`);
+    sec.innerHTML = `
+      <canvas class="trip-name" aria-hidden="true" style="--n:${tr.key.length}"></canvas>
+      <div class="trip-side">
+        <div class="arr-head" aria-hidden="true"><span>VOL</span><span>DATE</span><span>DESTINATION</span><span>STATUS</span></div>
+        <ol class="arr-rows"></ol>
+      </div>
+      <ol class="posters"></ol>`;
+    const name = new DotBoard(sec.querySelector(".trip-name"), { rows: 1, cols: tr.key.length, lit: INK_TEXT, off: OFF });
+    tripBoards.push({ name, text: tr.key });
+    tr.vols.forEach((id) => {
+      const v = BYVOL[id]; if (!v) return;
+      const label = `VOL. ${v.vol} ${v.title}, ${fmtDate(v.takenAt)}, arrived`;
+      const li = document.createElement("li");
+      li.innerHTML = `<button type="button" class="arr-row" aria-label="${label}"><canvas aria-hidden="true"></canvas></button>`;
+      sec.querySelector(".arr-rows").appendChild(li);
+      const row = new DotBoard(li.querySelector("canvas"), { rows: 1, cols: 33, lit: ROW_INK, off: ROW_OFF, radius: 0.4 });
+      const pi = document.createElement("li");
+      pi.innerHTML = `<button type="button" class="poster" aria-label="${label}"><figure class="cover"></figure>${stampSVG(v)}</button>`;
+      sec.querySelector(".posters").appendChild(pi);
+      fillCover(pi.querySelector(".cover"), v);
+      const it = items[id] = { v, row, text: rowText(v), rowEl: li.querySelector(".arr-row"), poster: pi.querySelector(".poster"), stamp: pi.querySelector(".stamp"), landed: false };
+      row.set([it.text], null, false);
+      const on = () => hot(it, true), off = () => hot(it, false);
+      [it.rowEl, it.poster].forEach((el) => {
+        el.addEventListener("mouseenter", on); el.addEventListener("mouseleave", off);
+        el.addEventListener("focus", on); el.addEventListener("blur", off);
+        el.addEventListener("click", () => { location.hash = `#vol-${v.vol}`; });
+      });
+    });
+    $("#trips").appendChild(sec);
   });
+
+  // 도장 "쿵" — 위에서 떨어져 눌리고, 포스터가 살짝 눌림
+  function thump(it, delay = 0) {
+    it.landed = true;
+    it.stamp.animate([
+      { opacity: 0, transform: "rotate(-6deg) scale(1.45)" },
+      { opacity: 1, transform: "rotate(-6deg) scale(0.95)", offset: 0.62 },
+      { opacity: 1, transform: "rotate(-6deg) scale(1.02)", offset: 0.82 },
+      { opacity: 1, transform: "rotate(-6deg) scale(1)" },
+    ], { duration: 340, delay, easing: "cubic-bezier(.3,.7,.4,1)", fill: "both" });
+    it.poster.querySelector(".cover").animate([
+      { transform: "translateY(0)" }, { transform: "translateY(3px) scale(.995)", offset: 0.4 }, { transform: "translateY(0)" },
+    ], { duration: 260, delay: delay + 200, easing: "ease-out" });
+  }
+  function hot(it, on) {
+    it.rowEl.classList.toggle("is-hot", on);
+    it.poster.classList.toggle("is-hot", on);
+    it.row.set([it.text], [on ? ACCENT : ROW_INK], false);
+    if (on) { it.row.set([" "], null, false); it.row.set([it.text], [ACCENT], true); thump(it); }
+  }
+
+  // 화면에 보이는 포스터부터 순서대로 도장이 찍힘 (모바일 스크롤 포함)
+  let landQueue = 0, landReset = 0;
+  const io = new IntersectionObserver((ents) => {
+    const now = performance.now();
+    if (now > landReset) landQueue = 0;
+    ents.filter((e) => e.isIntersecting).forEach((e) => {
+      const it = items[e.target.dataset.vol];
+      if (!it || it.landed) return;
+      io.unobserve(e.target);
+      thump(it, 350 + landQueue * 120);
+      landQueue++; landReset = now + 400;
+    });
+  }, { threshold: 0.45 });
+  Object.entries(items).forEach(([id, it]) => { it.poster.dataset.vol = id; });
+
+  let flipTimers = [];
+  function enterProject() {
+    flipTimers.forEach(clearTimeout); flipTimers = [];
+    arrTitle.resize(); arrTitle.set([" "], null, false);
+    flipTimers.push(setTimeout(() => arrTitle.set(["ARRIVALS"], null, true), 60));
+    tripBoards.forEach(({ name, text }, i) => { name.resize(); name.set([" "], null, false); flipTimers.push(setTimeout(() => name.set([text], null, true), 160 + i * 140)); });
+    Object.values(items).forEach((it, i) => {
+      it.row.resize(); it.row.set([" "], [ROW_INK], false);
+      flipTimers.push(setTimeout(() => it.row.set([it.text], null, true), 220 + i * 70));
+      it.landed = false;
+      it.stamp.getAnimations().forEach((a) => a.cancel());
+      it.stamp.style.opacity = 0;
+      io.unobserve(it.poster);
+      requestAnimationFrame(() => io.observe(it.poster));
+    });
+  }
 
   // ───────── 화면 전환 (World / Project / About) ─────────
   let pendingVol = null;
@@ -479,7 +568,7 @@
     } else {
       stopBoard();
       if (view === "detail") showDetail(vol);
-      if (view === "project") flipCards();
+      if (view === "project") enterProject();
     }
   }
   window.addEventListener("hashchange", showView);

@@ -60,3 +60,18 @@ window.CURIO_IMAGES = {
   "12": ["HALLSTATT_1", "HALLSTATT_1_review", "HALLSTATT_1_stamp"],
   "13": ["HALLSTATT_2", "HALLSTATT_2_review", "HALLSTATT_2_stamp"],
 };
+
+// 여정 묶음 (Project 화면) — 순서대로 표시
+window.CURIO_TRIPS = [
+  { key: "EUROPE",  sub: "GERMANY · AUSTRIA", when: "20.06 — 05.07.2024", vols: ["10", "11", "12", "13"] },
+  { key: "VIETNAM", sub: "FANSIPAN PEAK",     when: "24.12.2024",         vols: ["01", "02", "03"] },
+  { key: "JAPAN",   sub: "HOKKAIDO",          when: "29.06 — 01.07.2025", vols: ["07", "08", "06", "09", "04", "05"] },
+];
+
+// 여권 스탬프 하단 지명 (피그마 스탬프와 동일)
+window.CURIO_STAMP_CITY = {
+  "01": "FANSIPAN/SA PA", "02": "FANSIPAN/SA PA", "03": "FANSIPAN/SA PA",
+  "04": "SAPPORO/HOKKAIDO", "05": "SAPPORO/HOKKAIDO", "06": "NAKAFURANO/HKD",
+  "07": "OTARU/HOKKAIDO", "08": "OTARU/HOKKAIDO", "09": "BIEI/SHIROGANE",
+  "10": "FRANKFURT/MAIN", "11": "OSNABRÜCK HBF", "12": "HALLSTATT/AUSTRIA", "13": "HALLSTATT/AUSTRIA",
+};

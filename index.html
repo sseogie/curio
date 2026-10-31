@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=42dot+Sans:wght@300..800&family=ABeeZee&family=Bpmf+Zihi+Kai+Std&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=202610310212">
+<link rel="stylesheet" href="css/style.css?v=202610311207">
 </head>
 <body>
 
@@ -96,8 +96,10 @@
 </main>
 
 <main class="view project" id="project" data-name="project" hidden aria-labelledby="project-h">
-  <h1 class="page-title" id="project-h">ARRIVAL COMPLETE</h1>
-  <ol class="cards" id="cards"></ol>
+  <h1 class="sr-only" id="project-h">ARRIVALS</h1>
+  <canvas class="arr-title" id="arr-title" aria-hidden="true"></canvas>
+  <p class="arr-sum" id="arr-sum"></p>
+  <div class="trips" id="trips"></div>
 </main>
 
 <main class="view vol-detail" id="detail-view" data-name="detail" hidden aria-labelledby="detail-title">
@@ -127,8 +129,8 @@
 <script src="vendor/d3.min.js"></script>
 <script src="vendor/topojson-client.min.js"></script>
 <script src="vendor/world-50m.js"></script>
-<script src="js/data.js?v=202610310212"></script>
-<script src="js/board.js?v=202610310212"></script>
-<script src="js/main.js?v=202610310212"></script>
+<script src="js/data.js?v=202610311207"></script>
+<script src="js/board.js?v=202610311207"></script>
+<script src="js/main.js?v=202610311207"></script>
 </body>
 </html>

@@ -6,14 +6,14 @@
   for (const [k, v] of Object.entries(F)) G[k] = v.split(",").map((r) => [...r].map((c) => c === "1"));
   const norm = (ch) => { const c = ch.toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); return G[c] ? c : " "; };
   const FLIP_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  const COLS = 20;
 
   class DotBoard {
     // opts: { rows, lit, off, accent, rowGap (줄 간격 / 줄 높이) }
     constructor(canvas, opts) {
       this.c = canvas; this.ctx = canvas.getContext("2d");
-      this.o = Object.assign({ rows: 1, rowGap: 23.4 / 36 }, opts);
-      this.cells = Array.from({ length: this.o.rows }, () => Array.from({ length: COLS }, () => ({ cur: " ", target: " ", left: 0, next: 0 })));
+      this.o = Object.assign({ rows: 1, cols: 20, rowGap: 23.4 / 36, radius: 0.36 }, opts);
+      this.COLS = this.o.cols;
+      this.cells = Array.from({ length: this.o.rows }, () => Array.from({ length: this.COLS }, () => ({ cur: " ", target: " ", left: 0, next: 0 })));
       this.colors = Array(this.o.rows).fill(this.o.lit);
       this.raf = 0;
       this.resize();
@@ -22,7 +22,7 @@
     static fmt(date, dest) { return (date.padEnd(8).slice(0, 8) + "  " + dest.padEnd(10).slice(0, 10)); }
     resize() {
       const w = this.c.clientWidth; if (!w) return;
-      const pitch = w / (COLS * 6 - 1), rowH = pitch * 7, gap = rowH * this.o.rowGap;
+      const pitch = w / (this.COLS * 6 - 1), rowH = pitch * 7, gap = rowH * this.o.rowGap;
       const h = this.o.rows * rowH + (this.o.rows - 1) * gap;
       const dpr = Math.min(window.devicePixelRatio || 1, 3);
       this.c.style.height = h + "px";
@@ -37,7 +37,7 @@
       texts.forEach((t, r) => {
         if (r >= this.o.rows) return;
         if (colors) this.colors[r] = colors[r] || this.o.lit;
-        [...t.padEnd(COLS).slice(0, COLS)].forEach((ch, i) => {
+        [...t.padEnd(this.COLS).slice(0, this.COLS)].forEach((ch, i) => {
           const cell = this.cells[r][i], target = norm(ch);
           if (cell.target === target && cell.left === 0 && cell.cur === target) return;
           cell.target = target;
@@ -70,12 +70,12 @@
     draw() {
       const { ctx, pitch, rowH, gap, w, h } = this; if (!pitch) return;
       ctx.clearRect(0, 0, w, h);
-      const r = pitch * 0.36;
+      const r = pitch * this.o.radius;
       this.cells.forEach((row, ri) => {
         const y0 = ri * (rowH + gap);
         // 꺼진 도트
         ctx.fillStyle = this.o.off; ctx.beginPath();
-        for (let ci = 0; ci < COLS * 6 - 1; ci++) for (let rr = 0; rr < 7; rr++) {
+        for (let ci = 0; ci < this.COLS * 6 - 1; ci++) for (let rr = 0; rr < 7; rr++) {
           const k = Math.floor(ci / 6), cc = ci % 6;
           if (cc < 5 && G[row[k].cur][rr][cc]) continue;
           ctx.moveTo(ci * pitch + pitch / 2 + r, y0 + rr * pitch + pitch / 2);

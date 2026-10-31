@@ -229,24 +229,47 @@ a { color: inherit; }
 .card:target .cover, li:target .cover { outline: 2px solid var(--accent); outline-offset: 4px; }
 .index { padding-left: max(var(--side), env(safe-area-inset-left, 0px)); padding-right: max(var(--side), env(safe-area-inset-right, 0px)); }
 
-/* ───────── Project: ARRIVAL COMPLETE ───────── */
-.project {
-  padding: max(96px, calc(235 * var(--u))) max(16px, calc(447 * var(--u))) max(160px, calc(400 * var(--u)));
+/* ───────── Project: ARRIVALS (D · 전광판 줄 + 포스터 + 도장) ───────── */
+.project { padding: max(96px, calc(230 * var(--u))) max(16px, calc(268 * var(--u))) max(160px, calc(320 * var(--u))); }
+.arr-title { display: block; width: max(200px, calc(564 * var(--u))); }
+.arr-sum { display: none; margin: max(14px, calc(40 * var(--u))) 0 0; font: 400 max(12px, calc(26 * var(--u)))/1.4 var(--sans); letter-spacing: .06em; color: var(--foot); }
+.trips { margin-top: max(40px, calc(90 * var(--u))); display: grid; row-gap: max(48px, calc(120 * var(--u))); }
+.trip {
+  display: grid; grid-template-columns: calc(827 * var(--u)) 1fr; column-gap: calc(110 * var(--u));
+  grid-template-areas: "name ." "side posters";
+  border-top: 1px solid rgba(127,175,168,.35); padding-top: max(20px, calc(44 * var(--u)));
 }
-.page-title {
-  text-align: center;
-  font: 600 max(20px, calc(55 * var(--u)))/1.2 var(--sans); letter-spacing: -.01em; color: var(--text);
+.trip-name { grid-area: name; display: block; width: calc((var(--n) * 6 - 1) * max(3px, calc(8 * var(--u)))); }
+.trip-sub { margin: max(10px, calc(26 * var(--u))) 0 0; font: 500 max(12px, calc(24 * var(--u)))/1.4 var(--sans); letter-spacing: .06em; color: var(--text); }
+.trip-sub span { margin-left: 1.2em; font-weight: 400; color: var(--foot); }
+.trip-side { grid-area: side; }
+.arr-head { position: relative; height: 1.4em; margin-top: max(14px, calc(40 * var(--u))); font: 500 max(9px, calc(16 * var(--u))) var(--sans); letter-spacing: .12em; color: var(--mark); }
+.arr-head span { position: absolute; top: 0; }
+.arr-head span:nth-child(1) { left: 0; }
+.arr-head span:nth-child(2) { left: calc(4 * 6 / 197 * 100%); }
+.arr-head span:nth-child(3) { left: calc(14 * 6 / 197 * 100%); }
+.arr-head span:nth-child(4) { left: calc(26 * 6 / 197 * 100%); }
+.arr-rows { list-style: none; margin: max(2px, calc(6 * var(--u))) 0 0; padding: 0; }
+.arr-row {
+  display: block; width: calc(100% + 2 * max(6px, calc(14 * var(--u)))); margin: 0 calc(-1 * max(6px, calc(14 * var(--u))));
+  padding: max(2px, calc(6.5 * var(--u))) max(6px, calc(14 * var(--u))); border: 0; background: transparent; cursor: pointer; transition: background .2s;
 }
-.cards {
-  list-style: none; margin: max(48px, calc(144 * var(--u))) 0 0; padding: 0;
-  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
-  column-gap: calc(79 * var(--u)); row-gap: max(40px, calc(144 * var(--u)));
+.arr-row canvas { display: block; width: 100%; }
+.arr-row.is-hot, .arr-row:focus-visible { background: var(--sphere); }
+.arr-row:focus-visible, .poster:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.posters {
+  grid-area: posters; list-style: none; margin: max(14px, calc(40 * var(--u))) 0 0; padding: 0; align-self: start;
+  display: grid; grid-template-columns: repeat(6, calc(363 * var(--u))); gap: calc(30 * var(--u));
 }
-.vcard { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; text-align: left; }
-.vcard .cover { background: var(--land); border-radius: 0; transition: opacity .25s; }
-.vcard .cover::before, .vcard .cover::after, .vcard .cover .ph { display: none; }
-.vcard:hover .cover { opacity: .85; }
-.vcard-row { display: block; width: 100%; margin-top: max(10px, calc(40 * var(--u))); }
+.poster { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
+.poster .cover { aspect-ratio: 363 / 454; background: var(--land); border-radius: 0; transform-origin: 50% 100%; }
+.poster .cover::before, .poster .cover::after, .poster .cover .ph { display: none; }
+.poster .cover img { width: 100%; height: 100%; object-fit: cover; }
+.stamp {
+  position: absolute; z-index: 2; pointer-events: none;
+  width: 62%; right: calc(-16 / 363 * 100%); bottom: calc(-20 / 454 * 100%);
+  transform: rotate(-6deg); opacity: 0; filter: drop-shadow(0 1px 1px rgba(44,74,71,.12)); overflow: visible;
+}
 
 /* ───────── VOL 상세 (Project_inside) ───────── */
 .view[hidden] { display: none !important; }
@@ -317,7 +340,11 @@ body[data-view="project"] .fade { display: block; }
   .photo { position: relative; right: auto; top: auto; transform: none; width: 112px; margin-top: 36px; grid-row: 2; grid-column: 2; align-self: start; }
   .exif { margin: 10px 0 0; font-size: 9px; white-space: normal; }
   .board { position: relative; right: auto; top: auto; transform: none; width: 100%; grid-column: 1 / -1; grid-row: 3; margin-top: 32px; }
-  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 12px; }
+  .trip { grid-template-columns: minmax(0, 1fr); grid-template-areas: "name" "side" "posters"; row-gap: 0; }
+  .posters { margin-top: 24px; }
+  .trip-name { width: calc((var(--n) * 6 - 1) * 4px); }
+  .arr-head { margin-top: 18px; }
+  .posters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; padding-bottom: 12px; }
   .panels { grid-template-columns: 1fr; gap: 16px; }
   .about-lead br { display: none; }
   .evolution { grid-template-columns: 1fr; grid-template-areas: "game" "cgame" "arrow" "brand" "cbrand"; row-gap: 16px; }
