@@ -335,6 +335,20 @@ body[data-view="project"] .fade { display: block; }
 .ver-cap span { display: block; }
 .ver-cap-game { grid-area: cgame; }
 .ver-cap-brand { grid-area: cbrand; }
+/* 제작 과정 */
+.process { margin-top: max(72px, calc(260 * var(--u))); width: 100%; display: flex; flex-direction: column; align-items: center; }
+.process-title { margin: 0; font: 600 max(16px, calc(40 * var(--u)))/1.2 var(--sans); letter-spacing: .04em; color: var(--text); }
+.process-lead { margin: max(14px, calc(40 * var(--u))) 0 0; font: 400 max(13px, calc(27 * var(--u)))/1.6 var(--sans); color: var(--text); }
+.steps { list-style: none; margin: max(32px, calc(110 * var(--u))) 0 0; padding: 0; display: flex; align-items: flex-start; justify-content: center; gap: calc(60 * var(--u)); }
+.step { display: flex; flex-direction: column; align-items: center; }
+.step img { display: block; width: calc(449 * var(--u)); min-width: 120px; aspect-ratio: 213 / 285; height: auto; object-fit: cover; border-radius: max(6px, calc(16 * var(--u))); }
+.pair { display: flex; gap: calc(34 * var(--u)); }
+.pair img { width: calc(480 * var(--u)); min-width: 128px; aspect-ratio: 4 / 5; border-radius: max(6px, calc(16 * var(--u))); }
+.step-arrow { align-self: flex-start; margin-top: calc(300 * var(--u)); }
+.step-arrow img { display: block; width: max(44px, calc(120 * var(--u))); height: auto; }
+.step-cap { margin: max(14px, calc(46 * var(--u))) 0 0; max-width: max(160px, calc(470 * var(--u))); font: 400 max(11px, calc(22 * var(--u)))/1.55 var(--sans); color: var(--text); text-align: center; }
+.step-pair .step-cap { max-width: max(200px, calc(560 * var(--u))); }
+.step-cap span { display: block; margin-bottom: .5em; font: 500 max(12px, calc(25 * var(--u)))/1.3 var(--sans); letter-spacing: .06em; color: var(--ink); }
 .top { z-index: 7; }
 .about p { color: var(--text); }
 .about .meta { color: var(--foot); }
@@ -445,6 +459,14 @@ body.first-visit .marker .breath { animation: breath 2.2s ease-out infinite; tra
   .about-lead br { display: none; }
   .evolution { grid-template-columns: 1fr; grid-template-areas: "game" "cgame" "arrow" "brand" "cbrand"; row-gap: 16px; }
   .ver-arrow { width: 56px; transform: rotate(90deg); margin: 30px auto; }
+  .process-lead br { display: none; }
+  .steps { flex-direction: column; align-items: center; gap: 0; }
+  .step img { width: min(70vw, 260px); }
+  .pair img { width: min(42vw, 170px); }
+  .pair { gap: 10px; }
+  .step-arrow { align-self: center; margin: 22px 0; }
+  .step-arrow img { width: 44px; transform: rotate(90deg); }
+  .step-cap { max-width: 300px; }
   .credit { position: static; text-align: right; padding: 24px 16px 32px; align-items: flex-end; }
   body[data-view="project"] .fade { display: none; }
   .card-title { font-size: 20px; }
