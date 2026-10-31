@@ -290,6 +290,10 @@ a { color: inherit; }
   margin-top: max(40px, calc(132 * var(--u)));
 }
 .panels .cover { background: var(--land); border-radius: 0; }
+.panels .cover { transition: transform .35s cubic-bezier(.2,.7,.3,1), box-shadow .35s; will-change: transform; }
+@media (hover: hover) {
+  .panels .cover:hover { transform: scale(1.035); box-shadow: 0 14px 34px rgba(44,74,71,.18); z-index: 2; }
+}
 .panels .cover::before, .panels .cover::after { display: none; }
 
 /* 하단 페이드 (Project 화면) */
