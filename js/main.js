@@ -324,15 +324,18 @@
   const boardRows = [
     ...route.filter((g, i) => route.findIndex((h) => h.vols[0].title === g.vols[0].title) === i)
       .map((g) => ({ date: stampDate(firstTime(g) === "9" ? null : firstTime(g)), dest: g.vols[0].title })),
-    ...UPCOMING.map((d) => ({ date: "--.--.--", dest: d, next: d === UPCOMING[0] })),
+    ...UPCOMING.map((d) => ({ date: "--.--.--", dest: d, next: true })),
   ];
+  // 빨간 강조 줄: 방문한 도시 중 하나를 무작위로 (새로고침마다 바뀜)
+  const visitedRows = boardRows.filter((r) => !r.next);
+  const featured = visitedRows.length ? visitedRows[Math.floor(Math.random() * visitedRows.length)].dest : null;
   const board = new DotBoard($("#board-canvas"), { rows: boardRows.length, lit: INK_TEXT, off: OFF, hlBg: "#E2F3F0" });
   const volRow = new DotBoard($("#vol-row"), { rows: 1, lit: INK_TEXT, off: OFF });
   $("#board-list").innerHTML = boardRows.map((r) => `<li>${r.date} ${r.dest}</li>`).join("");
   let order = boardRows.slice(), boardTimer = 0, boardHover = -1;
   const paintBoard = (animate) => board.set(
     order.map((r) => DotBoard.fmt(r.date, r.dest)),
-    order.map((r, i) => (r.next || i === boardHover ? ACCENT : INK_TEXT)),
+    order.map((r, i) => (r.dest === featured || i === boardHover ? ACCENT : INK_TEXT)),
     animate
   );
   // 전광판 줄 → 지구본: 올리면 강조, 누르면 그 도시로 날아감
@@ -521,7 +524,7 @@
   const TRIPS = window.CURIO_TRIPS || [];
   const STAMP_CITY = window.CURIO_STAMP_CITY || {};
   const ROW_INK = "#2C4A47", ROW_OFF = "rgba(44,74,71,0.1)";
-  const TRANSPORT = { "cable car": "cable", subway: "subway", bus: "bus", train: "train", plane: "plane", ferry: "ferry" };
+  const TRANSPORT = { tram: "tram", "cable car": "cable", subway: "subway", bus: "bus", train: "train", plane: "plane", ferry: "ferry" };
   const arrTitle = new DotBoard($("#arr-title"), { rows: 1, cols: 8, lit: INK_TEXT, off: OFF });
   const regions = new Set(VOLS.map((v) => v.area));
   const years = VOLS.map((v) => v.takenAt.slice(0, 4)).sort();

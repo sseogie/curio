@@ -42,8 +42,8 @@ window.CURIO_VOLS = [
     place: "DE HAAL, ZAANSE SCHANS", lat: 52.4741, lon: 4.8167, takenAt: "2024-06-23T13:39", transport: "train" },
 ];
 
-// 다음 목적지 (안내판에 시간 "--:--"으로 표시, 첫 번째가 강조)
-window.CURIO_UPCOMING = ["TOKYO", "OSAKA", "KYOTO"];
+// 다음 목적지 (안내판에 "--.--.--"로 표시). 비워 두면 표시하지 않음
+window.CURIO_UPCOMING = [];
 
 // VOL별 이미지 (피그마 프레임 이름 그대로 내보낸 JPG → assets/vol/ 폴더)
 // 순서: [커버, 리뷰, 스탬프 지도]
@@ -80,4 +80,4 @@ window.CURIO_STAMP_CITY = {
 };
 
 // 이미지를 교체하면 이 값을 바꿔서 브라우저 캐시를 갱신
-window.CURIO_IMG_V = "202610311757";
+window.CURIO_IMG_V = "202611011345";
