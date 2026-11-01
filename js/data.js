@@ -84,4 +84,4 @@ window.CURIO_STAMP_CITY = {
 };
 
 // 이미지를 교체하면 이 값을 바꿔서 브라우저 캐시를 갱신
-window.CURIO_IMG_V = "202611011400";
+window.CURIO_IMG_V = "202611011410";
