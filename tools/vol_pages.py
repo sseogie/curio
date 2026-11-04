@@ -18,7 +18,7 @@ for vol, title, region, taken in vols:
     bg.save(f'assets/og/vol-{vol}.jpg', quality=84, optimize=True)
     y, m, dd = taken[:10].split('-')
     t = html.escape(f'{title} · VOL. {vol} — PROJECT. CURIO. CITY.')
-    desc = html.escape(f'{region.title()}, {dd}.{m}.{y}. A travel log of the cities Curio collects.')
+    desc = html.escape(f'{region.title()}, {dd}.{m}.{y}. Field data turned into one fixed visual system.')
     img = f'{base}assets/og/vol-{vol}.jpg'
     os.makedirs(f'vol/{vol}', exist_ok=True)
     open(f'vol/{vol}/index.html', 'w').write(f'''<!doctype html>
