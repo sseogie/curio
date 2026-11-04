@@ -42,6 +42,8 @@ window.CURIO_VOLS = [
     place: "DE HAAL, ZAANSE SCHANS", lat: 52.4741, lon: 4.8167, takenAt: "2024-06-23T13:39", transport: "train" },
   { vol: "15", title: "AMSTERDAM", region: "NORTH HOLLAND, NETHERLANDS", area: "europe",
     place: "JORDAAN DISTRICT, AMSTERDAM", lat: 52.3765, lon: 4.8830, takenAt: "2024-06-22T15:26", transport: "tram" },
+  { vol: "16", title: "AMSTERDAM", region: "NORTH HOLLAND, NETHERLANDS", area: "europe",
+    place: "DAM SQUARE, AMSTERDAM", lat: 52.3733, lon: 4.8928, takenAt: "2024-06-23T11:13", transport: "tram" },
 ];
 
 // 다음 목적지 (안내판에 "--.--.--"로 표시). 비워 두면 표시하지 않음
@@ -65,11 +67,12 @@ window.CURIO_IMAGES = {
   "13": ["HALLSTATT_2", "HALLSTATT_2_review", "HALLSTATT_2_stamp"],
   "14": ["ZAANSE SCHANS_1", "ZAANSE SCHANS_1_REVIEW", "ZAANSE SCHANS_1_stamp"],
   "15": ["암스테르담 요르단 거리_1", "암스테르담 요르단 거리_1_review", "암스테르담 요르단 거리_1_stamp"],
+  "16": ["암스테르담_트램_1", "암스테르담_트램_1_review", "암스테르담_트램_1_stamp"],
 };
 
 // 여정 묶음 (Project 화면) — 순서대로 표시
 window.CURIO_TRIPS = [
-  { key: "EUROPE",  sub: "GERMANY, NETHERLANDS, AUSTRIA", when: "20.06 — 05.07.2024", vols: ["10", "11", "15", "14", "12", "13"] },
+  { key: "EUROPE",  sub: "GERMANY, NETHERLANDS, AUSTRIA", when: "20.06 — 05.07.2024", vols: ["10", "11", "15", "16", "14", "12", "13"] },
   { key: "VIETNAM", sub: "FANSIPAN PEAK",     when: "24.12.2024",         vols: ["01", "02", "03"] },
   { key: "JAPAN",   sub: "HOKKAIDO",          when: "29.06 — 01.07.2025", vols: ["07", "08", "06", "09", "04", "05"] },
 ];
@@ -80,8 +83,8 @@ window.CURIO_STAMP_CITY = {
   "04": "SAPPORO/HOKKAIDO", "05": "SAPPORO/HOKKAIDO", "06": "NAKAFURANO/HKD",
   "07": "OTARU/HOKKAIDO", "08": "OTARU/HOKKAIDO", "09": "BIEI/SHIROGANE",
   "10": "FRANKFURT/MAIN", "11": "OSNABRÜCK HBF", "12": "HALLSTATT/AUSTRIA", "13": "HALLSTATT/AUSTRIA", "14": "ZAANSE SCHANS/NL",
-  "15": "AMSTERDAM/JORDAAN",
+  "15": "AMSTERDAM/JORDAAN", "16": "AMSTERDAM/DAM",
 };
 
 // 이미지를 교체하면 이 값을 바꿔서 브라우저 캐시를 갱신
-window.CURIO_IMG_V = "202611011410";
+window.CURIO_IMG_V = "202611050050";
