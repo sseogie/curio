@@ -313,6 +313,20 @@ body[data-view="project"] .fade { display: block; }
   padding: max(96px, calc(235 * var(--u))) max(16px, calc(268 * var(--u))) max(140px, calc(300 * var(--u)));
   display: flex; flex-direction: column; align-items: center; text-align: center;
 }
+.about-badge { margin: 0; font: 500 max(11px, calc(24 * var(--u)))/1.2 var(--mono); letter-spacing: .08em; color: var(--accent); }
+.page-title { margin: max(14px, calc(40 * var(--u))) 0 0; font: 700 max(26px, calc(110 * var(--u)))/1.1 var(--mono); letter-spacing: -.02em; color: var(--ink); }
+.about-sub { margin-top: max(14px, calc(40 * var(--u))); font: 500 max(13px, calc(34 * var(--u)))/1.4 var(--mono); letter-spacing: -.01em; color: var(--text); }
+.about-tags { list-style: none; margin: max(18px, calc(48 * var(--u))) 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px max(8px, calc(16 * var(--u))); }
+.about-tags li { padding: .35em .9em; border: 1.5px solid rgba(66, 100, 95, .3); border-radius: 999px; font: 500 max(10px, calc(20 * var(--u)))/1.2 var(--mono); letter-spacing: .06em; color: var(--text); }
+/* 연구 보고서 느낌의 3카드 */
+.lab { margin-top: max(56px, calc(200 * var(--u))); width: min(100%, calc(2404 * var(--u))); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: max(14px, calc(30 * var(--u))); text-align: left; }
+.lab-card { padding: max(18px, calc(52 * var(--u))); border: 1.7px solid rgba(66, 100, 95, .3); border-radius: max(10px, calc(20 * var(--u))); }
+.lab-card h2 { margin: 0 0 max(10px, calc(26 * var(--u))); font: 700 max(13px, calc(28 * var(--u)))/1.3 var(--mono); letter-spacing: -.01em; color: var(--ink); }
+.lab-card h2 span { display: block; margin-bottom: .4em; color: var(--accent); font-weight: 500; }
+.lab-card p { font: 400 max(12px, calc(23 * var(--u)))/1.6 var(--sans); letter-spacing: -.02em; }
+.lab-card ul { list-style: none; margin: max(10px, calc(24 * var(--u))) 0 0; padding: 0; display: grid; gap: max(8px, calc(18 * var(--u))); }
+.lab-card li { font: 400 max(12px, calc(22 * var(--u)))/1.55 var(--sans); letter-spacing: -.02em; color: var(--text); }
+.lab-card li b { display: block; font: 600 max(10px, calc(19 * var(--u)))/1.3 var(--mono); letter-spacing: .04em; color: var(--accent); }
 .about-lead {
   margin-top: max(28px, calc(90 * var(--u)));
   font: 400 max(14px, calc(30 * var(--u)))/1.5 var(--sans); letter-spacing: -.01em; color: var(--text);
@@ -468,6 +482,7 @@ body.first-visit .marker .breath { animation: breath 2.2s ease-out infinite; tra
   .panels { grid-template-columns: 1fr; gap: 16px; }
   .vol-nav { position: static; transform: none; justify-content: flex-end; margin-top: 16px; }
   .about-lead br { display: none; }
+  .lab { grid-template-columns: 1fr; }
   .evolution { grid-template-columns: 1fr; grid-template-areas: "game" "cgame" "arrow" "brand" "cbrand"; row-gap: 16px; }
   .ver-arrow { width: 56px; transform: rotate(90deg); margin: 30px auto; }
   .process-lead br { display: none; }
