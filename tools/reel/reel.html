@@ -74,6 +74,7 @@ html, body { margin: 0; background: var(--bg); }
 <script src="../../vendor/d3.min.js"></script>
 <script src="../../vendor/topojson-client.min.js"></script>
 <script src="../../vendor/world-50m.js"></script>
+<script>if (location.search.includes("lite")) document.write('<script src="../../vendor/world-110m.js"><\/script>');   // 피그마 내보내기용 가벼운 지도</script>
 <script src="../../js/data.js"></script>
 <script>
 (async () => {
@@ -129,6 +130,7 @@ html, body { margin: 0; background: var(--bg); }
   const CX = 540, CY = 690, R = 400;
   const proj = d3.geoOrthographic().clipAngle(90).precision(0.3);
   const path = d3.geoPath(proj);
+  if (q.has("clip")) proj.clipExtent([[CX - R, CY - R], [CX + R, CY + R]]);   // 피그마 내보내기용: 렌즈 밖 경로 잘라냄
   const $ = (id) => document.getElementById(id);
   ["lensC", "sphereBg", "shadeC"].forEach((id) => { $(id).setAttribute("cx", CX); $(id).setAttribute("cy", CY); $(id).setAttribute("r", R); });
   const pillText = $("pillG").querySelector("text"); pillText.textContent = v.title;
