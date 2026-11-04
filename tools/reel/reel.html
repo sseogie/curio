@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>CURIO reel</title>
+<style>
+@font-face { font-family: "42dot Sans"; font-weight: 400; src: url(fonts/42dot-sans-latin-400-normal.woff2); }
+@font-face { font-family: "42dot Sans"; font-weight: 500; src: url(fonts/42dot-sans-latin-500-normal.woff2); }
+@font-face { font-family: "42dot Sans"; font-weight: 600; src: url(fonts/42dot-sans-latin-600-normal.woff2); }
+@font-face { font-family: "Roboto Mono"; font-weight: 400; src: url(fonts/roboto-mono-latin-400-normal.woff2); }
+@font-face { font-family: "Roboto Mono"; font-weight: 500; src: url(fonts/roboto-mono-latin-500-normal.woff2); }
+:root {
+  --bg:#F5FFFE; --ink:#2C4A47; --text:#42645F; --mark:#94BAB5;
+  --land:#D0E3E0; --focus:#9EC3BF; --sphere:#E2F3F0; --teal-line:#7FAFA8; --accent:#C8735A;
+}
+html, body { margin: 0; background: var(--bg); }
+#frame { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); color: var(--text); font-family: "42dot Sans", sans-serif; }
+.top { position: absolute; left: 90px; right: 90px; top: 250px; display: flex; justify-content: space-between; align-items: center; }
+.brand { display: flex; align-items: center; gap: 22px; color: var(--mark); }
+.brand svg { width: 74px; height: auto; display: block; }
+.mono { font-family: "Roboto Mono", monospace; font-weight: 500; letter-spacing: .03em; text-transform: uppercase; }
+.brand span { font-size: 26px; color: var(--ink); }
+.volno { font-size: 26px; color: var(--accent); }
+#globe { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+.sphere { fill: var(--sphere); }
+.graticule { fill: none; stroke: var(--ink); stroke-opacity: .07; stroke-width: 1.2; }
+.land { fill: var(--land); stroke: var(--bg); stroke-opacity: .8; stroke-width: 1; }
+.visited { fill: var(--focus); }
+.leg { fill: none; stroke: var(--accent); stroke-width: 5; stroke-dasharray: .1 14; stroke-linecap: round; }
+.dot { fill: var(--accent); stroke: #fff; stroke-width: 4; }
+.pulse { fill: none; stroke: var(--accent); stroke-width: 3; }
+.pill { fill: #fff; }
+.pill-name { font: 600 24px "42dot Sans"; letter-spacing: .02em; fill: var(--ink); }
+.curio-shadow { fill: var(--ink); opacity: .14; }
+.curio-mark path { fill: var(--mark); }
+.caption { position: absolute; left: 90px; right: 90px; top: 1170px; }
+.caption h1 { margin: 0; font: 600 92px/1 "42dot Sans"; letter-spacing: -.01em; color: var(--ink); }
+.caption p { margin: 18px 0 0; font-size: 24px; color: var(--text); }
+.coord { position: absolute; left: 90px; top: 1356px; font-size: 22px; color: var(--text); opacity: .8; }
+.url { position: absolute; left: 90px; top: 1450px; font-size: 24px; color: var(--ink); }
+.stamp { position: absolute; width: 470px; left: 540px; top: 800px; transform-origin: 50% 50%; }
+.poster { position: absolute; left: 220px; top: 340px; width: 640px; box-shadow: 0 30px 60px rgba(44,74,71,.18); transform-origin: 50% 100%; }
+.poster img { display: block; width: 100%; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <svg id="globe" viewBox="0 0 1080 1920">
+    <defs>
+      <radialGradient id="shade" cx="34%" cy="28%" r="78%">
+        <stop offset="0" stop-color="#F5FFFE" stop-opacity=".6"/><stop offset=".4" stop-color="#F5FFFE" stop-opacity=".1"/><stop offset="1" stop-color="#F5FFFE" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="drop" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="40" stdDeviation="46" flood-color="#2C4A47" flood-opacity=".14"/></filter>
+      <filter id="pillsh" x="-30%" y="-50%" width="160%" height="220%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#2C4A47" flood-opacity=".14"/></filter>
+      <clipPath id="lens"><circle id="lensC"/></clipPath>
+    </defs>
+    <circle id="sphereBg" class="sphere" filter="url(#drop)"/>
+    <g clip-path="url(#lens)">
+      <path id="grat" class="graticule"/><path id="landP" class="land"/><path id="visP" class="land visited"/><path id="legP" class="leg"/>
+    </g>
+    <circle id="shadeC" fill="url(#shade)"/>
+    <circle id="pulseC" class="pulse" r="0" opacity="0"/>
+    <circle id="dotC" class="dot" r="0"/>
+    <g id="curioG" opacity="0"><ellipse class="curio-shadow" cx="0" cy="2" rx="26" ry="6"/><svg class="curio-mark" viewBox="0 0 81 67" x="-30" y="-52" width="60" height="50"><path id="curioPath"/></svg></g>
+    <g id="pillG" opacity="0"><rect class="pill" height="48" rx="24" filter="url(#pillsh)"/><text class="pill-name" x="24" y="32"></text></g>
+  </svg>
+  <div class="top"><div class="brand"><svg viewBox="0 0 81 67"><path id="brandPath" fill="currentColor"/></svg><span class="mono">PROJECT CURIO</span></div><div class="volno mono" id="volno"></div></div>
+  <div class="poster" id="poster" style="opacity:0"><img id="posterImg" alt=""></div>
+  <div class="caption"><h1 id="title"></h1><p class="mono" id="region"></p></div>
+  <div class="coord mono" id="coord"></div>
+  <div class="url mono" id="url">sseogie.github.io/curio</div>
+  <svg class="stamp" id="stamp" viewBox="0 0 340 220" style="opacity:0"></svg>
+</div>
+<script src="../../vendor/d3.min.js"></script>
+<script src="../../vendor/topojson-client.min.js"></script>
+<script src="../../vendor/world-50m.js"></script>
+<script src="../../js/data.js"></script>
+<script>
+(async () => {
+  const q = new URLSearchParams(location.search);
+  const VOLS = window.CURIO_VOLS;
+  const v = VOLS.find((x) => x.vol === (q.get("vol") || VOLS[VOLS.length - 1].vol));
+  const area = window.CURIO_AREAS[v.area];
+  const TRANSPORT = { "cable car": "cable", subway: "subway", bus: "bus", train: "train", plane: "plane", ferry: "ferry", tram: "tram" };
+  const stampDate = (iso) => { const [y, m, d] = iso.split("T")[0].split("-"); return `${d}.${m}.${y.slice(2)}`; };
+
+  // 출발점: 같은 여정의 바로 앞 VOL(촬영 시각 기준), 없으면 인천
+  const trip = window.CURIO_TRIPS.find((t) => t.vols.includes(v.vol));
+  const prev = VOLS.filter((x) => trip.vols.includes(x.vol) && x.takenAt < v.takenAt && (x.lat !== v.lat || x.lon !== v.lon))
+    .sort((a, b) => b.takenAt.localeCompare(a.takenAt))[0];
+  const from = prev ? [prev.lon, prev.lat] : [126.45, 37.46];
+  const to = [v.lon, v.lat];
+
+  // 텍스트
+  document.getElementById("volno").textContent = `VOL. ${v.vol}`;
+  document.getElementById("title").textContent = v.title;
+  document.getElementById("region").textContent = v.region;
+  const fmtC = (lat, lon) => `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? "N" : "S"}  ${Math.abs(lon).toFixed(4)}°${lon >= 0 ? "E" : "W"}`;
+
+  // 로고 패스는 사이트 index.html에서 가져옴
+  const html = await (await fetch("../../index.html")).text();
+  const d = new DOMParser().parseFromString(html, "text/html").querySelector(".brand path").getAttribute("d");
+  document.getElementById("brandPath").setAttribute("d", d);
+  document.getElementById("curioPath").setAttribute("d", d);
+
+  // 스탬프 (사이트 Project 화면과 같은 구성)
+  const st = document.getElementById("stamp");
+  st.innerHTML = `<rect x="7" y="7" width="326" height="206" rx="16" fill="#F5FFFE" opacity=".9"/>
+    <image href="../../assets/stamp/base.svg" width="340" height="220"/>
+    <image href="../../assets/stamp/${TRANSPORT[v.transport] || "train"}.svg" width="340" height="220"/>
+    <g font-family="Roboto Mono, monospace" font-weight="500" dominant-baseline="hanging">
+      <text x="56" y="92" font-size="34" letter-spacing="2.04" fill="#C8735A">${stampDate(v.takenAt)}</text>
+      <text x="262" y="92" font-size="34" letter-spacing="2.04" fill="#C8735A" opacity=".82">${v.vol}</text>
+      <text x="127" y="158" font-size="17" letter-spacing="1.7" fill="#2C4A47" opacity=".9">${window.CURIO_STAMP_CITY[v.vol] || v.title}</text>
+      <text x="148" y="184" font-size="13" letter-spacing="1.82" fill="#2C4A47" opacity=".7">PROJECT CURIO</text>
+    </g>`;
+
+  // 포스터
+  const img = document.getElementById("posterImg");
+  img.src = `../../assets/vol/${encodeURIComponent(window.CURIO_IMAGES[v.vol][0])}.jpg`;
+  await img.decode().catch(() => {});
+
+  // 지구본
+  const W = window.WORLD, VIS = new Set(window.CURIO_VISITED);
+  const cs = topojson.feature(W, W.objects.countries).features;
+  const landFC = { type: "FeatureCollection", features: cs.filter((f) => !VIS.has(f.id)) };
+  const visFC = { type: "FeatureCollection", features: cs.filter((f) => VIS.has(f.id)) };
+  const grat = d3.geoGraticule10();
+  const CX = 540, CY = 690, R = 400;
+  const proj = d3.geoOrthographic().clipAngle(90).precision(0.3);
+  const path = d3.geoPath(proj);
+  const $ = (id) => document.getElementById(id);
+  ["lensC", "sphereBg", "shadeC"].forEach((id) => { $(id).setAttribute("cx", CX); $(id).setAttribute("cy", CY); $(id).setAttribute("r", R); });
+  const pillText = $("pillG").querySelector("text"); pillText.textContent = v.title;
+  await document.fonts.ready;
+  $("pillG").querySelector("rect").setAttribute("width", 48 + pillText.getComputedTextLength());
+
+  // 타임라인 (초)
+  const DUR = 9;
+  const clamp = (x) => Math.max(0, Math.min(1, x));
+  const seg = (t, a, b) => clamp((t - a) / (b - a));
+  const eio = d3.easeCubicInOut, eo = d3.easeCubicOut;
+  const start = [127, 30];
+  const midGeo = d3.geoInterpolate(start, from);   // 0 → 1.2s: 한국 → 출발지
+  const flyGeo = d3.geoInterpolate(from, to);      // 1.2 → 3.6s: 출발지 → 도착지
+  const zoomTo = area ? area.zoom : 4;
+
+  function frame(t) {
+    // 카메라
+    let c, k;
+    if (t < 1.2) { const p = eio(seg(t, 0, 1.2)); c = midGeo(p); k = 1 + (prev ? .6 * p : 0); }
+    else { const p = eio(seg(t, 1.2, 3.6)); c = flyGeo(p); k = (prev ? 1.6 : 1) + (zoomTo - (prev ? 1.6 : 1)) * p; }
+    // 도장 찍힐 때 살짝 흔들림
+    const hit = seg(t, 4.1, 4.5);
+    const shake = hit > 0 && hit < 1 ? Math.sin(hit * Math.PI * 3) * (1 - hit) * 6 : 0;
+    proj.scale(R * k).translate([CX, CY + shake]).rotate([-c[0], -c[1]]);
+    $("grat").setAttribute("d", path(grat));
+    $("landP").setAttribute("d", path(landFC));
+    $("visP").setAttribute("d", path(visFC));
+
+    // 이동 경로: 따라 그려짐
+    const lp = eo(seg(t, 1.2, 3.6));
+    $("legP").setAttribute("d", lp > 0 ? path({ type: "LineString", coordinates: d3.range(0, 1.0001, 1 / 60).filter((s) => s <= lp).map((s) => flyGeo(s)).concat([flyGeo(lp)]) }) : "");
+
+    // 도착점
+    const [x, y] = proj(to);
+    const ap = eo(seg(t, 3.5, 3.9));
+    $("dotC").setAttribute("cx", x); $("dotC").setAttribute("cy", y); $("dotC").setAttribute("r", 16 * ap);
+    const pp = seg(t, 3.7, 4.7);
+    $("pulseC").setAttribute("cx", x); $("pulseC").setAttribute("cy", y);
+    $("pulseC").setAttribute("r", 16 + 90 * eo(pp)); $("pulseC").setAttribute("opacity", pp > 0 && pp < 1 ? 1 - pp : 0);
+    const cu = eo(seg(t, 3.9, 4.4));
+    $("curioG").setAttribute("opacity", cu);
+    $("curioG").setAttribute("transform", `translate(${x},${y - 16 - 30 * (1 - cu)})`);
+    const pl = eo(seg(t, 4.3, 4.8));
+    $("pillG").setAttribute("opacity", pl);
+    $("pillG").setAttribute("transform", `translate(${x + 30},${y - 92 + 12 * (1 - pl)})`);
+
+    // 캡션
+    const tp = eo(seg(t, 0.3, 1.1));
+    $("frame").querySelector(".top").style.opacity = tp;
+    const cp = eo(seg(t, 3.6, 4.2));
+    $("title").style.cssText = `opacity:${cp};transform:translateY(${24 * (1 - cp)}px)`;
+    $("region").style.opacity = eo(seg(t, 3.8, 4.4));
+    $("url").style.opacity = eo(seg(t, 5.6, 6.2));
+    // 좌표: 비행 중엔 현재 중심, 도착하면 고정
+    $("coord").textContent = t < 3.6 ? fmtC(c[1], c[0]) : fmtC(v.lat, v.lon);
+    $("coord").style.opacity = .8 * tp;
+
+    // 도장: 위에서 눌러 찍히는 느낌
+    const sIn = seg(t, 4.0, 4.25);
+    const sc = sIn < 1 ? 1.5 - .5 * d3.easeQuadIn(sIn) : 1;
+    const settle = t > 4.25 ? 1 + .04 * Math.sin(seg(t, 4.25, 4.5) * Math.PI) : sc;
+    // 포스터가 올라오면 도장은 포스터 오른쪽 아래로
+    const mv = eio(seg(t, 5.4, 6.2));
+    st.style.opacity = sIn > 0 ? Math.min(1, sIn * 3) : 0;
+    st.style.transform = `translate(${40 * mv}px, ${150 * mv}px) rotate(${-7 + 2 * sIn}deg) scale(${(t > 4.25 ? settle : sc) * (1 - .1 * mv)})`;
+
+    // 포스터
+    const po = eo(seg(t, 5.2, 6.1));
+    $("poster").style.opacity = po;
+    $("poster").style.transform = `translateY(${120 * (1 - po)}px) rotate(${-1.5 * po}deg)`;
+    // 포스터가 올라오면 캡션은 빠지고 주소만 포스터 아래로
+    const out = eio(seg(t, 5.0, 5.6));
+    $("frame").querySelector(".caption").style.opacity = 1 - out;
+    $("coord").style.opacity = .8 * tp * (1 - out);
+    $("url").style.transform = `translateY(${-130 * mv}px)`;
+  }
+
+  window.REEL = { frame, DUR, vol: v.vol };
+  frame(0);
+  if (!q.has("render")) {   // 브라우저에서 열면 그냥 재생
+    const t0 = performance.now();
+    const loop = (now) => { frame(((now - t0) / 1000) % (DUR + 1)); requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  }
+  window.REEL_READY = true;
+})();
+</script>
+</body>
+</html>
