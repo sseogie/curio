@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>CURIO reel</title>
 <style>
+@font-face { font-family: "42dot Sans"; font-weight: 300; src: url(fonts/42dot-sans-latin-300-normal.woff2); }
 @font-face { font-family: "42dot Sans"; font-weight: 400; src: url(fonts/42dot-sans-latin-400-normal.woff2); }
 @font-face { font-family: "42dot Sans"; font-weight: 500; src: url(fonts/42dot-sans-latin-500-normal.woff2); }
 @font-face { font-family: "42dot Sans"; font-weight: 600; src: url(fonts/42dot-sans-latin-600-normal.woff2); }
@@ -15,12 +16,13 @@
 }
 html, body { margin: 0; background: var(--bg); }
 #frame { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); color: var(--text); font-family: "42dot Sans", sans-serif; }
-.top { position: absolute; left: 90px; right: 90px; top: 250px; display: flex; justify-content: space-between; align-items: center; }
-.brand { display: flex; align-items: center; gap: 22px; color: var(--mark); }
+/* 레이아웃 값은 피그마 REEL 프레임(섹션 372:105) 기준 */
+.top { position: absolute; left: 88px; right: 90px; top: 291px; height: 61px; display: flex; justify-content: space-between; align-items: center; }
+.brand { display: flex; align-items: center; gap: 24px; color: var(--mark); }
 .brand svg { width: 74px; height: auto; display: block; }
 .mono { font-family: "Roboto Mono", monospace; font-weight: 500; letter-spacing: .03em; text-transform: uppercase; }
-.brand span { font-size: 26px; color: var(--ink); }
-.volno { font-size: 26px; color: var(--accent); }
+.brand span, .volno { font: 500 30px/1.2 "42dot Sans"; letter-spacing: -.01em; color: var(--ink); }
+.volno { color: var(--accent); }
 #globe { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
 .sphere { fill: var(--sphere); }
 .graticule { fill: none; stroke: var(--ink); stroke-opacity: .07; stroke-width: 1.2; }
@@ -33,13 +35,17 @@ html, body { margin: 0; background: var(--bg); }
 .pill-name { font: 600 24px "42dot Sans"; letter-spacing: .02em; fill: var(--ink); }
 .curio-shadow { fill: var(--ink); opacity: .14; }
 .curio-mark path { fill: var(--mark); }
-.caption { position: absolute; left: 90px; right: 90px; top: 1170px; }
-.caption h1 { margin: 0; font: 600 92px/1 "42dot Sans"; letter-spacing: -.01em; color: var(--ink); }
-.caption p { margin: 18px 0 0; font-size: 24px; color: var(--text); }
-.coord { position: absolute; left: 90px; top: 1356px; font-size: 22px; color: var(--text); opacity: .8; }
-.url { position: absolute; left: 90px; top: 1450px; font-size: 24px; color: var(--ink); }
+.c { position: absolute; left: 0; right: 0; margin: 0; text-align: center; }
+/* 비행 중 */
+.headline { top: 1235px; font: 500 55px/70px "42dot Sans"; letter-spacing: -.03em; color: var(--ink); opacity: .8; }
+.fcoord { top: 1335px; font: 300 40px/60px "42dot Sans"; letter-spacing: -.01em; color: var(--text); opacity: .8; }
+/* 도착 후 */
+.title { top: 1238px; font: 600 92px/1 "42dot Sans"; letter-spacing: -.01em; color: var(--ink); }
+.region { top: 1348px; font: 300 24px/1.2 "42dot Sans"; letter-spacing: -.01em; color: var(--text); }
+.coord { top: 1421px; font: 300 22px/1.2 "42dot Sans"; letter-spacing: -.01em; color: var(--text); opacity: .8; white-space: pre; }
+.url { top: 1432px; font: 400 27px/1.2 "42dot Sans"; letter-spacing: -.02em; color: var(--ink); }
 .stamp { position: absolute; width: 470px; left: 540px; top: 800px; transform-origin: 50% 50%; }
-.poster { position: absolute; left: 220px; top: 340px; width: 640px; box-shadow: 0 30px 60px rgba(44,74,71,.18); transform-origin: 50% 100%; }
+.poster { position: absolute; left: 196px; top: 419px; width: 640px; box-shadow: 0 30px 60px rgba(44,74,71,.18); transform-origin: 50% 100%; }
 .poster img { display: block; width: 100%; }
 </style>
 </head>
@@ -64,11 +70,12 @@ html, body { margin: 0; background: var(--bg); }
     <g id="curioG" opacity="0"><ellipse class="curio-shadow" cx="0" cy="2" rx="26" ry="6"/><svg class="curio-mark" viewBox="0 0 81 67" x="-30" y="-52" width="60" height="50"><path id="curioPath"/></svg></g>
     <g id="pillG" opacity="0"><rect class="pill" height="48" rx="24" filter="url(#pillsh)"/><text class="pill-name" x="24" y="32"></text></g>
   </svg>
-  <div class="top"><div class="brand"><svg viewBox="0 0 81 67"><path id="brandPath" fill="currentColor"/></svg><span class="mono">PROJECT CURIO</span></div><div class="volno mono" id="volno"></div></div>
+  <div class="top"><div class="brand"><svg viewBox="0 0 81 67"><path id="brandPath" fill="currentColor"/></svg><span>CURIO</span></div><div class="volno" id="volno"></div></div>
   <div class="poster" id="poster" style="opacity:0"><img id="posterImg" alt=""></div>
-  <div class="caption"><h1 id="title"></h1><p class="mono" id="region"></p></div>
-  <div class="coord mono" id="coord"></div>
-  <div class="url mono" id="url">sseogie.github.io/curio</div>
+  <p class="c headline" id="headline">WHERE IS NEXT DESTINATION?</p>
+  <p class="c fcoord" id="fcoord"></p>
+  <div id="arrive"><h1 class="c title" id="title"></h1><p class="c region" id="region"></p><p class="c coord" id="coord"></p></div>
+  <p class="c url" id="url">Link : SSEOGIE.GITHUB.IO/CURIO</p>
   <svg class="stamp" id="stamp" viewBox="0 0 340 220" style="opacity:0"></svg>
 </div>
 <script src="../../vendor/d3.min.js"></script>
@@ -185,9 +192,15 @@ html, body { margin: 0; background: var(--bg); }
     $("title").style.cssText = `opacity:${cp};transform:translateY(${24 * (1 - cp)}px)`;
     $("region").style.opacity = eo(seg(t, 3.8, 4.4));
     $("url").style.opacity = eo(seg(t, 5.6, 6.2));
+    // 비행 중 문구와 좌표 → 도착하면 사라짐
+    const fl = tp * (1 - eo(seg(t, 3.3, 3.7)));
+    $("headline").style.cssText = `opacity:${.8 * fl};transform:translateY(${-16 * (1 - fl) * (t > 3 ? 1 : 0)}px)`;
+    const fc = t < 3.6 ? c : [v.lon, v.lat];
+    $("fcoord").innerHTML = fmtC(fc[1], fc[0]).replace("  ", "<br>");
+    $("fcoord").style.opacity = .8 * fl;
     // 좌표: 비행 중엔 현재 중심, 도착하면 고정
-    $("coord").textContent = t < 3.6 ? fmtC(c[1], c[0]) : fmtC(v.lat, v.lon);
-    $("coord").style.opacity = .8 * tp;
+    $("coord").textContent = fmtC(v.lat, v.lon);
+    $("coord").style.opacity = .8 * eo(seg(t, 3.9, 4.5));
 
     // 도장: 위에서 눌러 찍히는 느낌
     const sIn = seg(t, 4.0, 4.25);
@@ -196,7 +209,7 @@ html, body { margin: 0; background: var(--bg); }
     // 포스터가 올라오면 도장은 포스터 오른쪽 아래로
     const mv = eio(seg(t, 5.4, 6.2));
     st.style.opacity = sIn > 0 ? Math.min(1, sIn * 3) : 0;
-    st.style.transform = `translate(${40 * mv}px, ${150 * mv}px) rotate(${-7 + 2 * sIn}deg) scale(${(t > 4.25 ? settle : sc) * (1 - .1 * mv)})`;
+    st.style.transform = `translate(${16 * mv}px, ${229 * mv}px) rotate(${-7 + 2 * sIn}deg) scale(${(t > 4.25 ? settle : sc) * (1 - .1 * mv)})`;
 
     // 포스터
     const po = eo(seg(t, 5.2, 6.1));
@@ -204,9 +217,7 @@ html, body { margin: 0; background: var(--bg); }
     $("poster").style.transform = `translateY(${120 * (1 - po)}px) rotate(${-1.5 * po}deg)`;
     // 포스터가 올라오면 캡션은 빠지고 주소만 포스터 아래로
     const out = eio(seg(t, 5.0, 5.6));
-    $("frame").querySelector(".caption").style.opacity = 1 - out;
-    $("coord").style.opacity = .8 * tp * (1 - out);
-    $("url").style.transform = `translateY(${-130 * mv}px)`;
+    $("arrive").style.opacity = 1 - out;
   }
 
   window.REEL = { frame, DUR, vol: v.vol };
