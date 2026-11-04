@@ -133,7 +133,8 @@ a { color: inherit; }
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
 }
-#globe { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; overflow: visible; }
+.globe-wrap::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--sphere); }
+#globe { position: relative; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; overflow: visible; }
 #globe.dragging { cursor: grabbing; }
 
 #globe .sphere { fill: var(--sphere); }

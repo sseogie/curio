@@ -52,10 +52,15 @@
   const projection = d3.geoOrthographic().clipAngle(90).precision(0.4);
   const path = d3.geoPath(projection);
 
-  const world = window.WORLD;
-  const countries = topojson.feature(world, world.objects.countries).features;
-  const landFC = { type: "FeatureCollection", features: countries.filter((f) => !VISITED.has(f.id)) };
-  const visitedFC = { type: "FeatureCollection", features: countries.filter((f) => VISITED.has(f.id)) };
+  // 처음엔 가벼운 지도(110m)로 바로 그리고, 상세 지도(50m)는 뒤에서 받아 교체
+  let countries, landFC, visitedFC, landAll;
+  function setWorld(world) {
+    countries = topojson.feature(world, world.objects.countries).features;
+    landFC = { type: "FeatureCollection", features: countries.filter((f) => !VISITED.has(f.id)) };
+    visitedFC = { type: "FeatureCollection", features: countries.filter((f) => VISITED.has(f.id)) };
+    landAll = { type: "FeatureCollection", features: countries };
+  }
+  setWorld(window.WORLD);
   const graticule = d3.geoGraticule10();
 
   // 여행 동선: 촬영 시각 순서
@@ -226,7 +231,6 @@
   }
 
   // 좌표 씰: 바깥 링 텍스트 + 정사영 미니 글로브
-  const landAll = { type: "FeatureCollection", features: countries };
   function drawSeal(v) {
     // Figma "coordinate seal" (263px) → viewBox 0..263
     const seal = d3.select("#seal");
@@ -546,7 +550,8 @@
     </svg>`;
   }
 
-  const items = {};      // vol → { row, rowEl, poster, stamp, landed }
+  const items = {};
+  const posterFills = [];   // Project 화면을 처음 열 때 포스터 이미지를 불러옴      // vol → { row, rowEl, poster, stamp, landed }
   const tripBoards = [];
   TRIPS.forEach((tr) => {
     const sec = document.createElement("section");
@@ -571,7 +576,7 @@
       const pi = document.createElement("li");
       pi.innerHTML = `<button type="button" class="poster" aria-label="${label}"><figure class="cover"></figure>${stampSVG(v)}</button>`;
       sec.querySelector(".posters").appendChild(pi);
-      fillCover(pi.querySelector(".cover"), v);
+      posterFills.push(() => fillCover(pi.querySelector(".cover"), v));
       const it = items[id] = { v, row, text: rowText(v), rowEl: li.querySelector(".arr-row"), poster: pi.querySelector(".poster"), stamp: pi.querySelector(".stamp"), landed: false };
       row.set([it.text], null, false);
       const on = () => hot(it, true), off = () => hot(it, false);
@@ -621,6 +626,7 @@
 
   let flipTimers = [];
   function enterProject() {
+    while (posterFills.length) posterFills.shift()();
     flipTimers.forEach(clearTimeout); flipTimers = [];
     arrTitle.resize(); arrTitle.set([" "], null, false);
     flipTimers.push(setTimeout(() => arrTitle.set(["ARRIVALS"], null, true), 60));
@@ -688,6 +694,13 @@
   const latest = VOLS[VOLS.length - 1];
   showView();
   if (document.body.dataset.view === "world") showHint();
+  const loadDetail = () => {
+    const s = document.createElement("script");
+    s.src = (document.querySelector('script[src*="world-110m"]')?.src || "").replace("world-110m", "world-50m") || "vendor/world-50m.js";
+    s.onload = () => { setWorld(window.WORLD); render(); if (selected) drawSeal(selected); };
+    document.body.appendChild(s);
+  };
+  if (document.querySelector('script[src*="world-110m"]')) (window.requestIdleCallback || ((f) => setTimeout(f, 1200)))(loadDetail);
   // 처음 들어오면 미탐색(PREPARING TO DEPART) 상태의 World 화면에서 시작
 
 })();
