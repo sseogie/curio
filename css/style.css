@@ -390,7 +390,10 @@ body.first-visit .marker .breath { animation: breath 2.2s ease-out infinite; tra
 .drag-hint[hidden] { display: none; }
 @keyframes hint-in { from { opacity: 0; transform: translate(-50%, 8px); } }
 
-.stack { position: relative; }
+.stack { position: relative; cursor: pointer; }
+.stack #photo-cover { transition: transform .3s cubic-bezier(.2,.7,.3,1); }
+@media (hover: hover) { .stack:hover #photo-cover { transform: translateY(-4px); } }
+.stack:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
 .stack .back { position: absolute; inset: 0; display: none; box-shadow: 0 4px 14px rgba(44,74,71,.14); }
 .stack .back.b2 { transform: translate(-6%, -3%) rotate(-5deg); }
 .stack .back.b1 { transform: translate(5%, -1.5%) rotate(3.5deg); }

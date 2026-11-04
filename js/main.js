@@ -432,6 +432,10 @@
     const g = groupOf(selected), n = g.vols.length;
     select(g.vols[(g.vols.indexOf(selected) + d + n) % n], false);
   }
+  // 포스터를 눌러도 상세 페이지로
+  const openDetail = () => { location.hash = $("#detail").getAttribute("href"); };
+  $("#photo-stack").addEventListener("click", openDetail);
+  $("#photo-stack").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDetail(); } });
   $("#pg-prev").addEventListener("click", () => stepVol(-1));
   $("#pg-next").addEventListener("click", () => stepVol(1));
 
