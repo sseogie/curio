@@ -28,8 +28,11 @@ const server = http.createServer((req, res) => {
       await el.screenshot({ path: path.join(dir, `${String(i).padStart(4, "0")}.png`) });
     }
     const mp4 = path.join(out, `curio-vol-${vol}.mp4`);
+    // 큐리오 목소리(hello-passengers.wav)를 0.2초에 넣음
+    const voice = path.join(__dirname, "hello-passengers.wav");
     execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(fps), "-i", path.join(dir, "%04d.png"),
-      "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart", mp4]);
+      "-i", voice, "-filter_complex", "[1:a]adelay=200|200,apad[a]", "-map", "0:v", "-map", "[a]", "-shortest",
+      "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", mp4]);
     fs.rmSync(dir, { recursive: true });
     console.log(mp4);
   }
