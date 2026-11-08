@@ -22,8 +22,10 @@
 
   const KINDS = ["cover", "review", "stamp"];
   const imgSrc = (v, kind = "cover") => {
+    // 파일명은 프레임 이름 규칙(VOLNN_cover/review/stamp)에서 바로 만든다. CURIO_IMAGES는 예외가 필요할 때만 쓴다.
     const n = (window.CURIO_IMAGES || {})[v.vol];
-    return n ? `assets/vol/${encodeURIComponent(n[KINDS.indexOf(kind)])}.jpg?v=${window.CURIO_IMG_V || ""}` : `assets/covers/vol-${v.vol}.jpg`;
+    const name = n ? n[KINDS.indexOf(kind)] : `VOL${v.vol}_${kind}`;
+    return `assets/vol/${encodeURIComponent(name)}.jpg?v=${window.CURIO_IMG_V || ""}`;
   };
   function fillCover(el, v, kind = "cover") {
     el.classList.remove("has-img");

@@ -5,15 +5,15 @@
 ## 구조
 - `index.html` · `css/style.css` · `js/main.js`(화면·지구본) · `js/board.js`(전광판) · `js/data.js`(VOL 데이터)
 - `assets/vol/` 포스터(1080×1350 JPG), `assets/stamp/` 교통 아이콘, `assets/about/`, `assets/og/` 미리보기
-- `vol/NN/` VOL 공유 페이지 — `tools/vol_pages.py`가 생성 (직접 수정 금지)
+- `vol/NN/` VOL 공유 페이지 — `tools/release.py`가 생성 (직접 수정 금지, `vol_pages.py`는 호환용)
 - `tools/reel/` 릴스 렌더 도구
 
 ## 새 VOL 배포 순서
-1. 3x JPG(3240×4050)를 1080×1350으로 줄여 `assets/vol/`에 프레임 이름 그대로 저장 (커버·`_review`·`_stamp`)
-2. `js/data.js` 수정: `CURIO_VOLS`(vol, title, region, area, place, lat, lon, takenAt, transport, 불확실하면 `warn: true`) · `CURIO_IMAGES` · `CURIO_TRIPS`(여정 순서) · `CURIO_STAMP_CITY` · 새 나라면 `CURIO_VISITED`(ISO 숫자 코드)
-3. `python3 tools/vol_pages.py` 실행 (공유 페이지·og 이미지 생성)
-4. 캐시 값 갱신: 이미지가 바뀌면 `CURIO_IMG_V`, CSS·JS가 바뀌면 `index.html`의 `?v=` — 형식 `YYYYMMDDHHMM`
-5. 로컬 서버로 `#vol-NN` 확인 → main에 push
+1. `js/data.js` 수정: `CURIO_VOLS`(vol, title, region, area, place, lat, lon, takenAt, transport, 불확실하면 `warn: true`) · `CURIO_TRIPS`(여정 순서) · `CURIO_STAMP_CITY` · 새 나라면 `CURIO_VISITED`(ISO 숫자 코드). 이미지 목록은 쓰지 않는다 — `VOLNN_cover/review/stamp` 이름 규칙으로 자동 연결 (`CURIO_IMAGES`는 예외 파일명이 필요할 때만)
+2. `python3 tools/release.py --import <3x JPG 폴더>` — 1080×1350 변환·저장, 검사, 공유 페이지·og 생성, 캐시 값 갱신을 한 번에. 이미지 교체가 없으면 `--import` 없이 실행
+3. 오류가 나면 고치고 다시 실행. 캐시 값(`CURIO_IMG_V`, `index.html`의 `?v=`)은 손으로 바꾸지 않는다 (`tools/release_manifest.json`으로 변경 감지)
+4. 로컬 서버로 `#vol-NN` 확인 → `git pull --rebase` → main에 push
+5. push하면 GitHub Actions(`check`)가 같은 검사를 돌린다. 실패해도 Pages 배포는 막지 않으니 Actions 탭에서 결과를 확인한다
 
 ## 규칙
 - 이미지는 민석이 피그마에서 직접 내보내 채팅에 올린다. 좌표·촬영 시각은 원본 사진의 EXIF·GPS에서 읽는다.
