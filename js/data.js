@@ -49,25 +49,25 @@ window.CURIO_VOLS = [
 // 다음 목적지 (안내판에 "--.--.--"로 표시). 비워 두면 표시하지 않음
 window.CURIO_UPCOMING = [];
 
-// VOL별 이미지 (피그마 프레임 이름 그대로 내보낸 JPG → assets/vol/ 폴더)
+// VOL별 이미지 (피그마 프레임 이름 VOLNN_cover/review/stamp 그대로 내보낸 JPG → assets/vol/ 폴더)
 // 순서: [커버, 리뷰, 스탬프 지도]
 window.CURIO_IMAGES = {
-  "01": ["FANSIPAN_1", "FANSIPAN_1_REVIEW", "FANSIPAN_1_stamp"],
-  "02": ["FANSIPAN_2", "FANSIPAN_2_REVIEW", "FANSIPAN_2_stamp"],
-  "03": ["fansipan_3", "fansipan_3_review", "fansipan_3_stamp"],
-  "04": ["SAPPORO_1", "SAPPORO_1_REVIEW", "SAPPORO_1_stamp"],
-  "05": ["SAPPORO_2", "SAPPORO_2_REVIEW", "SAPPORO_2_stamp"],
-  "06": ["BIEI TOWN_1", "BIEI TOWN_1_REVIEW", "BIEI TOWN_1_stamp"],
-  "07": ["OTARU_1", "OTARU_1_REVIEW", "OTARU_1_stamp"],
-  "08": ["sapporo_4", "sapporo_4_review", "sapporo_4_stamp"],
-  "09": ["blue1", "blue2", "blue1_stamp"],
-  "10": ["frankfurt_1", "frankfurt_1_review", "frankfurt_stamp"],
-  "11": ["osnabruck_1", "osnabruck_1_review", "osnabruck_1_stamp"],
-  "12": ["HALLSTATT_1", "HALLSTATT_1_review", "HALLSTATT_1_stamp"],
-  "13": ["HALLSTATT_2", "HALLSTATT_2_review", "HALLSTATT_2_stamp"],
-  "14": ["ZAANSE SCHANS_1", "ZAANSE SCHANS_1_REVIEW", "ZAANSE SCHANS_1_stamp"],
-  "15": ["암스테르담 요르단 거리_1", "암스테르담 요르단 거리_1_review", "암스테르담 요르단 거리_1_stamp"],
-  "16": ["암스테르담_트램_1", "암스테르담_트램_1_review", "암스테르담_트램_1_stamp"],
+  "01": ["VOL01_cover", "VOL01_review", "VOL01_stamp"],
+  "02": ["VOL02_cover", "VOL02_review", "VOL02_stamp"],
+  "03": ["VOL03_cover", "VOL03_review", "VOL03_stamp"],
+  "04": ["VOL04_cover", "VOL04_review", "VOL04_stamp"],
+  "05": ["VOL05_cover", "VOL05_review", "VOL05_stamp"],
+  "06": ["VOL06_cover", "VOL06_review", "VOL06_stamp"],
+  "07": ["VOL07_cover", "VOL07_review", "VOL07_stamp"],
+  "08": ["VOL08_cover", "VOL08_review", "VOL08_stamp"],
+  "09": ["VOL09_cover", "VOL09_review", "VOL09_stamp"],
+  "10": ["VOL10_cover", "VOL10_review", "VOL10_stamp"],
+  "11": ["VOL11_cover", "VOL11_review", "VOL11_stamp"],
+  "12": ["VOL12_cover", "VOL12_review", "VOL12_stamp"],
+  "13": ["VOL13_cover", "VOL13_review", "VOL13_stamp"],
+  "14": ["VOL14_cover", "VOL14_review", "VOL14_stamp"],
+  "15": ["VOL15_cover", "VOL15_review", "VOL15_stamp"],
+  "16": ["VOL16_cover", "VOL16_review", "VOL16_stamp"],
 };
 
 // 여정 묶음 (Project 화면) — 순서대로 표시
@@ -87,4 +87,4 @@ window.CURIO_STAMP_CITY = {
 };
 
 // 이미지를 교체하면 이 값을 바꿔서 브라우저 캐시를 갱신
-window.CURIO_IMG_V = "202611050050";
+window.CURIO_IMG_V = "202611081220";
