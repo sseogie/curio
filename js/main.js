@@ -532,7 +532,7 @@
   const TRIPS = window.CURIO_TRIPS || [];
   const STAMP_CITY = window.CURIO_STAMP_CITY || {};
   const ROW_INK = "#2C4A47", ROW_OFF = "rgba(44,74,71,0.1)";
-  const TRANSPORT = { tram: "tram", "cable car": "cable", subway: "subway", bus: "bus", train: "train", plane: "plane", ferry: "ferry" };
+  const TRANSPORT = { tram: "tram", "cable car": "cable", subway: "subway", bus: "bus", train: "train", plane: "plane", ferry: "ferry", motorbike: "motorbike" };
   const arrTitle = new DotBoard($("#arr-title"), { rows: 1, cols: 8, lit: INK_TEXT, off: OFF });
   const regions = new Set(VOLS.map((v) => v.area));
   const years = VOLS.map((v) => v.takenAt.slice(0, 4)).sort();

@@ -44,6 +44,8 @@ window.CURIO_VOLS = [
     place: "JORDAAN DISTRICT, AMSTERDAM", lat: 52.3765, lon: 4.8830, takenAt: "2024-06-22T15:26", transport: "tram" },
   { vol: "16", title: "AMSTERDAM", region: "NORTH HOLLAND, NETHERLANDS", area: "europe",
     place: "DAM SQUARE, AMSTERDAM", lat: 52.3733, lon: 4.8928, takenAt: "2024-06-23T11:13", transport: "tram" },
+  { vol: "17", title: "SA PA", region: "LAO CAI, VIETNAM", area: "vietnam",
+    place: "CAT CAT VILLAGE, SA PA", lat: 22.3305, lon: 103.8248, takenAt: "2024-12-23T16:27", transport: "motorbike" },
 ];
 
 // 다음 목적지 (안내판에 "--.--.--"로 표시). 비워 두면 표시하지 않음
@@ -68,12 +70,13 @@ window.CURIO_IMAGES = {
   "14": ["VOL14_cover", "VOL14_review", "VOL14_stamp"],
   "15": ["VOL15_cover", "VOL15_review", "VOL15_stamp"],
   "16": ["VOL16_cover", "VOL16_review", "VOL16_stamp"],
+  "17": ["VOL17_cover", "VOL17_review", "VOL17_stamp"],
 };
 
 // 여정 묶음 (Project 화면) — 순서대로 표시
 window.CURIO_TRIPS = [
   { key: "EUROPE",  sub: "GERMANY, NETHERLANDS, AUSTRIA", when: "20.06 — 05.07.2024", vols: ["10", "11", "15", "16", "14", "12", "13"] },
-  { key: "VIETNAM", sub: "FANSIPAN PEAK",     when: "24.12.2024",         vols: ["01", "02", "03"] },
+  { key: "VIETNAM", sub: "CAT CAT VILLAGE, FANSIPAN PEAK", when: "23.12 — 24.12.2024", vols: ["17", "01", "02", "03"] },
   { key: "JAPAN",   sub: "HOKKAIDO",          when: "29.06 — 01.07.2025", vols: ["07", "08", "06", "09", "04", "05"] },
 ];
 
@@ -83,8 +86,8 @@ window.CURIO_STAMP_CITY = {
   "04": "SAPPORO/HOKKAIDO", "05": "SAPPORO/HOKKAIDO", "06": "NAKAFURANO/HKD",
   "07": "OTARU/HOKKAIDO", "08": "OTARU/HOKKAIDO", "09": "BIEI/SHIROGANE",
   "10": "FRANKFURT/MAIN", "11": "OSNABRÜCK HBF", "12": "HALLSTATT/AUSTRIA", "13": "HALLSTATT/AUSTRIA", "14": "ZAANSE SCHANS/NL",
-  "15": "AMSTERDAM/JORDAAN", "16": "AMSTERDAM/DAM",
+  "15": "AMSTERDAM/JORDAAN", "16": "AMSTERDAM/DAM", "17": "CAT CAT/SA PA",
 };
 
 // 이미지를 교체하면 이 값을 바꿔서 브라우저 캐시를 갱신
-window.CURIO_IMG_V = "202611081220";
+window.CURIO_IMG_V = "202611081325";
