@@ -45,7 +45,7 @@ window.CURIO_VOLS = [
   { vol: "16", title: "AMSTERDAM", region: "NORTH HOLLAND, NETHERLANDS", area: "europe",
     place: "DAM SQUARE, AMSTERDAM", lat: 52.3733, lon: 4.8928, takenAt: "2024-06-23T11:13", transport: "tram" },
   { vol: "17", title: "SA PA", region: "LAO CAI, VIETNAM", area: "vietnam",
-    place: "CAT CAT VILLAGE, SA PA", lat: 22.3305, lon: 103.8248, takenAt: "2024-12-23T16:27", transport: "motorbike" },
+    place: "CAT CAT VILLAGE, SA PA", lat: 22.3305, lon: 103.8248, takenAt: "2024-12-23T16:27", transport: "motorbike", warn: true },
 ];
 
 // 다음 목적지 (안내판에 "--.--.--"로 표시). 비워 두면 표시하지 않음
