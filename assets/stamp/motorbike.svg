@@ -1,9 +1,14 @@
 <svg width="340" height="220" viewBox="0 0 340 220" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g opacity="0.88">
-<path d="M318 18H186V72H318V18Z" stroke="#2C4A47" stroke-width="2.6"/>
-<circle cx="228" cy="53" r="8.5" stroke="#2C4A47" stroke-width="1.9"/>
-<circle cx="278" cy="53" r="8.5" stroke="#2C4A47" stroke-width="1.9"/>
-<path d="M213 49C214 45 217 44 221 44M216 42H231L238 47M238 47L244 40H256L262 45V50M231 47L240 52H252L258 47M228 53L236 52" stroke="#2C4A47" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/>
-<path d="M258 47L266 30H272M266 34L270 38V44M268 36L278 53" stroke="#2C4A47" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M318.00 18.00L186.00 18.00L186.00 72.00L318.00 72.00L318.00 18.00Z" stroke="#2C4A47" stroke-width="2.6"/>
+<path d="M235.75 61.58C240.20 61.58 243.81 57.97 243.81 53.52C243.81 49.07 240.20 45.46 235.75 45.46C231.30 45.46 227.69 49.07 227.69 53.52C227.69 57.97 231.30 61.58 235.75 61.58Z" stroke="#2C4A47" stroke-width="2.21"/>
+<path d="M275.01 61.71C279.46 61.71 283.07 58.10 283.07 53.65C283.07 49.20 279.46 45.59 275.01 45.59C270.56 45.59 266.95 49.20 266.95 53.65C266.95 58.10 270.56 61.71 275.01 61.71Z" stroke="#2C4A47" stroke-width="2.21"/>
+<path d="M221.97 51.83C221.97 47.15 225.22 43.77 230.42 41.95" stroke="#2C4A47" stroke-width="2.21"/>
+<path d="M229.64 36.23L237.96 36.23L244.98 42.99L229.64 42.99L229.64 36.23Z" stroke="#2C4A47" stroke-width="2.21"/>
+<path d="M246.28 42.99C246.80 38.44 252.52 36.75 260.58 35.45C262.83 35.10 264.22 35.80 264.74 37.53L266.82 42.99L246.28 42.99Z" stroke="#2C4A47" stroke-width="2.21"/>
+<path d="M246.28 42.99L266.82 42.99L264.22 48.45L250.18 48.45L246.28 42.99Z" stroke="#2C4A47" stroke-width="2.21"/>
+<path d="M235.10 50.27L237.70 53.39L259.28 53.39L263.96 45.85" stroke="#2C4A47" stroke-width="2.21"/>
+<path d="M258.37 28.17L264.22 28.17L274.36 53.65" stroke="#2C4A47" stroke-width="2.21"/>
+<path d="M269.42 38.44L273.32 35.45L273.32 43.25L269.42 43.25L269.42 38.44Z" stroke="#2C4A47" stroke-width="2.21"/>
 </g>
 </svg>
