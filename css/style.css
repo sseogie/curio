@@ -249,15 +249,15 @@ a { color: inherit; }
 .arr-head { position: relative; height: 1.4em; margin-top: max(14px, calc(40 * var(--u))); font: 500 max(9px, calc(16 * var(--u))) var(--sans); letter-spacing: .03em; color: var(--mark); }
 .arr-head span { position: absolute; top: 0; }
 .arr-head span:nth-child(1) { left: 0; }
-.arr-head span:nth-child(2) { left: calc(4 * 6 / 215 * 100%); }
-.arr-head span:nth-child(3) { left: calc(14 * 6 / 215 * 100%); }
-.arr-head span:nth-child(4) { left: calc(29 * 6 / 215 * 100%); }
+.arr-head span:nth-child(2) { left: calc(10 * 6 / 215 * 100%); }
+.arr-head span:nth-child(3) { left: calc(25 * 6 / 215 * 100%); }
 .arr-rows { list-style: none; margin: max(2px, calc(6 * var(--u))) 0 0; padding: 0; }
 .arr-row {
   display: block; width: calc(100% + 2 * max(6px, calc(14 * var(--u)))); margin: 0 calc(-1 * max(6px, calc(14 * var(--u))));
   padding: max(2px, calc(6.5 * var(--u))) max(6px, calc(14 * var(--u))); border: 0; background: transparent; cursor: pointer; transition: background .2s;
 }
-.arr-row canvas { display: block; width: 100%; }
+/* 32칸(VOL 칸 제외) — 점 크기는 기존 36칸 기준과 같게 유지 */
+.arr-row canvas { display: block; width: calc(100% * 191 / 215); }
 .arr-row.is-hot, .arr-row:focus-visible { background: var(--sphere); }
 .arr-row:focus-visible, .poster:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .posters {

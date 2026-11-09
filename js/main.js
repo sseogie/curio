@@ -531,7 +531,8 @@
 
   // ───────── Project: ARRIVALS (전광판 줄 + 포스터 + 여권 도장) ─────────
   const BYVOL = Object.fromEntries(VOLS.map((v) => [v.vol, v]));
-  const TRIPS = window.CURIO_TRIPS || [];
+  // 각 여정 안에서 촬영 시각 순(날짜가 같으면 시간 순, 시각까지 같으면 data.js 순서 유지)
+  const TRIPS = (window.CURIO_TRIPS || []).map((t) => ({ ...t, vols: t.vols.slice().sort((a, b) => ((BYVOL[a] && BYVOL[a].takenAt) || "").localeCompare((BYVOL[b] && BYVOL[b].takenAt) || "")) }));
   const STAMP_CITY = window.CURIO_STAMP_CITY || {};
   const ROW_INK = "#2C4A47", ROW_OFF = "rgba(44,74,71,0.1)";
   const TRANSPORT = { tram: "tram", "cable car": "cable", subway: "subway", bus: "bus", train: "train", plane: "plane", ferry: "ferry", motorbike: "motorbike", taxi: "taxi" };
@@ -539,7 +540,7 @@
   const regions = new Set(VOLS.map((v) => v.area));
   const years = VOLS.map((v) => v.takenAt.slice(0, 4)).sort();
   $("#arr-sum").textContent = `${VOLS.length} ARRIVALS · ${regions.size} REGIONS · ${years[0]} — ${years[years.length - 1]}`;
-  const rowText = (v) => `${v.vol}  ${stampDate(v.takenAt)}  ${v.title.padEnd(13).slice(0, 13)}  ARRIVED`;
+  const rowText = (v) => `${stampDate(v.takenAt)}  ${v.title.padEnd(13).slice(0, 13)}  ARRIVED`;
 
   function stampSVG(v) {
     const t = TRANSPORT[v.transport] || "train";
@@ -566,7 +567,7 @@
     sec.innerHTML = `
       <canvas class="trip-name" aria-hidden="true" style="--n:${tr.key.length}"></canvas>
       <div class="trip-side">
-        <div class="arr-head" aria-hidden="true"><span>VOL</span><span>DATE</span><span>DESTINATION</span><span>STATUS</span></div>
+        <div class="arr-head" aria-hidden="true"><span>DATE</span><span>DESTINATION</span><span>STATUS</span></div>
         <ol class="arr-rows"></ol>
       </div>
       <ol class="posters"></ol>`;
@@ -578,7 +579,7 @@
       const li = document.createElement("li");
       li.innerHTML = `<button type="button" class="arr-row" aria-label="${label}"><canvas aria-hidden="true"></canvas></button>`;
       sec.querySelector(".arr-rows").appendChild(li);
-      const row = new DotBoard(li.querySelector("canvas"), { rows: 1, cols: 36, lit: ROW_INK, off: ROW_OFF, radius: 0.4 });
+      const row = new DotBoard(li.querySelector("canvas"), { rows: 1, cols: 32, lit: ROW_INK, off: ROW_OFF, radius: 0.4 });
       const pi = document.createElement("li");
       pi.innerHTML = `<button type="button" class="poster" aria-label="${label}"><figure class="cover"></figure>${stampSVG(v)}</button>`;
       sec.querySelector(".posters").appendChild(pi);
