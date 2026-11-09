@@ -68,4 +68,4 @@ window.CURIO_STAMP_CITY = {
 };
 
 // 캐시 값 — tools/release.py가 이미지 변경을 감지해 자동 갱신
-window.CURIO_IMG_V = "202611081325";
+window.CURIO_IMG_V = "202611091255";
